@@ -1,0 +1,22 @@
+	.item-slider{
+		height: 570px;
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-position: center center;
+	}
+.slick-dots li button:before {
+    font-size: 14px;
+    line-height: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    content: '•';
+    text-align: center;
+    opacity: 1;
+    color: #fff;
+}
+.slick-dots{
+	bottom :13px;
+}
