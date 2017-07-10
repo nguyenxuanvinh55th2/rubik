@@ -95,21 +95,19 @@ export default class AddNewDialog extends React.Component {
       }
     })
     return (
-      <div className="modal-dialog" style={{width: 'auto', margin: 0}}>
-          <div className="modal-header">
-            <h4 className="modal-title">{'Tạo' + ' ' + this.props.name}</h4>
-          </div>
-          <div className="modal-content" style={{border: 0}}>
-              <div className="modal-body" style={{height, overflowY: 'auto', overflowX: 'hidden'}}>
-                  <form className="form-horizontal">
-                    {this.renderInputField()}
-                  </form>
-              </div>
-              <div className="modal-footer" style={{margin: 0}}>
-                  <button type="button" className="btn btn-default" data-dismiss="modal" onClick={() => this.props.handleClose()}>Hủy</button>
-                  <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.props.insertNew(this.state.newInfo)} disabled={disabled}>Lưu</button>
-              </div>
-          </div>
+      <div className="modal-content" style={{border: 0}}>
+        <div className="modal-header">
+          <h4 className="modal-title">{'Tạo' + ' ' + this.props.name}</h4>
+        </div>
+        <div className="modal-body" style={{height, overflowY: 'auto', overflowX: 'hidden'}}>
+            <form className="form-horizontal">
+              {this.renderInputField()}
+            </form>
+        </div>
+        <div className="modal-footer" style={{margin: 0}}>
+            <button type="button" className="btn btn-default" data-dismiss="modal" onClick={() => this.props.handleClose()}>Hủy</button>
+            <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.props.insertNew(this.state.newInfo)} disabled={disabled}>Lưu</button>
+        </div>
       </div>
     )
   }
