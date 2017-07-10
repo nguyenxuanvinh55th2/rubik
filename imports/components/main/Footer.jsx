@@ -48,7 +48,7 @@ export default class Footer extends React.Component{
 			</div>
 			<div className="end-footer">
 			<div className="container">
-			<p>Coppyright  © RubikNhaTrang 2017. Design by LokaTech.</p>
+			<p>Coppyright  © RubikNhaTrang 2017. <span>Design by <a style={{color: '#fff',textDecoration: 'underline'}} target="blank" href="http://lokatech.net/">LokaTech.</a></span></p>
 			</div>
 			</div>
 			</div>

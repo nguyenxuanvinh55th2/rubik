@@ -3,9 +3,13 @@ import { createStore, applyMiddleware, compose} from 'redux';
 import {syncHistoryWithStore} from 'react-router-redux';
 import { browserHistory} from 'react-router';
 import { client } from './apollo-client.js';
-
+import { Meteor } from 'meteor/meteor';
 const defaultState = {
-  users: {}
+  users: {},
+  notification: {
+    fetchData: false,
+    level: '', message: ''
+  },
 }
 const store = createStore(
   rootReducer,

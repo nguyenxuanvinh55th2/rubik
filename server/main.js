@@ -10,10 +10,30 @@ moment = require('moment');
 import {createApolloServer} from 'meteor/apollo';
 import schema from '/imports/data'
 
-
 createApolloServer({
   schema,
   graphiql: Meteor.isDevelopment,
   pretty: true,
   configServer: express().use('*', cors())
+});
+
+Meteor.startup(() => {
+  if (Meteor.users.find({}).count() === 0) {
+      Meteor.users.insert({
+          _id: '0',
+          username: 'admin',
+          emails: [
+              {
+                  address: 'nguyenxuanvinh55th2@gmail.com',
+                  verified: true
+              }
+          ],
+          profile:{
+              permissions: []
+          },
+          friendList: [],
+          childrents: []
+      });
+      Accounts.setPassword('0', '12345678');
+  }
 });
