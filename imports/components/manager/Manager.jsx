@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { browserHistory } from 'react-router';
 import __ from 'lodash';
 import store from '../../store.js'
+
 export default class Manager extends React.Component {
   constructor(props) {
     super(props);
