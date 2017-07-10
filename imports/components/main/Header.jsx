@@ -41,10 +41,10 @@ return(
 					</div>
 				</li>
 				<li>
-					<Link to={'#'}><i className="fa fa-facebook" aria-hidden="true"></i></Link>
+					<a href="https://www.facebook.com/rubiknt/" target="blank"><i className="fa fa-facebook" aria-hidden="true"></i></a>
 				</li>
 				<li>
-					<Link to={'#'}><i className="fa fa-youtube-play" aria-hidden="true"></i></Link>
+					<a href="https://www.youtube.com/channel/UCdrq9JuGSPd0aCJH-tAOXZQ" target="blank"><i className="fa fa-youtube-play" aria-hidden="true"></i></a>
 				</li>
 			</ul>
 		</div>

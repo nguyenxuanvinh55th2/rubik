@@ -7,7 +7,7 @@ super(props);
 render(){
 return(
 
-<div className="col-sm-3">
+<div className="col-sm-3 col-xs-6">
 	<div className="item-product">
 		<div className="box-item">
 			<img src={this.props.value.image} alt="" />
@@ -24,11 +24,13 @@ return(
 				<Link to={'#'}>{this.props.value.name}</Link>
 			</h4>
 			<div className="star">
+				<div className="group-star">
 				<i className="fa fa-star" aria-hidden="true"></i>
 				<i className="fa fa-star" aria-hidden="true"></i>
 				<i className="fa fa-star" aria-hidden="true"></i>
 				<i className="fa fa-star" aria-hidden="true"></i>
 				<i className="fa fa-star" aria-hidden="true"></i>
+			</div>
 			</div>
 			<p>{this.props.value.rate} đ</p>
 		</div>

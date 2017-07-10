@@ -9,6 +9,7 @@ import * as actionCreator from "../actions/actionCreator";
 function mapStateToProps(state){
   return {
     users: state.users,
+    notification: state.notification,
   }
 }
 
