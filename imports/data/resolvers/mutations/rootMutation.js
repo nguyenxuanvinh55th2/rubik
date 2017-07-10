@@ -8,26 +8,26 @@ const rootMutation = {
   },
   insertCategories: (_,{ userId, info }) => {
     let user = Meteor.users.findOne({_id: userId});
-    //if(user) {
+    if(user) {
       info = JSON.parse(info);
       info.createdAt = moment().valueOf();
-      // info.createdBy = {
-      //   _id: user._id,
-      //   username: user.username
-      // }
+      info.createdBy = {
+        _id: user._id,
+        username: user.username
+      }
       return Classifies.insert(info);
-    //}
+    }
     return;
   },
   removeCategories: (_,{ userId, _id }) => {
     let user = Meteor.users.findOne({_id: userId});
-    //if(user) {
-      // info.createdBy = {
-      //   _id: user._id,
-      //   username: user.username
-      // }
+    if(user) {
+      info.createdBy = {
+        _id: user._id,
+        username: user.username
+      }
       return Classifies.update({_id}, {$set: {active: false}});
-    //}
+    }
     return;
   }
 }

@@ -10,7 +10,7 @@ class RemoveButton extends React.Component {
         var remove = confirm('Bạn có thật sự muốn xóa trường này');
         if (remove == true) {
             let userId = Meteor.userId();
-            this.props.data.remove('0', this.props.data._id).then(() => {
+            this.props.data.remove(userId, this.props.data._id).then(() => {
                 this.props.data.refetch();
             }).catch((error) => {
                 console.log('there was an error sending the query', error);
@@ -169,7 +169,7 @@ export default class Category extends React.Component {
       category.active = true;
       category.isCategory = true;
       let info = JSON.stringify(category)
-      this.props.insertCategories('0', info).then(() => {
+      this.props.insertCategories(userId, info).then(() => {
           this.props.data.refetch();
       }).catch((error) => {
           console.log('there was an error sending the query', error);
@@ -180,7 +180,7 @@ export default class Category extends React.Component {
     render() {
         let {layouts, users, t} = this.props;
         let data = __.cloneDeep(this.props.data);
-        //if (Meteor.userId()) {
+        if (Meteor.userId()) {
             if (data.loading) {
                 return (
                     <div className="spinner spinner-lg"></div>
@@ -253,8 +253,8 @@ export default class Category extends React.Component {
                     </div>
                 )
             }
-        // } else {
-        //     return <div style={{textAlign: 'center'}}>{'Bạn cần đăng nhập để xem thông tin này'}</div>;
-        // }
+        } else {
+            return <div style={{textAlign: 'center'}}>{'Bạn cần đăng nhập để xem thông tin này'}</div>;
+        }
     }
 }
