@@ -19,9 +19,9 @@ const rootSchema = `
       categories: [Classify]
     }
     type Mutation {
-      removeTask(_id: String): String
       removeCategories(userId: String!, _id: String!): String
       insertCategories(userId: String!, info: String!): String
+      insertFiles(userId: String, info: String): String
     }
 `
 export default rootSchema;
