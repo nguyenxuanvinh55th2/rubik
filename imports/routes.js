@@ -9,6 +9,7 @@ import Home from './components/home/Home.jsx';
 import Login from './components/login/Login.jsx';
 import Manager from './components/manager/Manager.jsx';
 import Dashboard from './components/dashboard/Dashboard.jsx';
+import StockModel from './components/stockModel/StockModel.jsx';
 
 function requireAuth(nextState, replace){
   if (!Meteor.userId()) {
@@ -22,10 +23,11 @@ export const renderRoutes = () => (
   <Router history={history}>
     <Route path="/" component={App} >
       <IndexRoute component={Home}/>
-      <Route path="/Category" component={Category}/>
       <Route path="login" component={Login}/>
-      <Route path="manager" component={Manager} onEnter={requireAuth}>
+      <Route path="dashboard" component={Manager} onEnter={requireAuth}>
         <IndexRoute component={Dashboard}/>
+        <Route path="/stockModel" component={StockModel}/>
+        <Route path="/category" component={Category}/>
       </Route>
       <Route path="*" component={Home} />
     </Route>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
+import { browserHistory } from 'react-router';
 import __ from 'lodash';
 import store from '../../store.js';
 
@@ -12,7 +13,7 @@ export default class HeaderManager extends React.Component {
       <div className="header-admin">
         <div className="top-header-admin">
           <div className="left-top-header">
-            <p>Cong ty</p>
+            <p>RUBIK NHA TRANG</p>
           </div>
           <ul className="text-right">
             <li><a href=""><i className="fa fa-bell-o" aria-hidden="true"></i></a></li>
@@ -21,9 +22,9 @@ export default class HeaderManager extends React.Component {
               <a className="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i className="fa fa-user-o" aria-hidden="true"></i> Admin<span className="caret"> </span>
             </a>
               <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
+              <li><a href="#">Thông tin</a></li>
+              <li><a href="#">Đổi mật khẩu</a></li>
+              <li><a>Đăng xuất</a></li>
               </ul>
           </div>
           </li>
@@ -32,17 +33,18 @@ export default class HeaderManager extends React.Component {
         <nav className="navbar navbar-inverse" style={{borderRadius: 0}}>
           <div className="container-fluid">
             <ul className="nav navbar-nav">
+              <li><a onClick={() => browserHistory.push('/dashboard')}>Dashboard</a></li>
               <li className="dropdown">
-                <a className="dropdown-toggle" data-toggle="dropdown" href="#">Danh mục
+                <a className="dropdown-toggle" data-toggle="dropdown">Danh mục
                 <span className="caret"></span></a>
                 <ul className="dropdown-menu">
-                  <li><a href="#">Chủng loại</a></li>
-                  <li><a href="#">Kiểu hàng</a></li>
-                  <li><a href="#">Khách hàng</a></li>
+                  <li><a onClick={() => browserHistory.push('/category')}>Chủng loại</a></li>
+                  <li><a onClick={() => browserHistory.push('/stockModel')}>Kiểu hàng</a></li>
+                  <li><a onClick={() => browserHistory.push('/customer')}>Khách hàng</a></li>
                 </ul>
               </li>
               <li className="dropdown">
-                <a className="dropdown-toggle" data-toggle="dropdown" href="#">Kho cửa hàng
+                <a className="dropdown-toggle" data-toggle="dropdown">Kho cửa hàng
                 <span className="caret"></span></a>
                 <ul className="dropdown-menu">
                   <li><a href="#">Nhập kho</a></li>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { browserHistory} from 'react-router';
+import { browserHistory, Link} from 'react-router';
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -22,22 +22,34 @@ export default class Login extends React.Component {
   }
   render(){
     return(
-      <form className="form-horizontal">
-        <div className="form-group">
-          <div className="col-sm-9">
-            <input type="text" className="form-control" placeholder="Email" value={this.state.email} onChange={({target}) => this.setState({email: target.value})}/></div>
-        </div>
-        <div className="form-group">
-          <div className="col-sm-9">
-            <input type="password" className="form-control" placeholder="Mật khẩu" value={this.state.password} onChange={({target}) => this.setState({password: target.value})}/></div>
-        </div>
-        <div className="form-group">
-          <label className="col-sm-3 control-label" ></label>
-          <div className="col-sm-9" style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-            <button className="btn btn-primary" type="button" onClick={() => this.handleLogin()}>Đăng Nhập</button>
+      <div className="container" style={{width: 320, padding: 20}}>
+        <Link to={'/'}>
+          <img src="http://i1266.photobucket.com/albums/jj538/dinhvnquang/LASTEST-01_zpsymk9eoks.png" alt="" />
+        </Link>
+        <form style={{marginTop: 20, padding: '26px 24px 46px'}}>
+          <div className="form-group">
+            <label>Tên đăng nhập</label>
+            <div >
+              <input type="text" className="form-control" value={this.state.email} onChange={({target}) => this.setState({email: target.value})}/>
+            </div>
           </div>
-        </div>
-    </form>
+          <div className="form-group">
+            <label >Mật khẩu</label>
+            <div>
+              <input type="password" className="form-control" value={this.state.password} onChange={({target}) => this.setState({password: target.value})}/>
+            </div>
+          </div>
+          <div className="form-group">
+            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+              <div className="checkbox">
+                <label><input type="checkbox" name="remember" />Ghi nhớ tôi</label>
+              </div>
+                <button type="button" className="btn btn-primary" disabled={!this.state.email || !this.state.password} style={{height: 30, padding: '0 12px 2px'}}
+                  onClick={() => this.handleLogin()}>Đăng nhập</button>
+            </div>
+          </div>
+        </form>
+    </div>
     )
   }
 }
