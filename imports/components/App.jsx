@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Meteor } from 'meteor/meteor';
 import __ from 'lodash';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';

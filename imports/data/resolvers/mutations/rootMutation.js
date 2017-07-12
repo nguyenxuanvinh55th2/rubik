@@ -18,10 +18,6 @@ const rootMutation = {
   removeCategories: (_,{ userId, _id }) => {
     let user = Meteor.users.findOne({_id: userId});
     if(user) {
-      info.createdBy = {
-        _id: user._id,
-        username: user.username
-      }
       return Classifies.update({_id}, {$set: {active: false}});
     }
     return;

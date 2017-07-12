@@ -2,259 +2,175 @@ import React from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { Meteor } from 'meteor/meteor';
 import __ from 'lodash';
+import Dialog from 'material-ui/Dialog';
 
-import AddNewDialog from './AddNewDialog.jsx';
-
-class RemoveButton extends React.Component {
-    remove() {
-        var remove = confirm('Bạn có thật sự muốn xóa trường này');
-        if (remove == true) {
-            let userId = Meteor.userId();
-            this.props.data.remove(userId, this.props.data._id).then(() => {
-                this.props.data.refetch();
-            }).catch((error) => {
-                console.log('there was an error sending the query', error);
-            });
-        }
-    }
-
-    render() {
-        if(this.props.data.gridType === 'footer') {
-            return(
-                <div></div>
-            )
-        } else {
-            return <button className="btn btn-default" style={{borderWidth: 0, width: 34, color: 'red', padding: 0, marginLeft: -5}} onClick={() => this.remove()}>Xóa</button>
-        }
-    }
+class DeleteAditorRender extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+  render(){
+    return (
+        <div style={{width: '100%'}}>
+          <button className="btn btn-default" style={{borderWidth: 0, width: 56, color:'red'}}>Xóa</button>
+        </div>
+    )
+  }
 }
-
 export default class Category extends React.Component {
-    constructor(props) {
-        super(props);
-        this.width = window.innerWidth - 69;
-        this.state = {filterCol: 'name', height: window.innerHeight, width: this.width, open: false, categorySelected: {}};
-        this.removeRows = [];
-        this.error = false;
-
-        this.gridOptions = {
-            suppressHorizontalScroll: true,
-            doesDataFlower: () => {
-                return true;
-            },
-            onFilterChanged: () => {
-                if (this.gridOptionFooter) {
-                    this.gridOptionFooter.api.setRowData(this.renderFooterData());
-                }
-                this.saveFilter = this.gridOptions.api.getFilterModel();
-            },
-            suppressHorizontalScroll: true,
-            slaveGrids: [],
-            floatingFilter: true
-        };
-
-        this.gridOptionFooter = {
-            onColumnEverythingChanged: (params) => {
-                this.gridOptionFooter.api.sizeColumnsToFit();
-            },
-            onGridReady: (params) => {
-                this.gridOptionFooter.api.setRowData(this.renderFooterData());
-            },
-            rowData: null,
-            rowClass: 'bold-row',
-            headerHeight: 0,
-            slaveGrids: []
-        };
-
-        this.gridOptions.slaveGrids.push(this.gridOptionFooter);
-        this.gridOptionFooter.slaveGrids.push(this.gridOptions);
+  constructor(props) {
+    super(props);
+    this.data = [];
+    this.state = {
+        height: window.innerHeight,
+        open: false, name: ''
     }
-
-    clearAllFilter() {
-        document.getElementById('input-search').value = null;
-        this.gridOptions.api.setFilterModel(null);
-        this.gridOptions.api.onFilterChanged();
-    }
-
-    filterObject(data, label, value) {
-        let model = [];
-        __.forEach(data, (item) => {
-            if (__.lowerCase(item[label]).includes(__.lowerCase(value))) {
-                model.push(item[label]);
-            }
-        });
-        return model;
-    }
-
-    handleToggle(category) {
-        this.setState({open: !this.state.open});
-        this.setState({categorySelected: category})
-    }
-
-    handleClose() {
-        this.setState({open: false});
-    }
-
-
-    handleResize(e) {
-        this.setState({height: window.innerHeight});
-        this.width = window.innerWidth - 69;
-        this.setState({width: this.width})
-    }
-
-    componentDidMount() {
-        window.addEventListener('resize', this.handleResize.bind(this));
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.handleResize.bind(this));
-    }
-
-    onChangeFilter(value) {
-        let model;
-        let filterComponent = this.gridOptions.api.getFilterInstance(this.state.filterCol);
-        if (!value) {
-            this.gridOptions.api.setFilterModel(null);
-            this.gridOptions.api.onFilterChanged();
-        } else {
-            model = this.filterObject(this.props.data.categories, this.state.filterCol, value);
-            filterComponent.setModel(model);
-            this.gridOptions.api.onFilterChanged();
-        }
-    }
-
-    RefreshData() {
-        this.props.data.refetch().then(() => {
-            let categoryId = this.state.categorySelected._id;
-            if(categoryId) {
-                let category = __.filter(this.props.data.categories, item => item._id === categoryId)[0];
-                this.setState({categorySelected: category});
-            }
-        });
-    }
-
-    renderFooterData() {
-        let totalAmount = 0, totalStt = 0;
-
-        if (this.gridOptions && this.gridOptions.api) {
-            let data = [], models;
-            models = this.gridOptions.api.getModel().rowsToDisplay;
-            __.forEach(models, (model) => {
-                data.push(model.data);
-            });
-            __.forEach(data, (tran)=>{
-                totalStt++;
-                totalAmount += tran.amount;
-            });
-        }
-
-        return [{
-            gridType: 'footer',
-            name: 'Total: ' +  totalStt,
-            option: ''
-        }];
-    }
-
-    handleOpen() {
-        this.setState({open: true});
-    }
-
-    handleClose() {
-        this.setState({open: false});
-    }
-
-    addNewRow(category) {
-      let { data } = this.props;
-      let userId = Meteor.userId();
-      category.active = true;
-      category.isCategory = true;
-      let info = JSON.stringify(category)
-      this.props.insertCategories(userId, info).then(() => {
-          this.props.data.refetch();
-      }).catch((error) => {
-          console.log('there was an error sending the query', error);
+    this.gridOptions = {
+    floatingFilter: true,
+    onFilterChanged: () => {
+      let data = [], models = this.gridOptions.api.getModel().rowsToDisplay;
+      __.forEach(models, (model) => {
+          data.push(model.data);
       });
-      this.handleClose();
+      this.gridOptions.api.setFloatingBottomRowData(this.renderFooterData(data));
+      this.saveFilter = this.gridOptions.api.getFilterModel();
     }
-
-    render() {
-        let {layouts, users, t} = this.props;
-        let data = __.cloneDeep(this.props.data);
-        if (Meteor.userId()) {
-            if (data.loading) {
-                return (
-                    <div className="spinner spinner-lg"></div>
-                );
-            } else {
-                __.forEach(data.categories, item => {
-                    item['remove'] = this.props.removeCategories;
-                    item['refetch'] = this.props.data.refetch;
-                    item['t'] = this.props.t;
-                });
-                let columnDefs= [
-                    {
-                        cellRendererFramework: RemoveButton, headerName: "", field: "option", cellClass: 'agaction',
-                        minWidth: 34, width: 34, maxWidth: 34, editable: false, suppressMenu: true, filterParams: {filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']}, filter: ''
-                    },
-                    {
-                        headerName: "Tên chủng loại", field: "name", width: this.state.width, cellStyle: function(params) {
-                                if (params.node.data.gridType == 'footer') {
-                                    //mark police cells as red
-                                    return {fontWeight: 'bold'};
-                                } else {
-                                    return null;
-                                }
-                        }, filterParams: {filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']}, filter: 'text', suppressMenu: true, required: true
+  };
+  }
+  renderFooterData(data) {
+  return [
+    {
+      gridType: 'footer',
+      name: 'Total: ' +  data.length,
+    }];
+  }
+  componentDidUpdate(){
+  if(this.gridOptions.api){
+    this.gridOptions.api.showLoadingOverlay();
+    this.gridOptions.api.setRowData(__.orderBy(__.cloneDeep(this.props.documentsDate.documentsDate), ['createdAt'], ['desc']));
+    this.gridOptions.api.setFloatingBottomRowData(this.renderFooterData(this.props.documentsDate.documentsDate));
+    this.gridOptions.api.hideOverlay();
+  }
+}
+  componentDidUpdate(){
+  if(this.gridOptions.api){
+    this.gridOptions.api.showLoadingOverlay();
+    this.gridOptions.api.setRowData(this.props.data.categories);
+    this.gridOptions.api.setFloatingBottomRowData(this.renderFooterData(this.props.data.categories));
+    this.gridOptions.api.hideOverlay();
+  }
+}
+  render(){
+    let { data } = this.props;
+    if(Meteor.userId()){
+      if(!data.categories){
+        return (
+          <div className="loading">
+              <i className="fa fa-spinner fa-spin" style={{fontSize: 50}}></i>
+          </div>
+        )
+      }
+      else {
+        let columnDefs= [
+           {
+               headerName: "", field:'delete', minWidth: 56, width: 56, cellClass: 'agaction', pinned: 'left', filter: '',
+                 cellRendererFramework:DeleteAditorRender,
+                cellStyle: (params) => {
+                    if (params.node.data.gridType == 'footer') {
+                        return {display: 'none'};
                     }
-                ];
-                return (
-                    <div>
-                      <div>
-                          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', padding: 10}}>
-                              <div></div>
-                              <div>
-                                  <button className="btn btn-primary" data-toggle="modal" data-target="#myModal" style={{marginRight: 5}}>Tạo mới</button>
-                              </div>
-                          </div>
-                          <div style={{height: 36, display: 'flex', flexDirection: 'row', backgroundColor: '#f5f5f5', border: '1px solid #d1d1d1', borderBottom: 'none', padding: 5, position: 'relative', justifyContent: 'space-between'}}>
-                              <div></div>
-                              <div>
-                                  <i className="fa fa-refresh" aria-hidden="true" style={{fontSize: 22, cursor: 'pointer'}}
-                                      onClick={() => this.RefreshData()}></i>
-                              </div>
-                          </div>
-                          <div style={{height: this.state.height-193 + 40}} className="ag-fresh">
-                              <AgGridReact
-                                  gridOptions={this.gridOptions}
-                                  columnDefs={columnDefs}
-                                  rowData={data.categories}
-                                  enableColResize="true"
-                                  enableSorting="true"
-                                  enableFilter="true"
-                              />
-                          </div>
-                          <div style={{height: 45}} className="ag-fresh">
-                              <AgGridReact
-                                  rowClass="grid-bottom"
-                                  gridOptions={this.gridOptionFooter}
-                                  columnDefs={columnDefs}
-                                  rowData={this.renderFooterData()}
-                                  enableColResize="true"
-                              />
-                          </div>
-                          <div id="myModal" className="modal fade" role="dialog">
-                            <div className="modal-dialog">
-                              {
-                                <AddNewDialog {...this.props} columnDefs={columnDefs} insertNew={this.addNewRow.bind(this)} handleClose={this.handleClose.bind(this)} height={150} name={'Tạo chủng loại'}/>
-                              }
-                            </div>
-                          </div>
+                },
+                onCellClicked: (params) => {
+                  if(params.data && params.data._id){
+                    this.props.removeCategories(Meteor.userId(), params.data._id).then(({data}) => {
+                      if(data){
+                        this.props.data.refetch();
+                      }
+                    })
+                  }
+                }
+           },
+           {
+               headerName: "Tên chủng loại", field: "name", width: 320, cellStyle: function(params) {
+                       if (params.node.data.gridType == 'footer') {
+                           return {fontWeight: 'bold'};
+                       } else {
+                           return null;
+                       }
+               }, filterParams: {filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']}, filter: 'text', suppressMenu: true,
+           }
+       ];
+       return (
+         <div>
+           <ol className="breadcrumb" style={{marginBottom: 0}}>
+             <li>
+               <a>Dashboard</a>
+             </li>
+             <li>
+               <a>Chủng loại</a>
+             </li>
+           </ol>
+           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: 5}}>
+             <button type="button" className="btn btn-primary" onClick={() => {
+               this.setState({open: true})
+             }}>Thêm mới</button>
+           </div>
+           <div style={{height: this.state.height - 167}} className="ag-fresh">
+                 <AgGridReact
+                     gridOptions={this.gridOptions}
+                     columnDefs={columnDefs}
+                     rowData={this.data}
+                     enableColResize="true"
+                     enableSorting="true"
+                     enableFilter="true"
+                 />
+           </div>
+           <Dialog
+              modal={true}
+              open={this.state.open}
+              bodyStyle={{padding: 0}}
+              contentStyle={{width: 400}}
+            >
+              <div className="modal-dialog" style={{width: 'auto', margin: 0}}>
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h4 className="modal-title">Tạo mới chủng loại</h4>
+                </div>
+                <div className="modal-body" style={{overflowY: 'auto', overflowX: 'hidden', overflowY: 'auto', overflowX: 'hidden'}}>
+                  <form className="form-horizontal">
+                    <div className="form-group">
+                      <label className="control-label col-sm-2">Tên</label>
+                      <div className="col-sm-10">
+                        <input type="text" className="form-control" value={this.state.name} onChange={({target}) => {
+                          this.setState({name: target.value})
+                        }}/>
                       </div>
                     </div>
-                )
-            }
-        } else {
-            return <div style={{textAlign: 'center'}}>{'Bạn cần đăng nhập để xem thông tin này'}</div>;
-        }
+                  </form>
+                </div>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-default" onClick={() => this.setState({open: false})}>Đóng</button>
+                  <button type="button" className="btn btn-primary" disabled={!this.state.name} onClick={() => {
+                    this.props.insertCategories(Meteor.userId(), JSON.stringify({
+                      name: this.state.name,
+                      active: true,
+                      isCategory: true
+                    })).then(({data}) => {
+                      if(data){
+                        this.props.data.refetch();
+                        this.setState({name: '', open: false})
+                      }
+                    })
+                  }}>Lưu</button>
+                </div>
+              </div>
+          </div>
+            </Dialog>
+         </div>
+       )
+      }
     }
+    else {
+      return <div style={{textAlign: 'center'}}>{'Vui lòng đăng nhập'}</div>;
+    }
+  }
 }

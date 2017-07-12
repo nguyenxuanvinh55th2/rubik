@@ -16,7 +16,7 @@ export default class Login extends React.Component {
       }
       else {
         this.props.addNotificationMute({fetchData: true, message: 'Đăng nhập thành công', level:'success'});
-        browserHistory.push('/manager')
+        browserHistory.push('/dashboard')
       }
     });
   }
