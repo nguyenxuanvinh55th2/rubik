@@ -1,5 +1,4 @@
 import { Classifies } from '../../../../collections/classifies';
-import moment from 'moment';
 
 const rootMutation = {
   insertCategories: (_,{ userId, info }) => {

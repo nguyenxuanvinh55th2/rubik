@@ -3,7 +3,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { Meteor } from 'meteor/meteor';
 import __ from 'lodash';
 import Dialog from 'material-ui/Dialog';
-
+import { browserHistory } from 'react-router';
 class DeleteAditorRender extends React.Component {
   constructor(props) {
     super(props)
@@ -103,10 +103,10 @@ export default class Category extends React.Component {
          <div>
            <ol className="breadcrumb" style={{marginBottom: 0}}>
              <li>
-               <a>Dashboard</a>
+               <a onClick={() => browserHistory.push('/dashboard')}>Dashboard</a>
              </li>
              <li>
-               <a>Chủng loại</a>
+               <a onClick={() => browserHistory.push('/category')}>Chủng loại</a>
              </li>
            </ol>
            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: 5}}>

@@ -24,7 +24,10 @@ export default class HeaderManager extends React.Component {
               <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
               <li><a href="#">Thông tin</a></li>
               <li><a href="#">Đổi mật khẩu</a></li>
-              <li><a>Đăng xuất</a></li>
+              <li><a onClick={() => {
+                Meteor.logout();
+                browserHistory.push('/');
+              }}>Đăng xuất</a></li>
               </ul>
           </div>
           </li>
