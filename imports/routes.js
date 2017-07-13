@@ -10,6 +10,7 @@ import Login from './components/login/Login.jsx';
 import Manager from './components/manager/Manager.jsx';
 import Dashboard from './components/dashboard/Dashboard.jsx';
 import StockModel from './components/stockModel/StockModel.jsx';
+import StockModelForm from './components/stockModel/StockModelForm.jsx';
 
 function requireAuth(nextState, replace){
   if (!Meteor.userId()) {
@@ -26,8 +27,9 @@ export const renderRoutes = () => (
       <Route path="login" component={Login}/>
       <Route path="dashboard" component={Manager} onEnter={requireAuth}>
         <IndexRoute component={Dashboard}/>
-        <Route path="/stockModel" component={StockModel}/>
+        <Route path="/stockModels" component={StockModel}/>
         <Route path="/category" component={Category}/>
+        <Route path="/stockModelForm" component={StockModelForm}/>
       </Route>
       <Route path="*" component={Home} />
     </Route>
