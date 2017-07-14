@@ -21,6 +21,7 @@ const rootSchema = `
     type Mutation {
       removeCategories(userId: String!, _id: String!): String
       insertCategories(userId: String!, info: String!): String
+      insertStockModel(userId: String!, info: String!): String
       insertFiles(userId: String, info: String): String
     }
 `

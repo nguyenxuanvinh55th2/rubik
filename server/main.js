@@ -3,7 +3,7 @@ import { Mongo } from 'meteor/mongo';
 
 import express from 'express';
 import cors from 'cors';
-
+Future = Npm.require('fibers/future');
 __ = require('lodash');
 moment = require('moment');
 

@@ -42,6 +42,44 @@ const rootMutation = {
             }
         }, true);
     });
-  }
+  },
+  insertStockModel: (_,{userId,info}) => {
+      let user = Meteor.users.findOne({_id: userId});
+      let future = new Future();
+      if (user){
+        info = JSON.parse(info);
+        let imageData = {};
+        info.data.images = []
+        info.data.createdAt = moment().valueOf();
+        info.data.createdBy = {
+           _id: user._id,
+           username: user.username
+        };
+        future.return(StockModels.insert(info.data, (err,res) => {
+          if (err) {console.log(err);}
+          else if(res){
+            let docData = info.images;
+            __.forEach(docData, (content, key)=>{
+                if(content.fileName){
+                    imageData[key] = content;
+                    imageData[key].file = content.file.replace(/^data:image\/(png|gif|jpeg);base64,/,'');
+                    content = '';
+                }
+            });
+            __.forEach(imageData, (img, key)=>{
+                buf = new Buffer(img.file, 'base64');
+                Files.write(buf, {fileName: img.fileName, userId: userId, type: img.type}, (err, fileRef)=>{
+                    if (err) {
+                      throw err;
+                    } else {
+                      StockModels.update({ _id: res },{ $push: { images: fileRef._id }});
+                    }
+                }, true);
+            });
+          }
+        }))
+      }
+      return future.wait();
+  },
 }
 export default rootMutation

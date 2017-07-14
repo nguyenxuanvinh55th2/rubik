@@ -1,4 +1,5 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
 import { browserHistory } from 'react-router';
 import __ from 'lodash';
 import moment from 'moment';
@@ -6,13 +7,23 @@ import accounting from 'accounting';
 import Cleave from 'cleave.js/react';
 import QuillEditor from '../editor/QuillEditor.jsx';
 import Dialog from 'material-ui/Dialog';
-import { RenderImage } from './DialogStockModel.jsx'
-export default class StockModelForm extends React.Component {
+import { RenderImage } from './DialogStockModel.jsx';
+import { SketchPicker } from 'react-color';
+import { graphql, compose } from 'react-apollo';
+import gql from 'graphql-tag';
+class StockModelForm extends React.Component {
   constructor(props) {
     super(props);
     this.handleResize = this.handleResize.bind(this);
     this.state ={
       height: window.innerHeight,
+      displayColorPicker: false,
+      color: {
+        r: '241',
+        g: '112',
+        b: '19',
+        a: '1',
+      },
       openDialog: false,
       data: {
         name: '', weight: '', colors: [], origin: '', isLimited: false, isPromotion: false,
@@ -36,10 +47,78 @@ export default class StockModelForm extends React.Component {
     this.setState({data: data});
   }
   handleAddImage(images) {
-    this.setState({images:images, openDialog:false});
+    let data = this.state.data;
+    data.images = images;
+    this.setState({data:data, openDialog:false});
   }
+  handleClick = () => {
+     this.setState({ displayColorPicker: !this.state.displayColorPicker })
+   }
+   handleClose = () => {
+     this.setState({ displayColorPicker: false })
+   }
+   handleChange = (color) => {
+     this.setState({ color: color.rgb })
+   }
+   handleSave(type){
+     let data = this.state.data;
+     let info = {
+       data: data,
+       images: this.state.data.images
+     }
+     console.log(info);
+     if(this.props.insertStockModel){
+       this.props.insertStockModel(Meteor.userId(), JSON.stringify(info)).then(({data}) => {
+         if(data.insertStockModel){
+           console.log("success");
+           this.props.addNotificationMute({fetchData: true, message: 'Thêm hàng mới thành công', level:'success'});
+           if(type){
+             this.setState({data: {
+               name: '', weight: '', colors: [], origin: '', isLimited: false, isPromotion: false,
+               images: [], unit: '', averagePrice: 0, price: 0, quantity: 0, saleOff: 0,
+               description: ''
+             }})
+           }
+           else {
+             browserHistory.push('/StockModels');
+           }
+         }
+       })
+       .catch((error) => {
+         console.log(error);
+         this.props.addNotificationMute({fetchData: true, message: 'Thêm hàng mới hàng thất bại', level:'error'});
+       })
+     }
+   }
   render(){
     let { data } = this.state;
+    const styles = {
+      color: {
+        width: '36px',
+        height: '14px',
+        borderRadius: '2px',
+        background: `rgba(${ this.state.color.r }, ${ this.state.color.g }, ${ this.state.color.b }, ${ this.state.color.a })`,
+      },
+      swatch: {
+        padding: '5px',
+        background: '#fff',
+        borderRadius: '1px',
+        boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+        display: 'inline-block',
+        cursor: 'pointer',
+      },
+      popover: {
+        position: 'absolute',
+        zIndex: '2',
+      },
+      cover: {
+        position: 'fixed',
+        top: '0px',
+        right: '0px',
+        bottom: '0px',
+        left: '0px',
+      },
+    }
     return(
       <div className="column">
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -52,8 +131,10 @@ export default class StockModelForm extends React.Component {
             </li>
           </ol>
           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', marginTop: 5}}>
-            <button type="button" className="btn btn-primary">Lưu và khởi tạo</button>
-            <button type="button" className="btn btn-primary" style={{marginLeft: 10}}>Lưu</button>
+            <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit} onClick={() => this.handleSave(true)}>Lưu và khởi tạo</button>
+            <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit} style={{marginLeft: 10}} onClick={() => {
+              this.handleSave()
+            }}>Lưu</button>
             <button type="button" className="btn btn-danger" style={{margin: '0 10px'}}>Hủy</button>
           </div>
         </div>
@@ -74,13 +155,20 @@ export default class StockModelForm extends React.Component {
                   <label>Cân nặng</label>
                   <input type="text" className="form-control" value={data.weight} onChange={({target}) => {
                     this.setState((prevState) => {
-                      prevState.data.weight = parseInt(target.value);
+                      prevState.data.weight = target.value;
                       return prevState;
                     });
                   }}/>
                 </div>
                 <div className="form-group">
                   <label>Màu sắc</label>
+                  <div style={ styles.swatch } onClick={ this.handleClick }>
+                     <div style={ styles.color } />
+                   </div>
+                   { this.state.displayColorPicker ? <div style={ styles.popover }>
+                     <div style={ styles.cover } onClick={ this.handleClose }/>
+                     <SketchPicker color={ this.state.color } onChange={ this.handleChange } />
+                   </div> : null }
                   <input type="text" className="form-control" />
                 </div>
                 <div className="form-group">
@@ -124,7 +212,7 @@ export default class StockModelForm extends React.Component {
                   <label>Đơn vị</label>
                   <input type="text" className="form-control" value={data.unit} onChange={({target}) => {
                     this.setState((prevState) => {
-                      prevState.data.weight = target.value;
+                      prevState.data.unit = target.value;
                       return prevState;
                     });
                   }}/>
@@ -211,3 +299,15 @@ export default class StockModelForm extends React.Component {
     )
   }
 }
+
+const INSERT_STOCKMODEL = gql`
+    mutation insertStockModel($userId: String!, $info: String!){
+        insertStockModel(userId: $userId, info: $info)
+}`
+export default compose (
+    graphql(INSERT_STOCKMODEL, {
+        props: ({mutate})=> ({
+            insertStockModel : (userId, info) => mutate({variables:{userId, info}})
+        })
+    }),
+)(StockModelForm);
