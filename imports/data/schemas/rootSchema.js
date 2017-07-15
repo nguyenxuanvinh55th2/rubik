@@ -17,12 +17,18 @@ const rootSchema = `
       isCategory: Boolean
       createdAt: Float
     }
+    type StockType {
+      _id: String
+      name: String
+      active: Boolean
+    }
     type StockModel {
       _id: String
       name: String
       active: Boolean
       weight: String
       colors: [String]
+      categories: [String]
       isLimited: Boolean
       isPromotion: Boolean
       images: [File]
@@ -32,15 +38,19 @@ const rootSchema = `
       quantity: Int
       saleOff: Float
       description: String
+      stockType: StockType
     }
     type Query {
       categories: [Classify]
+      stockTypes: [StockType]
     }
     type Mutation {
       removeCategories(userId: String!, _id: String!): String
       insertCategories(userId: String!, info: String!): String
       insertStockModel(userId: String!, info: String!): String
       insertFiles(userId: String, info: String): String
+      removeStockType(userId: String!, _id: String!): String
+      insertStockType(userId: String!, info: String!): String
     }
 `
 export default rootSchema;
