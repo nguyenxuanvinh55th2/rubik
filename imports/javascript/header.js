@@ -63,9 +63,18 @@ function menuMobile(){
 		}
 	});
 }
+function slideChitiet(){
+	$('.click-anh ul li').click(function() {
+		$('.show-anh .item').removeClass('active');
+		var value = $(this).attr('data');
+		$('.show-anh .item'+value).addClass('active');
+
+	});
+}
 export {Search}
 export {removeSearch}
 export {PinHeader}
 export {PinTop}
 export {showProduct}
 export {menuMobile}
+export {slideChitiet}

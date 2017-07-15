@@ -1,16 +1,21 @@
 .header-top{
-	border-bottom: 1px solid #000;
+	border-bottom: 1px solid #fff;
+	background-color: #f94949;
 	ul{
 		margin-bottom: 0;
 	}
 	li{
 		display: inline-block;
-		padding: 15px 0 10px 20px;
+		padding: 4px 0 0px 20px;
 		a{
-
 			font-size: 20px;
 		}
-
+		i{
+			color: #fff;
+			&:hover{
+				color: #575757;
+			}
+		}
 	}
 	.form-group{
 		position: relative;
@@ -25,7 +30,7 @@
 			transform: translateY(-50%);
 			height: 20px;
 			width: 2px;
-			background-color: #000;
+			background-color: #fff;
 		}
 		input{
 			display: inline-block;
@@ -43,6 +48,9 @@
 			transform: translateY(-50%);
 		}
 		&.active-search{
+			.icon-search i{
+				color: #000;
+			}
 			input{
 				width: 300px;
 				visibility: visible;
@@ -77,14 +85,14 @@
 			font-size: 17px;
 			i{
 				font-size: 30px;
-				color: red;
+				color: #ed1e24;
 			}
 			&:before{
 				content: '';
 				width: 0%;
 				position: absolute;
 				left: 0;
-				background-color: red;
+				background-color: #ed1e24;
 				bottom: -5px;
 				height: 2px;
 				transition: all .3s ;
@@ -96,7 +104,7 @@
 					width: 100%;
 					position: absolute;
 					left: 0;
-					background-color: red;
+					background-color: #ed1e24;
 					bottom: -5px;
 					height: 2px;
 					transition: all .3s;
@@ -155,8 +163,8 @@
 		color: #fff;
 		font-size: 17px;
 		&:hover,&:active{
-		text-decoration: none;
-color:  red;
+			text-decoration: none;
+			color:  #ed1e24;
 		}
 
 	}
@@ -191,15 +199,18 @@ color:  red;
 @media only screen and (max-width: 767px){
 	.header-main{
 		.menu-control {
-			border: 1px solid #000;
+			border: none;
 			background-color: #fff;
+			&:focus{
+				outline: 0;
+			}
 			.box{
 				display: block;
 				margin-top: 5px;
 				.icon-bar {
 					height: 2px;
 					width: 35px;
-					background: red;
+					background: #ed1e24;
 					display: block;
 					margin-bottom: 6px;
 				}
@@ -239,7 +250,7 @@ color:  red;
 		}
 		.fa-cart-arrow-down{
 			font-size: 30px;
-			color:red;
+			color:#ed1e24;
 		}
 	}
 	

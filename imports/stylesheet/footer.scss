@@ -1,5 +1,6 @@
 #footer{
 	padding-top: 20px;
+	background-color: #f1f1f1;
 	h3{
 		text-align: center;
 	}
@@ -11,7 +12,7 @@
 			font-size: 18px;
 			i{
 				font-size: 21px;
-				color: red;
+				color: #ed1e24;
 				padding-right: 10px;
 			}
 		}
@@ -44,7 +45,7 @@
 		display: inline-block;
 		padding: 5px 15px;
 		a{
-			color: red;
+			color: #ed1e24;
 			font-size: 25px;
 			&:hover{
 				color: #575757;
@@ -55,7 +56,7 @@
 		padding-top: 30px;
 	}
 	.end-footer{
-		background-color: red;
+		background-color: #ed1e24;
 		color: #fff;
 		p{
 			font-size: 17px;

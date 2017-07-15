@@ -81,5 +81,35 @@ const rootMutation = {
       }
       return future.wait();
   },
+  insertInvoice(_, {token, info}) {
+    let invoice = Invoices.findOne({_id: token});
+    if(invoice) {
+      return invoice._id
+    }
+    info = JSON.parse(info);
+    Invoices.insert(info);
+    return info;
+  },
+  insertInvoiceDetail(_, {token, info}) {
+    info = JSON.parse(info);
+    let invoice = Invoices.findOne({_id: token});
+    let invoiceDetail = InvoiceDetails.findOne({'invoice._id': token, 'stockModel._id': info.stockModel._id});
+    let amount = info.quantity * (invoiceDetail ? invoiceDetail.stockModel.price : info.stockModel.price);
+    let docAmount = invoice.amount + amount;
+    let total = docAmount * invoice.discount / 100;
+    if(invoiceDetail) {
+      InvoiceDetails.update({_id: invoiceDetail._id}, {$inc: {
+        quantity: info.quantity,
+        amount: amount
+      }});
+    } else {
+        InvoiceDetails.insert(info)
+    }
+    Invoices.update({_id: invoice._id}, {$set: {
+      amount: docAmount,
+      total
+    }});
+    return
+  }
 }
 export default rootMutation

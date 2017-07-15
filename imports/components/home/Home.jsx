@@ -1,4 +1,8 @@
 import React from 'react'
+
+import { graphql, compose } from 'react-apollo';
+import gql from 'graphql-tag';
+
 import Sliders from './Slider.jsx'
 import SliderNew from './SliderNews.jsx'
 import Header from '../main/Header.jsx'
@@ -7,7 +11,8 @@ import Product from '../product/Product.jsx'
 import {PinTop} from '../../javascript/header.js'
 import { Link } from 'react-router';
 import {showProduct} from '../../javascript/header.js'
-export default class Home extends React.Component {
+
+class Home extends React.Component {
 constructor(props) {
 super(props)
 }
@@ -67,7 +72,9 @@ return (
 	<h2 className="text-center">SẢN PHẨM MỚI</h2>
 	<div className="two-space"></div>
 		<div className="row">
-			<Product />
+      {
+        <Product stockModels={this.props.data.stockModels}/>
+      }
 		</div>
 		<p className="text-center"><Link to={'#'} className="btn-more">Xem thêm</Link></p>
 	</div>
@@ -77,7 +84,9 @@ return (
 	<h2 className="text-center">TOP SẢN PHẨM BÁN CHẠY</h2>
 	<div className="two-space"></div>
 		<div className="row">
-			<Product />
+      {
+        <Product stockModels={this.props.data.stockModels}/>
+      }
 		</div>
 		<p className="text-center"><Link to={'#'} className="btn-more">Xem thêm</Link></p>
 	</div>
@@ -91,3 +100,26 @@ return (
 )
 }
 }
+
+
+const STOCK_MODEL_QUERY = gql`
+    query stockModels($limit: Int){
+        stockModels(limit: $limit) {
+            _id
+            name
+						images {
+							_id
+							file
+						}
+            price
+        }
+}`
+
+export default compose (
+    graphql(STOCK_MODEL_QUERY, {
+        options: ()=> ({
+            variables: {limit: 4},
+            fetchPolicy: 'network-only'
+        })
+    }),
+)(Home);
