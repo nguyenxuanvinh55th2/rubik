@@ -1,6 +1,6 @@
 const NonScalars = {
-  Task :{
-      _id: ({_id}) => _id
+  StockModel :{
+      images: ({images}) => images
   }
 }
 export default NonScalars;

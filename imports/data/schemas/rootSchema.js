@@ -3,8 +3,11 @@ const rootSchema = `
       query: Query
       mutation: Mutation
     }
-    type Task {
-      _id: String
+    type File {
+      _id: String,
+      file: String,
+      fileName: String,
+      type: String
     }
     type Classify {
       _id: String
@@ -14,8 +17,23 @@ const rootSchema = `
       isCategory: Boolean
       createdAt: Float
     }
+    type StockModel {
+      _id: String
+      name: String
+      active: Boolean
+      weight: String
+      colors: [String]
+      isLimited: Boolean
+      isPromotion: Boolean
+      images: [File]
+      unit: String
+      averagePrice: Float
+      price: Float
+      quantity: Int
+      saleOff: Float
+      description: String
+    }
     type Query {
-      getTasks: [Task]
       categories: [Classify]
     }
     type Mutation {

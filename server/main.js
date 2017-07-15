@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
-
+import { Email } from 'meteor/email';
 import express from 'express';
 import cors from 'cors';
 Future = Npm.require('fibers/future');
@@ -9,7 +9,18 @@ moment = require('moment');
 
 import {createApolloServer} from 'meteor/apollo';
 import schema from '/imports/data'
-
+process.env.MAIL_URL="smtp://noreply.lokatech@gmail.com:defa4ltlokatech@smtp.gmail.com:587/";
+// Email.send({
+//     from: Meteor.settings.email,
+//     bcc: "nguyenxuanvinh55th2@gmail.com",
+//     replyTo: Meteor.settings.email || undefined,
+//     subject: 'Báo cáo xuất kho',
+//     text: "helo vinh nguyen"
+// }, (err) => {
+//     if (err) {
+//       console.log(err);
+//     }
+// });
 createApolloServer({
   schema,
   graphiql: Meteor.isDevelopment,

@@ -42,7 +42,7 @@ export default class HeaderManager extends React.Component {
                 <span className="caret"></span></a>
                 <ul className="dropdown-menu">
                   <li><a onClick={() => browserHistory.push('/category')}>Chủng loại</a></li>
-                  <li><a onClick={() => browserHistory.push('/stockModel')}>Kiểu hàng</a></li>
+                  <li><a onClick={() => browserHistory.push('/stockModels')}>Kiểu hàng</a></li>
                   <li><a onClick={() => browserHistory.push('/customer')}>Khách hàng</a></li>
                 </ul>
               </li>
