@@ -131,5 +131,17 @@ const rootMutation = {
     }
     return;
   },
+  removeInvoiceDetail: (_, { _id }) => {
+    let invoiceDetail = InvoiceDetails.findOne({_id});
+    let invoice = Invoices.findOne({_id: invoiceDetail.invoice._id});
+    let docAmount = invoice.amount - invoiceDetail.amount;
+    let total = docAmount * invoice.discount / 100;
+    InvoiceDetails.remove(_id);
+    Invoices.update({_id: invoice._id}, {$set: {
+      amount: docAmount,
+      total
+    }});
+    return
+  }
 }
 export default rootMutation

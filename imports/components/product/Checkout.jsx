@@ -2,11 +2,13 @@ import React from 'react'
 import {Link} from 'react-router';
 import Header from '../main/Header.jsx'
 import Footer from '../main/Footer.jsx'
-export default class Checkout extends React.Component{
+class Checkout extends React.Component{
 constructor(props) {
 super(props);
 }
 render(){
+	let { getInVoice } = this.props.data;
+	if(getInVoice) {
 return(
 
 <div>
@@ -71,27 +73,21 @@ return(
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>rubik</td>
-									<td>1</td>
-									<td>99000</td>
-								</tr>
-								<tr>
-									<td>rubik</td>
-									<td>1</td>
-									<td>99000</td>
-								</tr>
-								<tr>
-									<td>rubik</td>
-									<td>1</td>
-									<td>99000</td>
-								</tr>
+								{
+									__.map(getInVoice.invoiceDetails, item => (
+										<tr>
+											<td>{item.stockModel.name}</td>
+											<td>{item.quantity}</td>
+											<td>{accounting.format(item.stockModel.price)}</td>
+										</tr>
+									))
+								}
 							</tbody>
 						</table>
 						<hr />
 						<p>Thành tiền <span>(Tổng số tiền thanh toán)</span></p>
-						<p className="text-right rate">1.3600.000đ</p>
-						
+						<p className="text-right rate">{accounting.format(getInVoice.total) + ' đ'}</p>
+
 					</div>
 				</div>
 			</div>
@@ -103,5 +99,63 @@ return(
 	<Footer />
 </div>
 )
+} else {
+		return (
+			<div className="loading">
+					<i className="fa fa-spinner fa-spin" style={{fontSize: 50}}></i>
+			</div>
+		)
 }
 }
+
+const INVOICE_QUERY = gql`
+    query getInVoice($token: String!){
+        getInVoice(token: $token) {
+					_id
+					code
+					status
+					amount
+					discount
+					total
+					createdAt
+					shipFee
+					invoiceDetails {
+						_id
+						stockModel {
+							_id
+							code
+	            name
+							quantity
+							saleOff
+							isPromotion
+							images {
+								_id
+								file
+							}
+	            price
+							description
+						}
+						quantity
+						amount
+					}
+        }
+}`
+
+const REMOVE_INVOICE_DETAIL = gql`
+    mutation removeInvoiceDetail($_id: String!){
+        removeInvoiceDetail(_id: $_id)
+}`
+
+export default compose (
+    graphql(INVOICE_QUERY, {
+        options: (ownProps)=> ({
+            variables: {token: localStorage.getItem('invoiceId') ? localStorage.getItem('invoiceId') : ''},
+            fetchPolicy: 'network-only'
+        })
+    }),
+		graphql(REMOVE_INVOICE_DETAIL, {
+        props: ({mutate})=> ({
+            removeInvoiceDetail : (_id) => mutate({variables:{_id}})
+        })
+    }),
+)(Cart);

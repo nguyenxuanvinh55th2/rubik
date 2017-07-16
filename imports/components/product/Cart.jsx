@@ -6,13 +6,20 @@ import gql from 'graphql-tag';
 import accounting from 'accounting';
 import moment from 'moment';
 
-import {Link} from 'react-router';
+import {Link, browserHistory} from 'react-router';
 import Header from '../main/Header.jsx'
 import Footer from '../main/Footer.jsx'
 class Cart extends React.Component{
 constructor(props) {
 super(props);
 }
+
+removeInvoiceDetail(_id) {
+	this.props.removeInvoiceDetail(_id).then(() => {
+		this.props.data.refetch();
+	});
+}
+
 render(){
 	let { getInVoice } = this.props.data;
 	if(getInVoice) {
@@ -32,7 +39,7 @@ return(
 							<div className="row">
 								<div className="col-sm-3">
 								<div className="image">
-									<img src={item.stockModel.images[0].file} alt="" />
+									<img src={item.stockModel.images[0] ? item.stockModel.images[0].file : ''} alt="" />
 								</div>
 								</div>
 								<div className="col-sm-9">
@@ -40,7 +47,7 @@ return(
 									<h4>Danh mục: Rubik 2x2x2</h4>
 									<h4>{'Giá: ' +  accounting.format(item.stockModel.price) + 'đ'}</h4>
 									<div className="group-star"><i className="fa fa-star" aria-hidden="true"></i><i className="fa fa-star" aria-hidden="true"></i><i className="fa fa-star" aria-hidden="true"></i><i className="fa fa-star" aria-hidden="true"></i><i className="fa fa-star" aria-hidden="true"></i></div>
-									<span className="close"><i className="fa fa-times" aria-hidden="true"></i></span>
+									<span className="close"><i className="fa fa-times" aria-hidden="true" onClick={this.removeInvoiceDetail.bind(this, item._id)}></i></span>
 								</div>
 							</div>
 						</div>
@@ -65,7 +72,7 @@ return(
 										<tr>
 											<td>{item.stockModel.name}</td>
 											<td>{item.quantity}</td>
-											<td>{accounting.format(item.stockModel.price)}</td>
+											<td>{accounting.format(item.stockModel.price) + ' đ'}</td>
 										</tr>
 									))
 								}
@@ -73,9 +80,9 @@ return(
 						</table>
 						<hr />
 						<p>Thành tiền <span>(Tổng số tiền thanh toán)</span></p>
-						<p className="text-right rate">{ accounting.format(getInVoice.total) + 'đ' }</p>
+						<p className="text-right rate">{ accounting.format(getInVoice.total) + ' đ' }</p>
 						<p className="text-center">
-						<a className="btn-more btn-red" href="#">Thanh toán</a>
+						<a className="btn-more btn-red" href="#" onClick={() => browserHistory.push('/checkout')}>Thanh toán</a>
 						</p>
 					</div>
 				</div>
@@ -128,14 +135,9 @@ const INVOICE_QUERY = gql`
         }
 }`
 
-const INSERT_INVOICE = gql`
-    mutation insertInvoice($token: String!, $info: String){
-        insertInvoice(token: $token, info: $info)
-}`
-
-const INSERT_INVOICE_DETAIL = gql`
-    mutation insertInvoiceDetail($token: String!, $info: String){
-        insertInvoiceDetail(info: $info)
+const REMOVE_INVOICE_DETAIL = gql`
+    mutation removeInvoiceDetail($_id: String!){
+        removeInvoiceDetail(_id: $_id)
 }`
 
 export default compose (
@@ -143,6 +145,11 @@ export default compose (
         options: (ownProps)=> ({
             variables: {token: localStorage.getItem('invoiceId') ? localStorage.getItem('invoiceId') : ''},
             fetchPolicy: 'network-only'
+        })
+    }),
+		graphql(REMOVE_INVOICE_DETAIL, {
+        props: ({mutate})=> ({
+            removeInvoiceDetail : (_id) => mutate({variables:{_id}})
         })
     }),
 )(Cart);
