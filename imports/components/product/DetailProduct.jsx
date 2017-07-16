@@ -26,13 +26,9 @@ class DetailProduct extends React.Component {
     let {stockModelById} = this.props.data;
     if (stockModelById) {
       if (stockModelById.description) {
-        console.log("message1");
         setTimeout(() => {
-          console.log("message2");
           let description = document.getElementById('mota');
-          console.log("message3 ", description);
           if (description) {
-            console.log("message");
             description.innerHTML = stockModelById.description;
           }
         }, 500)
@@ -80,7 +76,6 @@ class DetailProduct extends React.Component {
     invoice = JSON.stringify(invoice);
     detail = JSON.stringify(detail);
     this.props.insertInvoice(token, invoice).then(() => {
-      console.log("token ", token);
       this.props.insertInvoiceDetail(token, detail).then(() => {
         browserHistory.push('/shoppingCart');
       });
@@ -89,8 +84,6 @@ class DetailProduct extends React.Component {
   render() {
     let {stockModelById} = this.props.data;
     if (stockModelById) {
-      console.log("stockModelById ", stockModelById);
-
       let images = [];
       __.forEach(stockModelById.images, (item, idx) => {
         if (idx < 3) {
