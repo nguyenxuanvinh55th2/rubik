@@ -142,6 +142,12 @@ const rootMutation = {
       total
     }});
     return
+  },
+  updateUserInfo: (_, {token, info}) => {
+    info = JSON.parse(info);
+    return Invoices.update({_id: token}, {$set: {
+
+    }});
   }
 }
 export default rootMutation

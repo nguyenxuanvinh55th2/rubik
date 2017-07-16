@@ -34,35 +34,36 @@ class Cart extends React.Component {
               <div className="row">
                 <div className="col-sm-8">
                   <div className="left-cart">
-                    {__.map(getInVoice.invoiceDetails, (item, idx) => (
-                      <div className={"box-cart"}>
-                        <div className="row">
-                          <div className="col-sm-3">
-                            <div className="image">
-                              <img src={item.stockModel.images[0]
-                                ? item.stockModel.images[0].file
-                                : ''} alt=""/>
-                            </div>
-                          </div>
-                          <div className="col-sm-9">
-                            <h4>{item.stockModel.name}</h4>
-                            <h4>Danh mục: Rubik 2x2x2</h4>
-                            <h4>{'Giá: ' + accounting.format(item.stockModel.price) + 'đ'}</h4>
-                            <div className="group-star">
-                              <i className="fa fa-star" aria-hidden="true"></i>
-                              <i className="fa fa-star" aria-hidden="true"></i>
-                              <i className="fa fa-star" aria-hidden="true"></i>
-                              <i className="fa fa-star" aria-hidden="true"></i>
-                              <i className="fa fa-star" aria-hidden="true"></i>
-                            </div>
-                            <span className="close">
-                              <i className="fa fa-times" aria-hidden="true" onClick={this.removeInvoiceDetail.bind(this, item._id)}></i>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    ))
-}
+                    {
+											__.map(getInVoice.invoiceDetails, (item, idx) => (
+	                      <div className={"box-cart"}>
+	                        <div className="row">
+	                          <div className="col-sm-3">
+	                            <div className="image">
+	                              <img src={item.stockModel.images[0]
+	                                ? item.stockModel.images[0].file
+	                                : ''} alt=""/>
+	                            </div>
+	                          </div>
+	                          <div className="col-sm-9">
+	                            <h4>{item.stockModel.name}</h4>
+	                            <h4>Danh mục: Rubik 2x2x2</h4>
+	                            <h4>{'Giá: ' + accounting.format(item.stockModel.price) + 'đ'}</h4>
+	                            <div className="group-star">
+	                              <i className="fa fa-star" aria-hidden="true"></i>
+	                              <i className="fa fa-star" aria-hidden="true"></i>
+	                              <i className="fa fa-star" aria-hidden="true"></i>
+	                              <i className="fa fa-star" aria-hidden="true"></i>
+	                              <i className="fa fa-star" aria-hidden="true"></i>
+	                            </div>
+	                            <span className="close">
+	                              <i className="fa fa-times" aria-hidden="true" onClick={this.removeInvoiceDetail.bind(this, item._id)}></i>
+	                            </span>
+	                          </div>
+	                        </div>
+	                      </div>
+                    	))
+										}
                   </div>
                 </div>
                 <div className="col-sm-4">

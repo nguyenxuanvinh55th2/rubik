@@ -81,14 +81,15 @@ class Checkout extends React.Component {
                         </tr>
                       </thead>
                       <tbody>
-                        {__.map(getInVoice.invoiceDetails, (item, idx) => (
-                          <tr key={idx}>
-                            <td>{item.stockModel.name}</td>
-                            <td>{item.quantity}</td>
-                            <td>{accounting.format(item.stockModel.price)}</td>
-                          </tr>
-                        ))
-}
+                        {
+													__.map(getInVoice.invoiceDetails, (item, idx) => (
+	                          <tr key={idx}>
+	                            <td>{item.stockModel.name}</td>
+	                            <td>{item.quantity}</td>
+	                            <td>{accounting.format(item.stockModel.price)}</td>
+	                          </tr>
+                        	))
+												}
                       </tbody>
                     </table>
                     <hr/>

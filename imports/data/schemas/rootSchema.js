@@ -86,6 +86,7 @@ const rootSchema = `
       removeStockType(userId: String!, _id: String!): String
       insertStockType(userId: String!, info: String!): String
       removeInvoiceDetail(_id: String!): String
+      updateUserInfo(token: String!, info: String): String
     }
 `
 export default rootSchema;
