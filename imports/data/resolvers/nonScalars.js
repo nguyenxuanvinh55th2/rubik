@@ -3,7 +3,6 @@ const NonScalars = {
     images: ({images}) => {
       if(images && images[0]){
         return Files.find({_id:{$in: images}}).each().map((img)=>{
-          console.log(img.link(), img);
             return {
               _id: img._id,
               file: img.link(),
