@@ -172,10 +172,12 @@ class StockModelForm extends React.Component {
                     }}/>
                   </div>
                   <div className="form-group">
-                    <label>Màu sắc</label>
-                    <div style={ styles.swatch } onClick={ this.handleClick }>
-                       <div style={ styles.color } />
+                    <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
+                      <label>Màu sắc</label>
+                      <div style={ styles.swatch } onClick={ this.handleClick }>
+                         <div style={ styles.color } />
                      </div>
+                    </div>
                      { this.state.displayColorPicker ? <div style={ styles.popover }>
                        <div style={ styles.cover } onClick={ this.handleClose }/>
                        <SketchPicker color={ this.state.color } onChange={ this.handleChange } />
