@@ -36,7 +36,7 @@ class Cart extends React.Component {
                   <div className="left-cart">
                     {
 											__.map(getInVoice.invoiceDetails, (item, idx) => (
-	                      <div className={"box-cart"}>
+	                      <div key={idx} className={"box-cart"}>
 	                        <div className="row">
 	                          <div className="col-sm-3">
 	                            <div className="image">

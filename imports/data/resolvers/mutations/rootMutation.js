@@ -143,10 +143,11 @@ const rootMutation = {
     }});
     return
   },
-  updateUserInfo: (_, {token, info}) => {
+  orderDevoice: (_, {token, info}) => {
     info = JSON.parse(info);
     return Invoices.update({_id: token}, {$set: {
-
+      customer: info,
+      status: 1
     }});
   }
 }
