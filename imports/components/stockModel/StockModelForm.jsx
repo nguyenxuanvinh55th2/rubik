@@ -69,7 +69,11 @@ class StockModelForm extends React.Component {
    }
    handleSave(type){
      let data = this.state.data;
-     data.categories = __.map(data.categories, (category) => category.name)
+     data.categories = __.map(data.categories, (category) => category.name);
+     data.averagePrice = parseInt(data.averagePrice);
+     data.price = parseInt(data.price);
+     data.quantity = parseInt(data.quantity);
+     data.saleOff = parseInt(data.saleOff);
      let info = {
        data: data,
        images: this.state.data.images
@@ -81,7 +85,7 @@ class StockModelForm extends React.Component {
            this.props.addNotificationMute({fetchData: true, message: 'Thêm hàng mới thành công', level:'success'});
            if(type){
              this.setState({data: {
-               name: '', weight: '', colors: [], origin: '', isLimited: false, isPromotion: false,
+               code: '', name: '', weight: '', colors: [], origin: '', isLimited: false, isPromotion: false,
                images: [], unit: '', averagePrice: 0, price: 0, quantity: 0, saleOff: 0, stockType :{_id: '', name: ''},
                description: '', categories: []
              }})
@@ -147,8 +151,8 @@ class StockModelForm extends React.Component {
               </li>
             </ol>
             <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', marginTop: 5}}>
-              <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit} onClick={() => this.handleSave(true)}>Lưu và khởi tạo</button>
-              <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit} style={{marginLeft: 10}} onClick={() => {
+              <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit || !data.code || !data.stockType._id} onClick={() => this.handleSave(true)}>Lưu và khởi tạo</button>
+              <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit || !data.code || !data.stockType._id} style={{marginLeft: 10}} onClick={() => {
                 this.handleSave()
               }}>Lưu</button>
               <button type="button" className="btn btn-danger" style={{margin: '0 10px'}}>Hủy</button>
@@ -158,6 +162,15 @@ class StockModelForm extends React.Component {
             <div className="col-sm-6 col-md-4 col-lg-3" style={{paddingRight: 0}}>
               <div className="column" style={{backgroundColor: 'white', height: this.state.height - 152, overflow: 'auto'}}>
                 <form className="form-horizontal" style={{padding: '2px 25px 2px 25px'}}>
+                  <div className="form-group">
+                    <label>Mã hàng</label>
+                    <input type="text" className="form-control" value={data.code} onChange={({target}) => {
+                      this.setState((prevState) => {
+                        prevState.data.code = target.value;
+                        return prevState;
+                      });
+                    }}/>
+                  </div>
                   <div className="form-group">
                     <label>Tên</label>
                     <input type="text" className="form-control" value={data.name} onChange={({target}) => {

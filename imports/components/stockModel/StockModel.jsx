@@ -3,31 +3,17 @@ import {AgGridReact} from 'ag-grid-react';
 import { browserHistory } from 'react-router';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
-class DeleteAditorRender extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-  render() {
-    return (
-      <div style={{
-        width: '100%'
-      }}>
-        <button className="btn btn-default" style={{
-          borderWidth: 0,
-          width: 56,
-          color: 'red'
-        }}>Xóa</button>
-      </div>
-    )
-  }
-}
+import Dialog from 'material-ui/Dialog';
+import { HanderEditorStockModel } from './ChildStockModel.jsx'
 class StockModel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       height: window.innerHeight,
       open: false,
-      name: ''
+      name: '',
+      dialogType: '',
+      stockModelSelect: {}
     }
     this.gridOptions = {
     floatingFilter: true,
@@ -45,7 +31,7 @@ class StockModel extends React.Component {
   return [
     {
       gridType: 'footer',
-      name: 'Total: ' +  data.length,
+      code: 'Total: ' +  data.length,
     }];
   }
   componentDidUpdate() {
@@ -55,6 +41,22 @@ class StockModel extends React.Component {
       this.gridOptions.api.setFloatingBottomRowData(this.renderFooterData(this.props.data.stockModels));
       this.gridOptions.api.hideOverlay();
     }
+  }
+  updateStockModes(node){
+
+  }
+  showImage(node){
+    console.log(node);
+    this.setState({open: true, dialogType: 'image', stockModelSelect: node.data})
+  }
+  importStock(node){
+
+  }
+  exportStock(node){
+
+  }
+  showDescription(node){
+
   }
   render(){
     console.log(this.props);
@@ -68,45 +70,171 @@ class StockModel extends React.Component {
     else {
       let columnDefs = [
         {
-          headerName: "",
-          field: 'delete',
-          minWidth: 56,
-          width: 56,
-          cellClass: 'agaction',
-          pinned: 'left',
-          filter: '',
-          cellRendererFramework: DeleteAditorRender,
+          headerName: "", field: 'delete',  minWidth: 80, width: 80,  pinned: 'left', filter: '',
+          cellRendererFramework: HanderEditorStockModel ,
+          cellRendererParams: {
+              updateStockModes: this.updateStockModes.bind(this), showImage: this.showImage.bind(this), importStock: this.importStock.bind(this),
+              exportStock: this.exportStock.bind.this, showDescription: this.showDescription.bind(this)
+            },
           cellStyle: (params) => {
             if (params.node.data.gridType == 'footer') {
               return {display: 'none'};
             }
-          },
-          onCellClicked: (params) => {
-            if (params.data && params.data._id) {
-              this.props.removeCategories(Meteor.userId(), params.data._id).then(({data}) => {
-                if (data) {
-                  this.props.data.refetch();
-                }
-              })
-            }
           }
-        }, {
-          headerName: "Tên kiểu hàng",
-          field: "name",
-          width: 320,
+        },
+        {
+          headerName: "Mã kiểu hàng",  field: "code", pinned: 'left',  width: 150, filter: 'text', filterParams: {
+            filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+          },   suppressMenu: true,
           cellStyle: function(params) {
             if (params.node.data.gridType == 'footer') {
               return {fontWeight: 'bold'};
             } else {
               return null;
             }
-          },
+          }
+        },
+        {
+          headerName: "Tên kiểu hàng", field: "name",  width: 200, filter: 'text',
           filterParams: {
             filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
           },
-          filter: 'text',
-          suppressMenu: true
-        }
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Loại hàng", field: "stockType.name",  width: 200, filter: 'text', suppressMenu: true,
+          filterParams: {
+            filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+          },
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Chủng loại", field: "categories",  width: 200, filter: 'text', suppressMenu: true,
+          filterParams: {
+            filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+          },
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Số lượng", field: "categories",  width: 200, filter: 'number', suppressMenu: true,
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Đơn vị", field: "unit",  width: 200, filter: 'number', suppressMenu: true,
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Cân nặng", field: "weight",  width: 200, filter: 'text', suppressMenu: true,
+          filterParams: {
+            filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+          },
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Xuất xứ", field: "origin",  width: 200, filter: 'text', suppressMenu: true,
+          filterParams: {
+            filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+          },
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Hàng giới hạn", field: "isLimited",  width: 200, filter: 'text', suppressMenu: true,
+          filterParams: {
+            filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+          },
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Hàng giảm giá", field: "isPromotion",  width: 200, filter: 'text', suppressMenu: true,
+          filterParams: {
+            filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+          },
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Giá nhập", field: "isLimited",  width: 200, filter: 'number', suppressMenu: true,
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Giá bán", field: "isLimited",  width: 200, filter: 'number', suppressMenu: true,
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Giá giảm", field: "isLimited",  width: 200, filter: 'number', suppressMenu: true,
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
       ];
       return(
         <div>

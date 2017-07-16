@@ -21,6 +21,12 @@ img{
 	transform: translateX(-50%);
 	transition: translateX(-50%);
 }
+.buton-grid{
+	background-color: transparent;
+	&:hover{
+		background-color: transparent;
+	}
+}
 .btn-cate{
 	padding: 10px 50px;
 	border: 1px solid #fff;
