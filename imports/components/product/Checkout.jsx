@@ -1,7 +1,15 @@
 import React from 'react'
 import {Link} from 'react-router';
+
+import __ from 'lodash';
+import { graphql, compose } from 'react-apollo';
+import gql from 'graphql-tag';
+import accounting from 'accounting';
+import moment from 'moment';
+
 import Header from '../main/Header.jsx'
 import Footer from '../main/Footer.jsx'
+
 class Checkout extends React.Component{
 constructor(props) {
 super(props);
@@ -74,8 +82,8 @@ return(
 							</thead>
 							<tbody>
 								{
-									__.map(getInVoice.invoiceDetails, item => (
-										<tr>
+									__.map(getInVoice.invoiceDetails, (item, idx) => (
+										<tr key={idx}>
 											<td>{item.stockModel.name}</td>
 											<td>{item.quantity}</td>
 											<td>{accounting.format(item.stockModel.price)}</td>
@@ -105,6 +113,7 @@ return(
 					<i className="fa fa-spinner fa-spin" style={{fontSize: 50}}></i>
 			</div>
 		)
+}
 }
 }
 
@@ -158,4 +167,4 @@ export default compose (
             removeInvoiceDetail : (_id) => mutate({variables:{_id}})
         })
     }),
-)(Cart);
+)(Checkout);

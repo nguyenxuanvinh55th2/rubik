@@ -9,6 +9,7 @@ import moment from 'moment';
 import {Link, browserHistory} from 'react-router';
 import Header from '../main/Header.jsx'
 import Footer from '../main/Footer.jsx'
+
 class Cart extends React.Component{
 constructor(props) {
 super(props);
@@ -68,8 +69,8 @@ return(
 							</thead>
 							<tbody>
 								{
-									__.map(getInVoice.invoiceDetails, item => (
-										<tr>
+									__.map(getInVoice.invoiceDetails, (item, idx) => (
+										<tr key={idx}>
 											<td>{item.stockModel.name}</td>
 											<td>{item.quantity}</td>
 											<td>{accounting.format(item.stockModel.price) + ' đ'}</td>
