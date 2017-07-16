@@ -134,13 +134,16 @@ class StockModel extends React.Component {
 const STOCK_MODEL_QUERY = gql `
     query stockModels($limit: Int){
         stockModels(limit: $limit) {
-            _id
-            name
-						images {
-							_id
-							file
-						}
-            price
+          _id code name weight isLimited  isPromotion
+          unit averagePrice  price  quantity saleOff description
+					images {
+						_id
+						file
+					}
+          categories
+          stockType {
+            _id name
+          }
         }
 }`
 
