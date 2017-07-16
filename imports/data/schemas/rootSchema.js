@@ -25,6 +25,11 @@ const rootSchema = `
       isCategory: Boolean
       createdAt: Float
     }
+    type StockType {
+      _id: String
+      name: String
+      active: Boolean
+    }
     type StockModel {
       _id: String
       code: String
@@ -32,6 +37,7 @@ const rootSchema = `
       active: Boolean
       weight: String
       colors: [String]
+      categories: [String]
       isLimited: Boolean
       isPromotion: Boolean
       images: [File]
@@ -41,6 +47,7 @@ const rootSchema = `
       quantity: Int
       saleOff: Float
       description: String
+      stockType: StockType
     }
     type Invoice {
       _id: String
@@ -67,6 +74,7 @@ const rootSchema = `
       stockModels(limit: Int): [StockModel]
       stockModelById(_id: String!): StockModel
       getInVoice(token: String!): Invoice
+      stockTypes: [StockType]
     }
     type Mutation {
       removeCategories(userId: String!, _id: String!): String
@@ -75,6 +83,8 @@ const rootSchema = `
       insertFiles(userId: String, info: String): String
       insertInvoice(token: String!, info: String): String
       insertInvoiceDetail(token: String!, info: String): String
+      removeStockType(userId: String!, _id: String!): String
+      insertStockType(userId: String!, info: String!): String
     }
 `
 export default rootSchema;

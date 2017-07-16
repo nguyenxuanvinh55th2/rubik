@@ -5,3 +5,10 @@ Meteor.publish('stockModels', function () {
         this.ready();
     }
 });
+Meteor.publish('stockTypes', function () {
+    if (this.userId) {
+        return StockModels.find({});
+    } else {
+        this.ready();
+    }
+});

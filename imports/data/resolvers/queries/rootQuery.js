@@ -16,6 +16,9 @@ const rootQuery = {
   },
   getInVoice: (_, {token}) => {
     return Invoices.findOne({_id: token});
+  },
+  stockTypes: (_, {}) => {
+    return StockTypes.find({active: true}).fetch();
   }
 }
 export default rootQuery;

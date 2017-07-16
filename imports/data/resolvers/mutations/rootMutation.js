@@ -110,6 +110,26 @@ const rootMutation = {
       total
     }});
     return
-  }
+  },
+  insertStockType: (_,{ userId, info }) => {
+    let user = Meteor.users.findOne({_id: userId});
+    if(user) {
+      info = JSON.parse(info);
+      info.createdAt = moment().valueOf();
+      info.createdBy = {
+        _id: user._id,
+        username: user.username
+      }
+      return StockTypes.insert(info);
+    }
+    return;
+  },
+  removeStockType: (_,{ userId, _id }) => {
+    let user = Meteor.users.findOne({_id: userId});
+    if(user) {
+      return StockTypes.update({_id}, {$set: {active: false}});
+    }
+    return;
+  },
 }
 export default rootMutation
