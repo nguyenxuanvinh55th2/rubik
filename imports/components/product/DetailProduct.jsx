@@ -44,7 +44,7 @@ class DetailProduct extends React.Component {
     }
     return randomChar;
   }
-  addToCart() {
+  addToCart(linkTo) {
     let token = localStorage.getItem('invoiceId');
     let {stockModelById} = this.props.data;
     if (!token || token === '') {
@@ -77,7 +77,7 @@ class DetailProduct extends React.Component {
     detail = JSON.stringify(detail);
     this.props.insertInvoice(token, invoice).then(() => {
       this.props.insertInvoiceDetail(token, detail).then(() => {
-        browserHistory.push('/shoppingCart');
+        browserHistory.push(linkTo);
       });
     })
   }
@@ -159,11 +159,11 @@ class DetailProduct extends React.Component {
                             : 'Hết hàng'}</h4>
                         <h4 className="dmuc">Danh mục: Rubik 2x2x2</h4>
                         <p>
-                          <a className="btn-more btn-red" href="#">MUA HÀNG</a>
+                          <a className="btn-more btn-red" href="#" onClick={this.addToCart.bind(this, '/checkout')}>MUA HÀNG</a>
                         </p>
                         <div className="one-space"></div>
                         <p>
-                          <a className="btn-more" href="#" onClick={this.addToCart.bind(this)}>THÊM VÀO GIỎ HÀNG</a>
+                          <a className="btn-more" href="#" onClick={this.addToCart.bind(this, '/shoppingCart')}>THÊM VÀO GIỎ HÀNG</a>
                         </p>
                       </div>
                     </div>
@@ -223,6 +223,9 @@ const STOCK_MODEL_QUERY = gql `
 							_id
 							file
 						}
+            votes {
+              stars
+            }
             price
 						description
         }

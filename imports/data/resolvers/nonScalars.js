@@ -14,12 +14,14 @@ const NonScalars = {
       }
       return []
     },
+    votes: ({votes}) => votes
   },
   Invoice: {
     invoiceDetails: ({_id}) => InvoiceDetails.find({'invoice._id': _id}).fetch()
   },
   InvoiceDetail: {
-    stockModel: ({stockModel}) => stockModel
+    stockModel: ({stockModel}) => stockModel,
+    votes: ({stockModel}) => StockModels.findOne({_id: stockModel._id}).votes
   }
 }
 export default NonScalars;

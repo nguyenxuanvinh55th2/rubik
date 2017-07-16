@@ -137,9 +137,12 @@ class Checkout extends React.Component {
 															let mobileReg11 = /^\(?([0-9]{4})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 															if(info.mobile === '') {
 																this.setState({mobileError: 'Trường này không được để trống'});
-															} else {
-																	this.setState({mobileError: null});
-															}
+															} else
+                                  if(!mobileReg10.test(info.mobile) && !mobileReg11.test(info.mobile)){
+                                    this.setState({mobileError: 'Sai định dạng số điện thoại'});
+                                  } else {
+                                    this.setState({mobileError: null});
+                                  }
 														}}/>
 													<span className="help-block">{mobileError ? <font style={{color: 'red'}}>{mobileError}</font> : null}</span>
                         </div>

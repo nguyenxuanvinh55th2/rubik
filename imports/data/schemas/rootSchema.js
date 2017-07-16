@@ -48,6 +48,15 @@ const rootSchema = `
       saleOff: Float
       description: String
       stockType: StockType
+      votes: [Vote]
+    }
+    type Vote {
+      stars: Int
+      comment: String
+      name: String
+      mobile: String
+      email: String
+      createdAt: Float
     }
     type Invoice {
       _id: String
@@ -68,6 +77,7 @@ const rootSchema = `
       amount: String
       invoice: Invoice
       createdAt: Float
+      votes: [Vote]
     }
     type Query {
       categories: [Classify]

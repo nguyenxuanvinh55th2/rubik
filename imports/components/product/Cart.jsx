@@ -10,6 +10,8 @@ import {Link, browserHistory} from 'react-router';
 import Header from '../main/Header.jsx'
 import Footer from '../main/Footer.jsx'
 
+import Rating from './Rating.jsx';
+
 class Cart extends React.Component {
   constructor(props) {
     super(props);
@@ -23,6 +25,7 @@ class Cart extends React.Component {
 
   render() {
     let {getInVoice} = this.props.data;
+    console.log('getInVoice ', getInVoice);
     if (getInVoice) {
       return (
 
@@ -50,11 +53,7 @@ class Cart extends React.Component {
 	                            <h4>Danh mục: Rubik 2x2x2</h4>
 	                            <h4>{'Giá: ' + accounting.format(item.stockModel.price) + 'đ'}</h4>
 	                            <div className="group-star">
-	                              <i className="fa fa-star" aria-hidden="true"></i>
-	                              <i className="fa fa-star" aria-hidden="true"></i>
-	                              <i className="fa fa-star" aria-hidden="true"></i>
-	                              <i className="fa fa-star" aria-hidden="true"></i>
-	                              <i className="fa fa-star" aria-hidden="true"></i>
+                                <Rating {...this.props} iconSize={20} factor={'10%'} rating = {item.votes} allowEdit = {false} showStarText = {false}/>
 	                            </div>
 	                            <span className="close">
 	                              <i className="fa fa-times" aria-hidden="true" onClick={this.removeInvoiceDetail.bind(this, item._id)}></i>
@@ -143,6 +142,9 @@ const INVOICE_QUERY = gql `
 	            price
 							description
 						}
+            votes {
+              stars
+            }
 						quantity
 						amount
 					}
