@@ -48,7 +48,7 @@ class Dashboard extends React.Component {
   render(){
     return (
       <div>
-        {/* <Dropzone onDrop={this.onDropAccepted.bind(this)} multiple={false} style={{height: 140, border: '1px solid gray', borderRadius: 10, padding: '13px 7px', width: 350}} minSize={0} maxSize={1024*10*1000} multiple={false} >
+        {/* <Dropzone onDrop={this.onDropAccepted.bind(this)} multiple={true} style={{height: 140, border: '1px solid gray', borderRadius: 10, padding: '13px 7px', width: 350}} minSize={0} maxSize={1024*10*1000}>
           <div style={{textAlign: 'center'}}>Click or Drap here to upload file</div>
         </Dropzone>
         <button onClick={() => this.inserFile()}>ok</button> */}

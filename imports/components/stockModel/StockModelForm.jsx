@@ -68,24 +68,23 @@ class StockModelForm extends React.Component {
      })
    }
    handleSave(type){
-     console.log(this.state.data.images);
      let data = this.state.data;
      data.categories = __.map(data.categories, (category) => category.name)
      let info = {
        data: data,
        images: this.state.data.images
      }
-     delete info.data.images;
+     info.data.images = [];
      if(this.props.insertStockModel){
        this.props.insertStockModel(Meteor.userId(), JSON.stringify(info)).then(({data}) => {
          if(data.insertStockModel){
            this.props.addNotificationMute({fetchData: true, message: 'Thêm hàng mới thành công', level:'success'});
            if(type){
-            //  this.setState({data: {
-            //    name: '', weight: '', colors: [], origin: '', isLimited: false, isPromotion: false,
-            //    images: [], unit: '', averagePrice: 0, price: 0, quantity: 0, saleOff: 0, stockType :{_id: '', name: ''},
-            //    description: '', categories: []
-            //  }})
+             this.setState({data: {
+               name: '', weight: '', colors: [], origin: '', isLimited: false, isPromotion: false,
+               images: [], unit: '', averagePrice: 0, price: 0, quantity: 0, saleOff: 0, stockType :{_id: '', name: ''},
+               description: '', categories: []
+             }})
            }
            else {
              browserHistory.push('/StockModels');
