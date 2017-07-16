@@ -6,13 +6,21 @@ import gql from 'graphql-tag';
 import accounting from 'accounting';
 import moment from 'moment';
 
-import {Link} from 'react-router';
+import {Link, browserHistory} from 'react-router';
 import Header from '../main/Header.jsx'
 import Footer from '../main/Footer.jsx'
+
 class Cart extends React.Component {
   constructor(props) {
     super(props);
   }
+
+  removeInvoiceDetail(_id) {
+    this.props.removeInvoiceDetail(_id).then(() => {
+      this.props.data.refetch();
+    });
+  }
+
   render() {
     let {getInVoice} = this.props.data;
     if (getInVoice) {
@@ -31,7 +39,9 @@ class Cart extends React.Component {
                         <div className="row">
                           <div className="col-sm-3">
                             <div className="image">
-                              <img src={item.stockModel.images[0].file} alt=""/>
+                              <img src={item.stockModel.images[0]
+                                ? item.stockModel.images[0].file
+                                : ''} alt=""/>
                             </div>
                           </div>
                           <div className="col-sm-9">
@@ -46,7 +56,7 @@ class Cart extends React.Component {
                               <i className="fa fa-star" aria-hidden="true"></i>
                             </div>
                             <span className="close">
-                              <i className="fa fa-times" aria-hidden="true"></i>
+                              <i className="fa fa-times" aria-hidden="true" onClick={this.removeInvoiceDetail.bind(this, item._id)}></i>
                             </span>
                           </div>
                         </div>
@@ -67,11 +77,11 @@ class Cart extends React.Component {
                         </tr>
                       </thead>
                       <tbody>
-                        {__.map(getInVoice.invoiceDetails, item => (
-                          <tr>
+                        {__.map(getInVoice.invoiceDetails, (item, idx) => (
+                          <tr key={idx}>
                             <td>{item.stockModel.name}</td>
                             <td>{item.quantity}</td>
-                            <td>{accounting.format(item.stockModel.price)}</td>
+                            <td>{accounting.format(item.stockModel.price) + ' đ'}</td>
                           </tr>
                         ))
 }
@@ -81,9 +91,9 @@ class Cart extends React.Component {
                     <p>Thành tiền
                       <span>(Tổng số tiền thanh toán)</span>
                     </p>
-                    <p className="text-right rate">{accounting.format(getInVoice.total) + 'đ'}</p>
+                    <p className="text-right rate">{accounting.format(getInVoice.total) + ' đ'}</p>
                     <p className="text-center">
-                      <a className="btn-more btn-red" href="#">Thanh toán</a>
+                      <a className="btn-more btn-red" href="#" onClick={() => browserHistory.push('/checkout')}>Thanh toán</a>
                     </p>
                   </div>
                 </div>
@@ -138,14 +148,9 @@ const INVOICE_QUERY = gql `
         }
 }`
 
-const INSERT_INVOICE = gql `
-    mutation insertInvoice($token: String!, $info: String){
-        insertInvoice(token: $token, info: $info)
-}`
-
-const INSERT_INVOICE_DETAIL = gql `
-    mutation insertInvoiceDetail($token: String!, $info: String){
-        insertInvoiceDetail(info: $info)
+const REMOVE_INVOICE_DETAIL = gql `
+    mutation removeInvoiceDetail($_id: String!){
+        removeInvoiceDetail(_id: $_id)
 }`
 
 export default compose(graphql(INVOICE_QUERY, {
@@ -156,5 +161,11 @@ export default compose(graphql(INVOICE_QUERY, {
         : ''
     },
     fetchPolicy: 'network-only'
+  })
+}), graphql(REMOVE_INVOICE_DETAIL, {
+  props: ({mutate}) => ({
+    removeInvoiceDetail: (_id) => mutate({variables: {
+        _id
+      }})
   })
 }),)(Cart);

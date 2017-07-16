@@ -6,7 +6,7 @@ import gql from 'graphql-tag';
 import accounting from 'accounting';
 import moment from 'moment';
 
-import {Link} from 'react-router';
+import {Link, browserHistory} from 'react-router';
 import SliderDetails from '../home/SliderDetail.jsx'
 import Header from '../main/Header.jsx'
 import Footer from '../main/Footer.jsx'
@@ -48,7 +48,6 @@ class DetailProduct extends React.Component {
     }
     return randomChar;
   }
-
   addToCart() {
     let token = localStorage.getItem('invoiceId');
     let {stockModelById} = this.props.data;
@@ -82,10 +81,11 @@ class DetailProduct extends React.Component {
     detail = JSON.stringify(detail);
     this.props.insertInvoice(token, invoice).then(() => {
       console.log("token ", token);
-      this.props.insertInvoiceDetail(token, detail);
+      this.props.insertInvoiceDetail(token, detail).then(() => {
+        browserHistory.push('/shoppingCart');
+      });
     })
   }
-
   render() {
     let {stockModelById} = this.props.data;
     if (stockModelById) {
