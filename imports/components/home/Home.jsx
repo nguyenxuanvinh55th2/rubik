@@ -21,6 +21,7 @@ PinTop();
 showProduct();
 }
 render(){
+  console.log(this.props.data.stockModels);
 return (
 <div>
 	<Header />

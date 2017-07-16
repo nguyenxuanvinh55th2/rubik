@@ -35,7 +35,7 @@ export default class Product extends React.Component{
 		if(nextProps.stockModels) {
 			let stockModels = __.cloneDeep(nextProps.stockModels);
 			__.forEach(stockModels, item => {
-				item.image = item.images[0].file;
+				item.image = item.images [0] ? item.images[0].file : 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/sp1_zpssqbqw0b3.png';
 			})
 			this.setState({data: stockModels})
 		}
@@ -44,7 +44,7 @@ export default class Product extends React.Component{
 	render(){
 		let stockModels = __.cloneDeep(this.props.stockModels);
 		__.forEach(stockModels, item => {
-			item.image = item.images[0].file;
+			item.image = item.images[0] ? item.images[0].file : 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/sp1_zpssqbqw0b3.png';
 		})
 		return(
 			<div>

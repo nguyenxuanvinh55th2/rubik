@@ -31,7 +31,7 @@ class StockModelForm extends React.Component {
         name: '', weight: '', colors: [], origin: '', isLimited: false, isPromotion: false,
         images: [], unit: '', averagePrice: 0, price: 0, quantity: 0, saleOff: 0,
         stockType :{_id: '', name: ''}, categories: [],
-        description: ''
+        description: '', active: true
       },
       isCreateNew: false
     }
