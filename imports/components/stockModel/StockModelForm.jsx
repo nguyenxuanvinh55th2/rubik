@@ -8,7 +8,7 @@ import Cleave from 'cleave.js/react';
 import QuillEditor from '../editor/QuillEditor.jsx';
 import Dialog from 'material-ui/Dialog';
 import { RenderImage } from './DialogStockModel.jsx';
-import { SketchPicker } from 'react-color';
+import { SketchPicker, CirclePicker } from 'react-color';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import Select, {Creatable} from 'react-select';
@@ -20,12 +20,7 @@ class StockModelForm extends React.Component {
     this.state ={
       height: window.innerHeight,
       displayColorPicker: false,
-      color: {
-        r: '241',
-        g: '112',
-        b: '19',
-        a: '1',
-      },
+      color: '#FF6900',
       openDialog: false,
       data: {
         name: '', weight: '', colors: [], origin: '', isLimited: false, isPromotion: false,
@@ -59,10 +54,18 @@ class StockModelForm extends React.Component {
      this.setState({ displayColorPicker: !this.state.displayColorPicker })
    }
    handleClose = () => {
-     this.setState({ displayColorPicker: false })
+     this.setState((prevState) => {
+       prevState.displayColorPicker = false;
+       prevState.data.colors.push(this.state.color);
+       prevState.data.colors = __.uniq(prevState.data.colors);
+       return prevState;
+     });
    }
    handleChange = (color) => {
-     this.setState({ color: color.rgb })
+     this.setState((prevState) => {
+       prevState.color = color.hex;
+       return prevState;
+     })
    }
    handleSave(type){
      let data = this.state.data;
@@ -108,9 +111,10 @@ class StockModelForm extends React.Component {
           width: '36px',
           height: '14px',
           borderRadius: '2px',
-          background: `rgba(${ this.state.color.r }, ${ this.state.color.g }, ${ this.state.color.b }, ${ this.state.color.a })`,
+          background: this.state.color,
         },
         swatch: {
+          marginLeft: 10,
           padding: '5px',
           background: '#fff',
           borderRadius: '1px',
@@ -133,7 +137,7 @@ class StockModelForm extends React.Component {
       return(
         <div className="column">
           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-            <ol className="breadcrumb" style={{marginBottom: 0}}>
+            <ol className="breadcrumb" style={{marginBottom: 0, backgroundColor: 'white'}}>
               <li>
                 <a onClick={() => browserHistory.push('/dashboard')}>Dashboard</a>
               </li>
@@ -172,7 +176,7 @@ class StockModelForm extends React.Component {
                     }}/>
                   </div>
                   <div className="form-group">
-                    <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
+                    <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
                       <label>Màu sắc</label>
                       <div style={ styles.swatch } onClick={ this.handleClick }>
                          <div style={ styles.color } />
@@ -182,7 +186,23 @@ class StockModelForm extends React.Component {
                        <div style={ styles.cover } onClick={ this.handleClose }/>
                        <SketchPicker color={ this.state.color } onChange={ this.handleChange } />
                      </div> : null }
-                    <input type="text" className="form-control" />
+                     <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
+                       <CirclePicker width={252} colors={data.colors}
+                         circleSize={20} onChange={(color) => {
+                          let remove = confirm(`Loại bỏ màu ${color.hex}`);
+                          if(remove){
+                            this.setState((prevState) => {
+                              let colors = data.colors;
+                              let idx = __.findIndex(colors, (col) => col == color.hex);
+                              if(idx > -1){
+                                colors.splice(idx, 1);
+                              }
+                              prevState.data.colors = colors;
+                              return prevState;
+                            });
+                          }
+                         }}/>
+                     </div>
                   </div>
                   <div className="form-group">
                     <label>Xuất xứ</label>

@@ -8,7 +8,7 @@ const rootQuery = {
     if(limit) {
       return StockModels.find({active: true}, {limit}, {createdAt: -1}).fetch();
     } else {
-        return stockModels.find({active: true}).fetch();
+        return StockModels.find({active: true}).fetch();
     }
   },
   stockModelById: (_, {_id}) => {

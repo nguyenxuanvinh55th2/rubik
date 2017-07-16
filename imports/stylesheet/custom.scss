@@ -9,10 +9,17 @@ img{
 	max-width: 100%;
 }
 .bg{
-	
+
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center center;
+}
+.loading{
+	position: absolute;
+	top: 50%;
+	left :50%;
+	transform: translateX(-50%);
+	transition: translateX(-50%);
 }
 .btn-cate{
 	padding: 10px 50px;
