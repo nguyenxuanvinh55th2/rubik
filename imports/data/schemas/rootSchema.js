@@ -97,11 +97,8 @@ const rootSchema = `
       insertStockType(userId: String!, info: String!): String
       removeInvoiceDetail(_id: String!): String
       orderDevoice(token: String!, info: String): String
-<<<<<<< HEAD
       ratingStockModel(token: String!, _id: String, info: String): String
-=======
       updateStockModel(userId: String ,_id: String, info: String): String
->>>>>>> 2d59f1e9521e9a495e8dff0314e27d5503e3d14e
     }
 `
 export default rootSchema;
