@@ -135,7 +135,8 @@ export class UpdateQuantity extends React.Component {
     super(props)
     this.state = {
       quantity: 0,
-      reason: ''
+      reason: '',
+      averagePrice: 0, price: 0, isPromotion: false, saleOff: 0
     }
   }
   handleSave(){
