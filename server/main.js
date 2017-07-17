@@ -7,8 +7,16 @@ Future = Npm.require('fibers/future');
 __ = require('lodash');
 moment = require('moment');
 
+import { EJSON } from 'meteor/ejson';
+import { Accounts } from 'meteor/accounts-base';
+import { check } from 'meteor/check';
+
+// import bodyParser from 'body-parser';
+bodyParser = require("body-parser");
+import { createServer, http } from 'http';
+
 import {createApolloServer} from 'meteor/apollo';
-import schema from '/imports/data'
+import schema from '/imports/data';
 process.env.MAIL_URL="smtp://noreply.lokatech@gmail.com:defa4ltlokatech@smtp.gmail.com:587/";
 // Email.send({
 //     from: Meteor.settings.email,
@@ -21,6 +29,7 @@ process.env.MAIL_URL="smtp://noreply.lokatech@gmail.com:defa4ltlokatech@smtp.gma
 //       console.log(err);
 //     }
 // });
+
 createApolloServer({
   schema,
   graphiql: Meteor.isDevelopment,

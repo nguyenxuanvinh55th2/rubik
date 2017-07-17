@@ -3,31 +3,17 @@ import {AgGridReact} from 'ag-grid-react';
 import { browserHistory } from 'react-router';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
-class DeleteAditorRender extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-  render() {
-    return (
-      <div style={{
-        width: '100%'
-      }}>
-        <button className="btn btn-default" style={{
-          borderWidth: 0,
-          width: 56,
-          color: 'red'
-        }}>Xóa</button>
-      </div>
-    )
-  }
-}
+import Dialog from 'material-ui/Dialog';
+import { HanderEditorStockModel, RenderImage, RenderDescription, UpdateQuantity } from './ChildStockModel.jsx'
 class StockModel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       height: window.innerHeight,
       open: false,
-      name: ''
+      name: '',
+      dialogType: '',
+      stockModelSelect: {}
     }
     this.gridOptions = {
     floatingFilter: true,
@@ -45,7 +31,7 @@ class StockModel extends React.Component {
   return [
     {
       gridType: 'footer',
-      name: 'Total: ' +  data.length,
+      code: 'Total: ' +  data.length,
     }];
   }
   componentDidUpdate() {
@@ -56,8 +42,37 @@ class StockModel extends React.Component {
       this.gridOptions.api.hideOverlay();
     }
   }
+  deleteStockModel(node){
+    var deleteImage = confirm("Bạn có muốn kiểu hàng này?");
+    if (deleteImage == true) {
+      StockModels.update({_id: node.data._id},{$set: {active: false}},(error) => {
+        if(error){
+          throw error;
+           this.props.addNotificationMute({fetchData: true, message: 'Xóa hàng thất bại', level:'error'});
+        }
+        else {
+          this.props.addNotificationMute({fetchData: true, message: 'Xóa hàng thành công', level:'success'});
+          this.props.data.refetch();
+        }
+      });
+    }
+  }
+  updateStockModes(node){
+    browserHistory.push(`/StockModelForm/${node.data._id}`);
+  }
+  showImage(node){
+    this.setState({open: true, dialogType: 'image', stockModelSelect: node.data});
+  }
+  importStock(node){
+    this.setState({open: true, dialogType: 'import', stockModelSelect: node.data});
+  }
+  exportStock(node){
+    this.setState({open: true, dialogType: 'export', stockModelSelect: node.data});
+  }
+  showDescription(node){
+    this.setState({open: true, dialogType: 'description', stockModelSelect: node.data})
+  }
   render(){
-    console.log(this.props);
     if(!this.props.data.stockModels){
       return (
         <div className="loading">
@@ -68,45 +83,171 @@ class StockModel extends React.Component {
     else {
       let columnDefs = [
         {
-          headerName: "",
-          field: 'delete',
-          minWidth: 56,
-          width: 56,
-          cellClass: 'agaction',
-          pinned: 'left',
-          filter: '',
-          cellRendererFramework: DeleteAditorRender,
+          headerName: "", field: 'delete',  minWidth: 80, width: 80,  pinned: 'left', filter: '',
+          cellRendererFramework: HanderEditorStockModel ,
+          cellRendererParams: {
+              updateStockModes: this.updateStockModes.bind(this), showImage: this.showImage.bind(this), importStock: this.importStock.bind(this),
+              exportStock: this.exportStock.bind(this), showDescription: this.showDescription.bind(this), deleteStockModel: this.deleteStockModel.bind(this)
+            },
           cellStyle: (params) => {
             if (params.node.data.gridType == 'footer') {
               return {display: 'none'};
             }
-          },
-          onCellClicked: (params) => {
-            if (params.data && params.data._id) {
-              this.props.removeCategories(Meteor.userId(), params.data._id).then(({data}) => {
-                if (data) {
-                  this.props.data.refetch();
-                }
-              })
-            }
           }
-        }, {
-          headerName: "Tên kiểu hàng",
-          field: "name",
-          width: 320,
+        },
+        {
+          headerName: "Mã kiểu hàng",  field: "code", pinned: 'left',  width: 150, filter: 'text', filterParams: {
+            filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+          },   suppressMenu: true,
           cellStyle: function(params) {
             if (params.node.data.gridType == 'footer') {
               return {fontWeight: 'bold'};
             } else {
               return null;
             }
-          },
+          }
+        },
+        {
+          headerName: "Tên kiểu hàng", field: "name",  width: 200, filter: 'text',
           filterParams: {
             filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
           },
-          filter: 'text',
-          suppressMenu: true
-        }
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Loại hàng", field: "stockType.name",  width: 200, filter: 'text', suppressMenu: true,
+          filterParams: {
+            filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+          },
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Chủng loại", field: "categories",  width: 200, filter: 'text', suppressMenu: true,
+          filterParams: {
+            filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+          },
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Số lượng", field: "quantity",  width: 200, filter: 'number', suppressMenu: true,
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Đơn vị", field: "unit",  width: 200, filter: 'number', suppressMenu: true,
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Cân nặng", field: "weight",  width: 200, filter: 'text', suppressMenu: true,
+          filterParams: {
+            filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+          },
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Xuất xứ", field: "origin",  width: 200, filter: 'text', suppressMenu: true,
+          filterParams: {
+            filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+          },
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Hàng giới hạn", field: "isLimited",  width: 200, filter: 'text', suppressMenu: true,
+          filterParams: {
+            filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+          },
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Hàng giảm giá", field: "isPromotion",  width: 200, filter: 'text', suppressMenu: true,
+          filterParams: {
+            filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+          },
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Giá nhập", field: "averagePrice",  width: 200, filter: 'number', suppressMenu: true,
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Giá bán", field: "price",  width: 200, filter: 'number', suppressMenu: true,
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Giá giảm", field: "saleOff",  width: 200, filter: 'number', suppressMenu: true,
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
       ];
       return(
         <div>
@@ -126,6 +267,25 @@ class StockModel extends React.Component {
           <div style={{  height: this.state.height - 136}} className="ag-fresh">
             <AgGridReact gridOptions={this.gridOptions} columnDefs={columnDefs} rowData={this.data} enableColResize="true" enableSorting="true" enableFilter="true"/>
           </div>
+          <Dialog modal={true}
+              open={this.state.open}
+              contentStyle={{width: this.state.dialogType == 'import' || this.state.dialogType == 'export' ? 500 : 835, maxWidth: 'none',}}
+              bodyStyle={{padding: 0}}
+          >
+            {
+              this.state.dialogType == 'image' ?
+              <RenderImage {...this.props} height={window.innerHeight - 250} handleClose={() => this.setState({open: false})}
+                  dataImages={this.state.stockModelSelect.images}/> :
+              this.state.dialogType == 'description' ?
+              <RenderDescription {...this.props} height={window.innerHeight -250} handleClose={() => this.setState({open: false})}
+                description={this.state.stockModelSelect.description}/> :
+              this.state.dialogType == 'import' ?
+              <UpdateQuantity {...this.props} data={this.state.stockModelSelect} type={'import'} handleClose={() => this.setState({open: false})} refeshData={() => this.props.data.refetch()} /> :
+              this.state.dialogType == 'export' ?
+              <UpdateQuantity {...this.props} data={this.state.stockModelSelect} type={'export'} handleClose={() => this.setState({open: false})} refeshData={() => this.props.data.refetch()} />
+              : null
+            }
+          </Dialog>
         </div>
       )
     }
@@ -134,13 +294,16 @@ class StockModel extends React.Component {
 const STOCK_MODEL_QUERY = gql `
     query stockModels($limit: Int){
         stockModels(limit: $limit) {
-            _id
-            name
-						images {
-							_id
-							file
-						}
-            price
+          _id code name weight isLimited  isPromotion
+          unit averagePrice  price  quantity saleOff description
+					images {
+						_id fileName
+						file
+					}
+          categories
+          stockType {
+            _id name
+          }
         }
 }`
 

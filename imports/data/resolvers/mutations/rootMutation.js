@@ -155,6 +155,58 @@ const rootMutation = {
     return StockModels.update({_id}, {$push: {
       votes: info
     }});
+  },
+  updateStockModel: (_, {userId,_id, info}) => {
+    if(typeof info == 'string'){
+      info = JSON.parse(info);
+    }
+    let future = new Future();
+    let user = Meteor.users.findOne({_id: userId});
+    if (user){
+      let imagesExit = [], docData = [], imageData = {};
+      info.data.updatedAt = moment().valueOf();
+      info.data.updatedBy = {
+         _id: user._id,
+         username: user.username
+      };
+      __.forEach(info.images,(image) => {
+        if(image._id)
+          imagesExit.push(image._id);
+          else {
+            docData.push(image);
+          }
+      })
+      info.data.images = imagesExit;
+      future.return(
+        StockModels.update({_id: _id}, {$set: info.data}, (err) => {
+          if(err){
+            console.log(err);
+          }
+          else {
+            if(info.images){
+              __.forEach(docData, (content, key)=>{
+                  if(content.fileName){
+                      imageData[key] = content;
+                      imageData[key].file = content.file.replace(/^data:image\/(png|gif|jpeg);base64,/,'');
+                      content = '';
+                  }
+              });
+              __.forEach(imageData, (img, key)=>{
+                  buf = new Buffer(img.file, 'base64');
+                  Files.write(buf, {fileName: img.fileName, userId: user._id, type: img.type}, (err, fileRef)=>{
+                      if (err) {
+                        throw err;
+                      } else {
+                        StockModels.update({ _id: _id },{ $push: { images: fileRef._id }});
+                      }
+                  }, true);
+              });
+            }
+          }
+        })
+      )
+    }
+    return future.wait();
   }
 }
 export default rootMutation

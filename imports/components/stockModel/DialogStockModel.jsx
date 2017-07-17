@@ -17,21 +17,23 @@ export class RenderImage extends React.Component {
     let filesImage = this.state.filesImage;
     if(acceptedFiles.length){
       __.forEach(acceptedFiles,(file,idx) =>{
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function (e) {
-            if(e.target.result){
-              filesImage.push({
-                    file:e.target.result,
-                    fileName: file.name,
-                    type: file.type
-                  });
-              that.setState({filesImage:filesImage});
-            }
-        };
-        reader.onerror = function (error) {
-          console.log('Error: ', error);
-        };
+        if(file.size <= 1024*1000*2){
+          let reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = function (e) {
+              if(e.target.result){
+                filesImage.push({
+                      file:e.target.result,
+                      fileName: file.name,
+                      type: file.type
+                    });
+                that.setState({filesImage:filesImage});
+              }
+          };
+          reader.onerror = function (error) {
+            console.log('Error: ', error);
+          };
+        }
       });
     }
   }

@@ -3,7 +3,7 @@ export default class QuillRender extends React.Component {
   constructor(props) {
     super()
   }
-  componentDidUpdate() {
+  componentDidMount(){
     let description = document.getElementById('description');
     if(description) {
       description.innerHTML = this.props.value;
