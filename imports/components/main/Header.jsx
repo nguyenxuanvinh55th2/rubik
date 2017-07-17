@@ -80,7 +80,7 @@ export default class Header extends React.Component {
                         <Link to={'#'}>HƯỚNG DẪN CHƠI</Link>
                       </li>
                       <li>
-                        <Link to={'#'}>
+                        <Link to={'/shoppingCart'}>
                           <i className="fa fa-cart-arrow-down" aria-hidden="true"></i>
                         </Link>
                       </li>

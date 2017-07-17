@@ -2,6 +2,8 @@ import React from 'react'
 import {Link} from 'react-router';
 import accounting from 'accounting';
 
+import Rating from './Rating.jsx';
+
 export default class ItemProduct extends React.Component {
   constructor(props) {
     super(props);
@@ -28,11 +30,7 @@ export default class ItemProduct extends React.Component {
             </h4>
             <div className="star">
               <div className="group-star">
-                <i className="fa fa-star" aria-hidden="true"></i>
-                <i className="fa fa-star" aria-hidden="true"></i>
-                <i className="fa fa-star" aria-hidden="true"></i>
-                <i className="fa fa-star" aria-hidden="true"></i>
-                <i className="fa fa-star" aria-hidden="true"></i>
+                <Rating {...this.props} iconSize={20} factor={'10%'} rating = {this.props.value.votes} allowEdit = {false} showStarText = {false}/>
               </div>
             </div>
             <p>{accounting.format(this.props.value.price)}

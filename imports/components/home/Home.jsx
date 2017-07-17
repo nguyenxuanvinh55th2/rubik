@@ -129,6 +129,9 @@ const STOCK_MODEL_QUERY = gql `
 							file
 						}
             price
+            votes {
+              stars
+            }
         }
 }`
 

@@ -150,6 +150,12 @@ const rootMutation = {
       status: 1
     }});
   },
+  ratingStockModel: (_, {token, _id, info}) => {
+    info = JSON.parse(info);
+    return StockModels.update({_id}, {$push: {
+      votes: info
+    }});
+  },
   updateStockModel: (_, {userId,_id, info}) => {
     if(typeof info == 'string'){
       info = JSON.parse(info);
