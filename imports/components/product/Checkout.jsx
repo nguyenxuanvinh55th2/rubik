@@ -1,5 +1,5 @@
 import React from 'react'
-import {Link} from 'react-router';
+import {Link, browserHistory} from 'react-router';
 
 import __ from 'lodash';
 import {graphql, compose} from 'react-apollo';
@@ -33,7 +33,8 @@ class Checkout extends React.Component {
 		if(!emailError && !nameError && !mobileError && !addressError) {
 			info = JSON.stringify(info);
 			this.props.orderDevoice(token, info).then(() => {
-				console.log("dat hang thanh cong");
+        this.props.addNotificationMute({fetchData: true, message: 'Đặt hàng thành công', level:'success'});
+        browserHistory.push('/')
 				localStorage.removeItem('invoiceId');
 			})
 		}

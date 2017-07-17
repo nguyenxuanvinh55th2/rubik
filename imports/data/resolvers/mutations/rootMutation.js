@@ -149,6 +149,12 @@ const rootMutation = {
       customer: info,
       status: 1
     }});
+  },
+  ratingStockModel: (_, {token, _id, info}) => {
+    info = JSON.parse(info);
+    return StockModels.update({_id}, {$push: {
+      votes: info
+    }});
   }
 }
 export default rootMutation

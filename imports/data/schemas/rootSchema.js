@@ -54,7 +54,6 @@ const rootSchema = `
       stars: Int
       comment: String
       name: String
-      mobile: String
       email: String
       createdAt: Float
     }
@@ -97,6 +96,7 @@ const rootSchema = `
       insertStockType(userId: String!, info: String!): String
       removeInvoiceDetail(_id: String!): String
       orderDevoice(token: String!, info: String): String
+      ratingStockModel(token: String!, _id: String, info: String): String
     }
 `
 export default rootSchema;

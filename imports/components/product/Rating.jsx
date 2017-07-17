@@ -7,65 +7,112 @@ import __ from 'lodash';
 import Checkbox from 'material-ui/Checkbox';
 import FontIcon from 'material-ui/FontIcon';
 
-import '../../stylesheet/material.css'
 
 class Rating extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {starList: [], starText: '', rate: 0};
+    if(!props.allowEdit) {
+      if(props.rateCount) {
+        let starList = {};
+        for(let i = 1; i <= 5; i++) {
+          if(i <= props.rateCount) {
+            starList[i.toString()] = true;
+          } else {
+              starList[i.toString()] = false;
+          }
+        }
+        this.state = {starList};
+      }
+      let starList = {};
+      let starText = '';
+      let stars = 0;
+      if(props.rating && props.rating.length) {
+        __.forEach(props.rating, item => {
+          stars += item.stars;
+        })
+        stars = props.rateCount ? props.rateCount : Math.round(stars / props.rating.length);
+        for(let i = 1; i <= 5; i++) {
+          if(i <= stars) {
+            starList[i.toString()] = true;
+          } else {
+              starList[i.toString()] = false;
+          }
+        }
+        let starText;
+        switch (stars) {
+          case 1:
+            starText = 'Một sao';
+            break;
+          case 2:
+            starText = 'Hai sao';
+            break;
+          case 3:
+            starText = 'Ba sao';
+            break;
+          case 4:
+            starText = 'Bốn sao';
+            break;
+          case 5:
+            starText = 'Năm sao';
+            break;
+        }
+      }
+      this.state = {starList, starText, rate: 0};
+    } else {
+        this.state = {starList: [], starText: ''};
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     let { rateCount, rating } = nextProps;
-    if(rateCount) {
+    if(!this.props.allowEdit) {
+      if(rateCount) {
+        let starList = {};
+        for(let i = 1; i <= 5; i++) {
+          if(i <= rateCount) {
+            starList[i.toString()] = true;
+          } else {
+              starList[i.toString()] = false;
+          }
+        }
+        this.setState({starList});
+      }
       let starList = {};
-      for(let i = 1; i <= 5; i++) {
-        if(i <= rateCount) {
-          starList[i.toString()] = true;
-        } else {
-            starList[i.toString()] = false;
+      let starText = '';
+      let stars = 0;
+      if(rating && rating.length) {
+        __.forEach(rating, item => {
+          stars += item.stars;
+        })
+        stars = this.props.rateCount ? this.props.rateCount : Math.round(stars / rating.length);
+        for(let i = 1; i <= 5; i++) {
+          if(i <= stars) {
+            starList[i.toString()] = true;
+          } else {
+              starList[i.toString()] = false;
+          }
+        }
+        let starText;
+        switch (stars) {
+          case 1:
+            starText = 'Một sao';
+            break;
+          case 2:
+            starText = 'Hai sao';
+            break;
+          case 3:
+            starText = 'Ba sao';
+            break;
+          case 4:
+            starText = 'Bốn sao';
+            break;
+          case 5:
+            starText = 'Năm sao';
+            break;
         }
       }
-      this.setState({starList});
+      this.setState({starList, starText, rate: stars});
     }
-    let starList = {};
-    let starText = '';
-    let stars = 0;
-    if(this.props.allowEdit) {
-      rating = null;
-    }
-    if(rating && rating.length) {
-      __.forEach(rating, item => {
-        stars += item.stars;
-      })
-      stars = this.props.rateCount ? this.props.rateCount : Math.round(stars / rating.length);
-      for(let i = 1; i <= 5; i++) {
-        if(i <= stars) {
-          starList[i.toString()] = true;
-        } else {
-            starList[i.toString()] = false;
-        }
-      }
-      let starText;
-      switch (stars) {
-        case 1:
-          starText = 'Một sao';
-          break;
-        case 2:
-          starText = 'Hai sao';
-          break;
-        case 3:
-          starText = 'Ba sao';
-          break;
-        case 4:
-          starText = 'Bốn sao';
-          break;
-        case 5:
-          starText = 'Năm sao';
-          break;
-      }
-    }
-    this.setState({starList, starText, rate: stars});
   }
 
   onMouseOver(index) {
@@ -149,27 +196,27 @@ class Rating extends React.Component {
         starList[i.toString()] = false;
         this.setState({starList});
       }
+      //ReactDOM.findDOMNode(this.refs[(index + 1).toString()]).style.color = '#D7D7D7';
       this.props.ratingHandle(index);
     }
   }
 
   setStarText(index) {
-    let { t } = this.props;
     switch (index) {
       case 1:
-        this.setState({starText: t('shop:productDetail.labelOneStar')});
+        this.setState({starText: 'Một sao'});
         break;
       case 2:
-        this.setState({starText: t('shop:productDetail.labelTwoStar')});
+        this.setState({starText: 'Hai sao'});
         break;
       case 3:
-        this.setState({starText: t('shop:productDetail.labelThreeStar')});
+        this.setState({starText: 'Ba sao'});
         break;
       case 4:
-        this.setState({starText: t('shop:productDetail.labelFourStar')});
+        this.setState({starText: 'Bốn sao'});
         break;
       case 5:
-        this.setState({starText: t('shop:productDetail.labelFiveStar')});
+        this.setState({starText: 'Năm sao'});
         break;
       default:
 
@@ -177,6 +224,7 @@ class Rating extends React.Component {
   }
 
   render() {
+    console.log('somthing', this.props);
     let stars = [1, 2, 3, 4, 5];
     let deStars = [5, 4, 3, 2, 1];
     let { starList, starText, rate } = this.state;

@@ -7,6 +7,8 @@ import NotificationSystem from 'react-notification-system';
 
 import * as actionCreator from "../actions/actionCreator";
 
+import '../stylesheet/material.css';
+
 function mapStateToProps(state){
   return {
     users: state.users,
