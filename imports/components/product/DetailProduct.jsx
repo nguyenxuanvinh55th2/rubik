@@ -179,7 +179,6 @@ class DetailProduct extends React.Component {
   render() {
     let {stockModelById} = this.props.data;
     let { page, pageCount } = this.state;
-    console.log('rate ', this.state.rate);
     if (stockModelById) {
       let images = [];
       __.forEach(stockModelById.images, (item, idx) => {

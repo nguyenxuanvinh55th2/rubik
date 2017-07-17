@@ -9,7 +9,6 @@ export default class ItemProduct extends React.Component {
     super(props);
   }
   render() {
-    console.log('this.props.value ', this.props.value);
     return (
       <div className="col-sm-3 col-xs-6">
         <div className="item-product">

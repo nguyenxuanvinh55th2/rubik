@@ -224,7 +224,6 @@ class Rating extends React.Component {
   }
 
   render() {
-    console.log('somthing', this.props);
     let stars = [1, 2, 3, 4, 5];
     let deStars = [5, 4, 3, 2, 1];
     let { starList, starText, rate } = this.state;

@@ -25,7 +25,6 @@ class Cart extends React.Component {
 
   render() {
     let {getInVoice} = this.props.data;
-    console.log('getInVoice ', getInVoice);
     if (getInVoice) {
       return (
 
