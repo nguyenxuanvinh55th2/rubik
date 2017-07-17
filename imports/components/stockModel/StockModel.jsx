@@ -4,7 +4,7 @@ import { browserHistory } from 'react-router';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import Dialog from 'material-ui/Dialog';
-import { HanderEditorStockModel } from './ChildStockModel.jsx'
+import { HanderEditorStockModel, RenderImage } from './ChildStockModel.jsx'
 class StockModel extends React.Component {
   constructor(props) {
     super(props);
@@ -134,7 +134,7 @@ class StockModel extends React.Component {
           }
         },
         {
-          headerName: "Số lượng", field: "categories",  width: 200, filter: 'number', suppressMenu: true,
+          headerName: "Số lượng", field: "quantity",  width: 200, filter: 'number', suppressMenu: true,
           cellStyle: function(params) {
             if (params.node.data.gridType == 'footer') {
               return {fontWeight: 'bold'};
@@ -206,7 +206,7 @@ class StockModel extends React.Component {
           }
         },
         {
-          headerName: "Giá nhập", field: "isLimited",  width: 200, filter: 'number', suppressMenu: true,
+          headerName: "Giá nhập", field: "averagePrice",  width: 200, filter: 'number', suppressMenu: true,
           cellStyle: function(params) {
             if (params.node.data.gridType == 'footer') {
               return {fontWeight: 'bold'};
@@ -216,7 +216,7 @@ class StockModel extends React.Component {
           }
         },
         {
-          headerName: "Giá bán", field: "isLimited",  width: 200, filter: 'number', suppressMenu: true,
+          headerName: "Giá bán", field: "price",  width: 200, filter: 'number', suppressMenu: true,
           cellStyle: function(params) {
             if (params.node.data.gridType == 'footer') {
               return {fontWeight: 'bold'};
@@ -226,7 +226,7 @@ class StockModel extends React.Component {
           }
         },
         {
-          headerName: "Giá giảm", field: "isLimited",  width: 200, filter: 'number', suppressMenu: true,
+          headerName: "Giá giảm", field: "saleOff",  width: 200, filter: 'number', suppressMenu: true,
           cellStyle: function(params) {
             if (params.node.data.gridType == 'footer') {
               return {fontWeight: 'bold'};
@@ -254,6 +254,18 @@ class StockModel extends React.Component {
           <div style={{  height: this.state.height - 136}} className="ag-fresh">
             <AgGridReact gridOptions={this.gridOptions} columnDefs={columnDefs} rowData={this.data} enableColResize="true" enableSorting="true" enableFilter="true"/>
           </div>
+          <Dialog modal={true}
+              open={this.state.open}
+              contentStyle={{width: 835,height:'90%',maxWidth: 'none',}}
+              bodyStyle={{padding: 0}}
+          >
+            {
+              this.state.dialogType == 'image' ?
+              <RenderImage {...this.props} height={window.innerHeight - 226} handleClose={() => this.setState({open: false})}
+                  dataImages={this.state.stockModelSelect.images}/>
+              : null
+            }
+          </Dialog>
         </div>
       )
     }
@@ -265,7 +277,7 @@ const STOCK_MODEL_QUERY = gql `
           _id code name weight isLimited  isPromotion
           unit averagePrice  price  quantity saleOff description
 					images {
-						_id
+						_id fileName
 						file
 					}
           categories
