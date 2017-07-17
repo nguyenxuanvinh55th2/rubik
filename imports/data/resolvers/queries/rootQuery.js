@@ -19,6 +19,9 @@ const rootQuery = {
   },
   stockTypes: (_, {}) => {
     return StockTypes.find({active: true}).fetch();
+  },
+  stockModel: (_, {_id}) => {
+    return StockModels.findOne({_id});
   }
 }
 export default rootQuery;

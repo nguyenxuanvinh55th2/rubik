@@ -75,6 +75,7 @@ const rootSchema = `
       stockModelById(_id: String!): StockModel
       getInVoice(token: String!): Invoice
       stockTypes: [StockType]
+      stockModel(_id: String): StockModel
     }
     type Mutation {
       removeCategories(userId: String!, _id: String!): String
@@ -87,6 +88,7 @@ const rootSchema = `
       insertStockType(userId: String!, info: String!): String
       removeInvoiceDetail(_id: String!): String
       orderDevoice(token: String!, info: String): String
+      updateStockModel(userId: String ,_id: String, info: String): String
     }
 `
 export default rootSchema;

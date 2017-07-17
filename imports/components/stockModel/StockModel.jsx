@@ -4,7 +4,7 @@ import { browserHistory } from 'react-router';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import Dialog from 'material-ui/Dialog';
-import { HanderEditorStockModel, RenderImage } from './ChildStockModel.jsx'
+import { HanderEditorStockModel, RenderImage, RenderDescription, UpdateQuantity } from './ChildStockModel.jsx'
 class StockModel extends React.Component {
   constructor(props) {
     super(props);
@@ -42,24 +42,37 @@ class StockModel extends React.Component {
       this.gridOptions.api.hideOverlay();
     }
   }
+  deleteStockModel(node){
+    var deleteImage = confirm("Bạn có muốn kiểu hàng này?");
+    if (deleteImage == true) {
+      StockModels.update({_id: node.data._id},{$set: {active: false}},(error) => {
+        if(error){
+          throw error;
+           this.props.addNotificationMute({fetchData: true, message: 'Xóa hàng thất bại', level:'error'});
+        }
+        else {
+          this.props.addNotificationMute({fetchData: true, message: 'Xóa hàng thành công', level:'success'});
+          this.props.data.refetch();
+        }
+      });
+    }
+  }
   updateStockModes(node){
-
+    browserHistory.push(`/StockModelForm/${node.data._id}`);
   }
   showImage(node){
-    console.log(node);
-    this.setState({open: true, dialogType: 'image', stockModelSelect: node.data})
+    this.setState({open: true, dialogType: 'image', stockModelSelect: node.data});
   }
   importStock(node){
-
+    this.setState({open: true, dialogType: 'import', stockModelSelect: node.data});
   }
   exportStock(node){
-
+    this.setState({open: true, dialogType: 'export', stockModelSelect: node.data});
   }
   showDescription(node){
-
+    this.setState({open: true, dialogType: 'description', stockModelSelect: node.data})
   }
   render(){
-    console.log(this.props);
     if(!this.props.data.stockModels){
       return (
         <div className="loading">
@@ -74,7 +87,7 @@ class StockModel extends React.Component {
           cellRendererFramework: HanderEditorStockModel ,
           cellRendererParams: {
               updateStockModes: this.updateStockModes.bind(this), showImage: this.showImage.bind(this), importStock: this.importStock.bind(this),
-              exportStock: this.exportStock.bind.this, showDescription: this.showDescription.bind(this)
+              exportStock: this.exportStock.bind(this), showDescription: this.showDescription.bind(this), deleteStockModel: this.deleteStockModel.bind(this)
             },
           cellStyle: (params) => {
             if (params.node.data.gridType == 'footer') {
@@ -256,13 +269,20 @@ class StockModel extends React.Component {
           </div>
           <Dialog modal={true}
               open={this.state.open}
-              contentStyle={{width: 835,height:'90%',maxWidth: 'none',}}
+              contentStyle={{width: this.state.dialogType == 'import' || this.state.dialogType == 'export' ? 500 : 835, maxWidth: 'none',}}
               bodyStyle={{padding: 0}}
           >
             {
               this.state.dialogType == 'image' ?
-              <RenderImage {...this.props} height={window.innerHeight - 226} handleClose={() => this.setState({open: false})}
-                  dataImages={this.state.stockModelSelect.images}/>
+              <RenderImage {...this.props} height={window.innerHeight - 250} handleClose={() => this.setState({open: false})}
+                  dataImages={this.state.stockModelSelect.images}/> :
+              this.state.dialogType == 'description' ?
+              <RenderDescription {...this.props} height={window.innerHeight -250} handleClose={() => this.setState({open: false})}
+                description={this.state.stockModelSelect.description}/> :
+              this.state.dialogType == 'import' ?
+              <UpdateQuantity {...this.props} data={this.state.stockModelSelect} type={'import'} handleClose={() => this.setState({open: false})} refeshData={() => this.props.data.refetch()} /> :
+              this.state.dialogType == 'export' ?
+              <UpdateQuantity {...this.props} data={this.state.stockModelSelect} type={'export'} handleClose={() => this.setState({open: false})} refeshData={() => this.props.data.refetch()} />
               : null
             }
           </Dialog>

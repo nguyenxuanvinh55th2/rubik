@@ -36,6 +36,7 @@ export const renderRoutes = () => (
         <Route path="/stockModels" component={StockModel}/>
         <Route path="/category" component={Category}/>
         <Route path="/stockModelForm" component={StockModelForm}/>
+        <Route path="/stockModelForm/:_id" component={StockModelForm}/>
         <Route path="/stockType" component={StockType}/>
       </Route>
       <Route path="/productDetail/:id" component={DetailProduct} />
