@@ -254,7 +254,7 @@ class DetailProduct extends React.Component {
                         <h4 className="trangthai">{stockModelById.quantity > 0
                             ? 'Còn hàng'
                             : 'Hết hàng'}</h4>
-                        <h4 className="dmuc">Danh mục: Rubik 2x2x2</h4>
+                        <h4 className="dmuc">{'Danh mục: ' + (stockModelById.categories ? stockModelById.categories.toString() : '')}</h4>
                         <h4 className="dmuc" style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
                           <font style={{whiteSpace: 'nowrap', marginTop: 15}}>
                             Số  lượng:
@@ -366,6 +366,7 @@ const STOCK_MODEL_QUERY = gql `
             name
 						quantity
 						saleOff
+            categories
 						isPromotion
 						images {
 							_id

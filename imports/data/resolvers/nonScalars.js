@@ -14,7 +14,7 @@ const NonScalars = {
       }
       return []
     },
-    votes: ({votes}) => votes
+    votes: ({votes}) => votes,
   },
   Invoice: {
     invoiceDetails: ({_id}) => InvoiceDetails.find({'invoice._id': _id}).fetch()
