@@ -9,6 +9,7 @@ import accounting from 'accounting';
 import QuillEditor from '../editor/QuillEditor.jsx';
 import Select, {Creatable} from 'react-select';
 import 'react-select/dist/react-select.css';
+import __ from 'lodash';
 class PostForm extends React.Component {
   constructor(props) {
     super(props)
@@ -17,6 +18,15 @@ class PostForm extends React.Component {
       stockType: {
         _id: '', name : ''
       }
+    }
+  }
+  componentWillReceiveProps(nextProps){
+    if(nextProps.params._id && nextProps.data.post){
+      let post = __.cloneDeep(nextProps.data.post);
+      this.setState({
+        title: post.title, content: post.content, image: post.image, description: post.description,
+        stockType: post.stockType
+      })
     }
   }
   handleAddImage(files){
@@ -48,12 +58,21 @@ class PostForm extends React.Component {
     let info = {
       data: {
         title: this.state.title, content: this.state.content, description: this.state.description,
-        stockType: this.state.stockType
+        stockType: this.state.stockType, active: true
       },
       image: this.state.image
     }
     if(this.props.params._id){
-
+      if(this.props.updatePost){
+        this.props.updatePost(Meteor.userId(),this.props.params._id, JSON.stringify(info)).then(({data}) => {
+          this.props.addNotificationMute({fetchData: true, message: 'Cập nhật thành công', level: 'success'});
+          browserHistory.push('/post');
+        })
+        .catch((error) => {
+          console.log(error);
+          this.props.addNotificationMute({fetchData: true, message: 'Cập nhật thất bại', level: 'error'});
+        })
+      }
     }
     else {
       if(this.props.insertPost){
@@ -219,8 +238,20 @@ const INSERT_POST = gql `
     mutation insertPost($userId: String!, $info: String!){
         insertPost(userId: $userId, info: $info)
 }`
+const UPDATE_POST = gql`
+  mutation updatePost($userId: String,$_id:String,$info:String){
+    updatePost(userId: $userId,_id:$_id,info:$info)
+  }
+`;
 const STOCK_TYPE = gql `
-    query stockTypes{
+    query stockTypes($_id: String){
+        post(_id: $_id) {
+        _id title  content  description
+        image {
+          _id  file fileName
+        }
+        stockType { _id name }
+      }
       stockTypes {
           _id name
       }
@@ -228,6 +259,7 @@ const STOCK_TYPE = gql `
 export default compose(graphql(STOCK_TYPE, {
   options: (ownProps) => ({
     variables: {
+      _id: ownProps.params._id ? ownProps.params._id : ''
     },
     fetchPolicy: 'network-only'
   })
@@ -240,5 +272,10 @@ export default compose(graphql(STOCK_TYPE, {
       }
     })
   })
-})
+}),
+graphql(UPDATE_POST,{
+    props:({mutate})=>({
+    updatePost : (userId,_id,info) =>mutate({variables:{userId,_id,info}})
+  })
+}),
 )(PostForm);

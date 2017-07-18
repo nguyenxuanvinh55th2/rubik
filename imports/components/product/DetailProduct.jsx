@@ -189,7 +189,7 @@ class DetailProduct extends React.Component {
       return (
 
         <div>
-          <Header/>
+          {/* <Header/> */}
           <div className="product-detail">
             <div className="container">
               <div className="row">
@@ -342,7 +342,7 @@ class DetailProduct extends React.Component {
               </div>
             </div>
           </div>
-          <Footer/>
+          {/* <Footer/> */}
         </div>
       )
     } else {

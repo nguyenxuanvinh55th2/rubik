@@ -18,16 +18,6 @@ export default class Header extends React.Component {
   render() {
     return (
       <div>
-        {/* <div id="circularG">
-		<div id="circularG_1" className="circularG"></div>
-		<div id="circularG_2" className="circularG"></div>
-		<div id="circularG_3" className="circularG"></div>
-		<div id="circularG_4" className="circularG"></div>
-		<div id="circularG_5" className="circularG"></div>
-		<div id="circularG_6" className="circularG"></div>
-		<div id="circularG_7" className="circularG"></div>
-		<div id="circularG_8" className="circularG"></div>
-</div> */}
         <div id="header">
           <div className="header-top hidden-xs">
             <div className="container text-right">
@@ -65,7 +55,7 @@ export default class Header extends React.Component {
                   <nav className=" hidden-xs">
                     <ul>
                       <li className="active">
-                        <Link to={'#'}>TRANG CHỦ</Link>
+                        <Link to={'/'}>TRANG CHỦ</Link>
                       </li>
                       <li>
                         <Link to={'#'}>GIỚI THIỆU</Link>

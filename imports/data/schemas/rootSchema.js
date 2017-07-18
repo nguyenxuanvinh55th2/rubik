@@ -24,6 +24,7 @@ const rootSchema = `
       isColor: Boolean
       isCategory: Boolean
       createdAt: Float
+      stockType: StockType
     }
     type StockType {
       _id: String
@@ -78,6 +79,14 @@ const rootSchema = `
       createdAt: Float
       votes: [Vote]
     }
+    type Post {
+      _id: String
+      title: String
+      content: String
+      description: String
+      image: File
+      stockType: StockType
+    }
     type Query {
       categories: [Classify]
       stockModels(limit: Int): [StockModel]
@@ -85,6 +94,8 @@ const rootSchema = `
       getInVoice(token: String!): Invoice
       stockTypes: [StockType]
       stockModel(_id: String): StockModel
+      posts: [Post]
+      post(_id: String): Post
     }
     type Mutation {
       removeCategories(userId: String!, _id: String!): String
@@ -100,6 +111,7 @@ const rootSchema = `
       ratingStockModel(token: String!, _id: String, info: String): String
       updateStockModel(userId: String ,_id: String, info: String): String
       insertPost(userId: String, info: String): String
+      updatePost(userId: String, _id: String, info: String): String
     }
 `
 export default rootSchema;

@@ -22,7 +22,7 @@ export default class HeaderManager extends React.Component {
       <div className="header-admin">
         <div className="top-header-admin">
           <div className="left-top-header">
-            <p>RUBIK NHA TRANG</p>
+            <p style={{cusor: 'pointer'}} onClick={() => browserHistory.push('/')}>RUBIK NHA TRANG</p>
           </div>
           <ul className="text-right">
             <li><a href=""><i className="fa fa-bell-o" aria-hidden="true"></i></a></li>
@@ -64,6 +64,7 @@ export default class HeaderManager extends React.Component {
                   <li><a href="#">Nhật kí cửa hàng</a></li>
                 </ul>
               </li>
+              <li><a onClick={() => browserHistory.push('/post')}>Bài đăng</a></li>
             </ul>
           </div>
         </nav>

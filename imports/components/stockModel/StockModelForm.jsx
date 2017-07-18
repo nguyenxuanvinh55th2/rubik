@@ -109,7 +109,7 @@ class StockModelForm extends React.Component {
         })
         .catch((error) => {
           console.log(error);
-          this.props.addNotificationMute({fetchData: true, message: 'Thêm hàng mới hàng thất bại', level: 'error'});
+          this.props.addNotificationMute({fetchData: true, message: 'Cập nhật hàng thất bại', level: 'error'});
         })
       }
     }

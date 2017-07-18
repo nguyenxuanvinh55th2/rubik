@@ -20,6 +20,7 @@ import StockType from './containers/StockType.js';
 
 import Post from './components/post/Post.jsx';
 import PostForm from './components/post/PostForm.jsx';
+import Test from './components/test/Test.jsx';
 
 function requireAuth(nextState, replace){
   if (!Meteor.userId()) {
@@ -32,7 +33,13 @@ function requireAuth(nextState, replace){
 export const renderRoutes = () => (
   <Router history={history}>
     <Route path="/" component={App} >
-      <IndexRoute component={Home}/>
+      {/* <IndexRoute component={Home}/> */}
+      <Route component={Test}>
+          <IndexRoute component={Home}/>
+          <Route path="/productDetail/:id" component={DetailProduct} />
+          <Route path="/shoppingCart" component={Cart} />
+          <Route path="/checkOut" component={Checkout} />
+      </Route>
       <Route path="login" component={Login}/>
       <Route path="dashboard" component={Manager} onEnter={requireAuth}>
         <IndexRoute component={Dashboard}/>
@@ -45,10 +52,10 @@ export const renderRoutes = () => (
         <Route path="/postForm" component={PostForm}/>
         <Route path="/postForm/:_id" component={PostForm}/>
       </Route>
-      <Route path="/productDetail/:id" component={DetailProduct} />
-      <Route path="/shoppingCart" component={Cart} />
-      <Route path="/checkOut" component={Checkout} />
       <Route path="*" component={Home} />
     </Route>
+    <Router>
+
+    </Router>
   </Router>
 )

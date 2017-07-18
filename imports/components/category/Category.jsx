@@ -4,6 +4,10 @@ import {Meteor} from 'meteor/meteor';
 import __ from 'lodash';
 import Dialog from 'material-ui/Dialog';
 import {browserHistory} from 'react-router';
+import {graphql, compose} from 'react-apollo';
+import gql from 'graphql-tag';
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
 class DeleteAditorRender extends React.Component {
   constructor(props) {
     super(props)
@@ -29,7 +33,11 @@ export default class Category extends React.Component {
     this.state = {
       height: window.innerHeight,
       open: false,
-      name: ''
+      name: '',
+      stockType: {
+        _id: '',
+        name: ''
+      }
     }
     this.gridOptions = {
       floatingFilter: true,
@@ -112,6 +120,22 @@ export default class Category extends React.Component {
             },
             filter: 'text',
             suppressMenu: true
+          }, {
+            headerName: "Loại hàng",
+            field: "stockType.name",
+            width: 320,
+            cellStyle: function(params) {
+              if (params.node.data.gridType == 'footer') {
+                return {fontWeight: 'bold'};
+              } else {
+                return null;
+              }
+            },
+            filterParams: {
+              filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+            },
+            filter: 'text',
+            suppressMenu: true
           }
         ];
         return (
@@ -144,7 +168,7 @@ export default class Category extends React.Component {
             <Dialog modal={true} open={this.state.open} bodyStyle={{
               padding: 0
             }} contentStyle={{
-              width: 400
+              width: 500, height: '90%'
             }}>
               <div className="modal-dialog" style={{
                 width: 'auto',
@@ -154,18 +178,26 @@ export default class Category extends React.Component {
                   <div className="modal-header">
                     <h4 className="modal-title">Tạo mới chủng loại</h4>
                   </div>
-                  <div className="modal-body" style={{
-                    overflowY: 'auto',
-                    overflowX: 'hidden',
-                    overflowY: 'auto',
-                    overflowX: 'hidden'
-                  }}>
+                  <div className="modal-body" style={{height: window.innerHeight - 250 , overflowY: 'auto',  overflowX: 'hidden'}}>
                     <form className="form-horizontal">
                       <div className="form-group">
-                        <label className="control-label col-sm-2">Tên</label>
-                        <div className="col-sm-10">
+                        <label className="control-label col-sm-3">Tên</label>
+                        <div className="col-sm-9">
                           <input type="text" className="form-control" value={this.state.name} onChange={({target}) => {
                             this.setState({name: target.value})
+                          }}/>
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label className="control-label col-sm-3">Loại hàng</label>
+                        <div className="col-sm-9">
+                          <Select name="form-field-name" value={this.state.stockType._id
+                            ? this.state.stockType._id
+                            : ''} valueKey="_id" labelKey="name" options={this.props.data.stockTypes} placeholder="Chọn loại hàng" onChange={(value) => {
+                            this.setState((prevState) => {
+                              prevState.stockType = value;
+                              return prevState;
+                            })
                           }}/>
                         </div>
                       </div>
@@ -173,8 +205,8 @@ export default class Category extends React.Component {
                   </div>
                   <div className="modal-footer">
                     <button type="button" className="btn btn-default" onClick={() => this.setState({open: false})}>Đóng</button>
-                    <button type="button" className="btn btn-primary" disabled={!this.state.name} onClick={() => {
-                      this.props.insertCategories(Meteor.userId(), JSON.stringify({name: this.state.name, active: true, isCategory: true})).then(({data}) => {
+                    <button type="button" className="btn btn-primary" disabled={!this.state.name || !this.state.stockType._id} onClick={() => {
+                      this.props.insertCategories(Meteor.userId(), JSON.stringify({name: this.state.name, active: true, isCategory: true, stockType: this.state.stockType})).then(({data}) => {
                         if (data) {
                           this.props.data.refetch();
                           this.setState({name: '', open: false})

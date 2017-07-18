@@ -47,7 +47,7 @@ class Checkout extends React.Component {
       return (
 
         <div>
-          <Header/>
+          {/* <Header/> */}
           <div className="checkout">
             <div className="container">
               <h3>THANH TOÁN</h3>
@@ -188,7 +188,7 @@ class Checkout extends React.Component {
               </p>
             </div>
           </div>
-          <Footer/>
+          {/* <Footer/> */}
         </div>
       )
     } else {

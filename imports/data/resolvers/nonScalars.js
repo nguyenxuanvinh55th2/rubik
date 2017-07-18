@@ -21,6 +21,20 @@ const NonScalars = {
   InvoiceDetail: {
     stockModel: ({stockModel}) => stockModel,
     votes: ({stockModel}) => StockModels.findOne({_id: stockModel._id}).votes
+  },
+  Post: {
+    image: ({image}) => {
+      if(image){
+        let file = Files.findOne({_id: image});
+        if(file){
+          return {
+            _id: file._id, fileName: file.fileName, type: file.type,
+            file: file.link()
+          }
+        }
+      }
+      return {}
+    }
   }
 }
 export default NonScalars;

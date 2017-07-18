@@ -19,3 +19,10 @@ Meteor.publish('posts', function () {
         this.ready();
     }
 });
+Meteor.publish('sliders', function () {
+    if (this.userId) {
+        return Sliders.find({});
+    } else {
+        this.ready();
+    }
+});
