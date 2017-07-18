@@ -17,7 +17,7 @@ function removeSearch() {
 }
 function PinHeader(){
 	$(window).scroll(function() {
-		if($(window).scrollTop() >0){
+		if($(window).scrollTop() >38){
 			$('#header').addClass('pin-header');
 		}
 		else{
