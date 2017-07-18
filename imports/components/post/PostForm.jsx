@@ -1,4 +1,5 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
 import {AgGridReact} from 'ag-grid-react';
 import { browserHistory } from 'react-router';
 import { graphql, compose } from 'react-apollo';
@@ -43,6 +44,44 @@ class PostForm extends React.Component {
       }
     }
   }
+  handleSave(type){
+    let info = {
+      data: {
+        title: this.state.title, content: this.state.content, description: this.state.description,
+        stockType: this.state.stockType
+      },
+      image: this.state.image
+    }
+    if(this.props.params._id){
+
+    }
+    else {
+      if(this.props.insertPost){
+        this.props.insertPost(Meteor.userId(), JSON.stringify(info)).then(({data}) => {
+          if(data.insertPost){
+            if(type){
+              this.setState({
+                title: '', content: '', image: {}, description: '', stockType: {
+                  _id: '', name : ''
+                }
+              })
+              if(document.getElementById('editor') && document.getElementById('editor').firstChild){
+                document.getElementById('editor').firstChild.innerHTML =''
+              }
+              this.props.addNotificationMute({fetchData: true, message: 'Thêm bài dăng thành công', level: 'success'});
+            }
+            else {
+              browserHistory.push('/post');
+            }
+          }
+        })
+        .catch((error) =>  {
+          console.log(error);
+          this.props.addNotificationMute({fetchData: true, message: 'Thêm bài dăng thất bại', level: 'error'});
+        })
+      }
+    }
+  }
   render(){
     if(!this.props.data.stockTypes){
       return (
@@ -78,9 +117,18 @@ class PostForm extends React.Component {
               justifyContent: 'flex-end',
               marginTop: 5
             }}>
-              <button type="button" className="btn btn-primary" style={{
+            {
+              !this.props.params._id &&
+              <button type="button" className="btn btn-primary" disabled={!this.state.title || !this.state.stockType._id || !this.state.content} onClick={() => this.handleSave(true)}>Lưu và khởi tạo</button>
+            }
+              <button type="button" className="btn btn-primary" disabled={!this.state.title || !this.state.stockType._id || !this.state.content} style={{
+                marginLeft: 10
+              }} onClick={() => {
+                this.handleSave()
+              }}>Lưu</button>
+              <button type="button" className="btn btn-danger" style={{
                 margin: '0 10px'
-              }} onClick={() => {}}>Lưu</button>
+              }} onClick={() => browserHistory.push('/post')}>Hủy</button>
             </div>
           </div>
           <div className="row" style={{
@@ -123,6 +171,7 @@ class PostForm extends React.Component {
                   ? this.state.stockType._id
                   : ''} valueKey="_id" labelKey="name" options={this.props.data.stockTypes} placeholder="Chọn loại bài đăng" onChange={(value) => {
                   this.setState((prevState) => {
+                    prevState.stockType = value;
                     return prevState;
                   })
                 }}/>
@@ -165,6 +214,11 @@ class PostForm extends React.Component {
     }
   }
 }
+
+const INSERT_POST = gql `
+    mutation insertPost($userId: String!, $info: String!){
+        insertPost(userId: $userId, info: $info)
+}`
 const STOCK_TYPE = gql `
     query stockTypes{
       stockTypes {
@@ -176,6 +230,15 @@ export default compose(graphql(STOCK_TYPE, {
     variables: {
     },
     fetchPolicy: 'network-only'
+  })
+}), graphql(INSERT_POST, {
+  props: ({mutate}) => ({
+    insertPost: (userId, info) => mutate({
+      variables: {
+        userId,
+        info
+      }
+    })
   })
 })
 )(PostForm);

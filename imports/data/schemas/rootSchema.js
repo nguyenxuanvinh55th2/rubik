@@ -99,7 +99,7 @@ const rootSchema = `
       orderDevoice(token: String!, info: String): String
       ratingStockModel(token: String!, _id: String, info: String): String
       updateStockModel(userId: String ,_id: String, info: String): String
-      
+      insertPost(userId: String, info: String): String
     }
 `
 export default rootSchema;
