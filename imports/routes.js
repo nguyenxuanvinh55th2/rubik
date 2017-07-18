@@ -18,6 +18,9 @@ import Checkout from './components/product/Checkout.jsx';
 
 import StockType from './containers/StockType.js';
 
+import Post from './components/post/Post.jsx';
+import PostForm from './components/post/PostForm.jsx';
+
 function requireAuth(nextState, replace){
   if (!Meteor.userId()) {
     replace({
@@ -38,6 +41,9 @@ export const renderRoutes = () => (
         <Route path="/stockModelForm" component={StockModelForm}/>
         <Route path="/stockModelForm/:_id" component={StockModelForm}/>
         <Route path="/stockType" component={StockType}/>
+        <Route path="/post" component={Post}/>
+        <Route path="/postForm" component={PostForm}/>
+        <Route path="/postForm/:_id" component={PostForm}/>
       </Route>
       <Route path="/productDetail/:id" component={DetailProduct} />
       <Route path="/shoppingCart" component={Cart} />

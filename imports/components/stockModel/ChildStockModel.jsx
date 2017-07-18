@@ -136,7 +136,7 @@ export class UpdateQuantity extends React.Component {
     this.state = {
       quantity: 0,
       reason: '',
-      averagePrice: 0, price: 0, isPromotion: false, saleOff: 0
+      averagePrice: 0, price: 0
     }
   }
   handleSave(){
@@ -144,14 +144,14 @@ export class UpdateQuantity extends React.Component {
     let detail = []
     if(this.props.type == 'import'){
       info.quantity = parseInt(this.props.data.quantity) + parseInt(this.state.quantity);
+      info.averagePrice = parseInt(this.state.averagePrice);
+      info.price = parseInt(this.state.price);
     }
     else {
       info.quantity = parseInt(this.props.data.quantity) - parseInt(this.state.quantity);
     }
-    if(info.quantity > 0){
-      if(this.props.type == 'export'){
+    if(info.quantity < 0 && this.props.type == 'export'){
         alert("Không đủ hàng để xuất bán!")
-      }
     }
     else {
       info.detail = detail.push({
@@ -196,18 +196,64 @@ export class UpdateQuantity extends React.Component {
                       }}/>
                     </div>
                   </div>
-                  <div className="form-group">
-                    <label className="control-label col-sm-3">Mô tả</label>
-                    <div className="col-sm-9">
-                      <textarea rows="4" type="text" className="form-control" style={{textAlign: 'right'}} value={this.state.reason}
-                        onChange={({target}) => {
-                        this.setState((prevState) => {
-                          prevState.reason = target.value;
-                          return prevState;
-                        });
-                      }}/>
+                  {
+                    this.props.type == 'import' &&
+                    <div className="form-group">
+                      <label className="control-label col-sm-3">Giá nhập</label>
+                      <div className="col-sm-9">
+                        <Cleave className="form-control" style={{
+                          textAlign: 'right'
+                        }} value={this.state.averagePrice} options={{
+                          numeral: true,
+                          numeralThousandsGroupStyle: 'thousand'
+                        }} onFocus={({target}) => {
+                          if (target.value === '0') {
+                            target.value = ''
+                          }
+                        }} onChange={({target}) => {
+                          this.setState((prevState) => {
+                            prevState.averagePrice = target.value;
+                            return prevState;
+                          });
+                        }}/>
+                      </div>
                     </div>
-                  </div>
+                  }
+                  {
+                    this.props.type == 'import' &&
+                    <div className="form-group">
+                      <label className="control-label col-sm-3">Giá bán</label>
+                      <div className="col-sm-9">
+                        <Cleave className="form-control" style={{
+                          textAlign: 'right'
+                        }} value={this.state.price} options={{
+                          numeral: true,
+                          numeralThousandsGroupStyle: 'thousand'
+                        }} onFocus={({target}) => {
+                          if (target.value === '0') {
+                            target.value = ''
+                          }
+                        }} onChange={({target}) => {
+                          this.setState((prevState) => {
+                            prevState.price = target.value;
+                            return prevState;
+                          });
+                        }}/>
+                      </div>
+                    </div>
+                  }
+                  <div className="form-group">
+                   <label className="control-label col-sm-3">Mô tả</label>
+                   <div className="col-sm-9">
+                     <textarea rows="4" type="text" className="form-control" style={{textAlign: 'right'}} value={this.state.reason}
+                       onChange={({target}) => {
+                       this.setState((prevState) => {
+                         prevState.reason = target.value;
+                         return prevState;
+                       });
+                     }}/>
+                   </div>
+                 </div>
                 </form>
               </div>
               <div className="modal-footer" style={{margin: 0}}>
