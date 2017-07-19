@@ -13,70 +13,77 @@ class SliderNew extends React.Component {
     heightEqua.init();
   }
   render() {
-    var settings = {
-      arrows: true,
-      dots: true,
-      speed: 500,
-      infinite: false,
-      slidesToShow: 1,
-      autoplay: true,
-      slidesToScroll: 1,
-      responsive: [
-        {
-          breakpoint: 991,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            dots: false,
-            arrows: true
-          }
-        }
-      ]
-    };
-    console.log(this.props.data);
     if(!this.props.data.posts){
       return (
-        <div className="loading">
-          <i className="fa fa-spinner fa-spin" style={{
-            fontSize: 50
-          }}></i>
+        <div className="item-slider">
+          <div className="loading">
+              <i className="fa fa-spinner fa-spin" style={{fontSize: 20}}></i>
+          </div>
         </div>
       )
     }
     else {
+      var settings = {
+        arrows: true,
+        dots: true,
+        speed: 500,
+        infinite: false,
+        slidesToShow: 1,
+        autoplay: true,
+        slidesToScroll: 1,
+        responsive: [
+          {
+            breakpoint: 991,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1,
+              dots: false,
+              arrows: true
+            }
+          }
+        ]
+      };
       return (
         <div>
-          <Slider {...settings}>
-            {
-              __.map(this.props.data.posts,(post, idx) => {
-                return (
-                  <div key={idx} className="item-slider-new bg" style={{
-                    backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/slider-news_zps8vnwov5h.jpg')"
-                  }}>
-                    <div className="container">
-                      <h2 className="text-center">TIN TỨC NỔI BẬT</h2>
-                      <div className="row">
-                        <div className="col-sm-5">
-                          <div className="image">
-                            <img src={post.image.file ? post.image.file : 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/img-slidernew_zps7gtzduez.jpg'} alt=""/>
+          {
+            this.props.data.posts.length ?
+            <Slider {...settings}>
+                {
+                  __.map(this.props.data.posts,(post, idx) => {
+                    return (
+                      <div key={idx} className="item-slider-new bg" style={{
+                        backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/slider-news_zps8vnwov5h.jpg')"
+                      }}>
+                        <div className="container">
+                          <h2 className="text-center">TIN TỨC NỔI BẬT</h2>
+                          <div className="row">
+                            <div className="col-sm-5">
+                              <div className="image">
+                                <img src={post.image.file ? post.image.file : 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/img-slidernew_zps7gtzduez.jpg'} alt=""/>
+                              </div>
+                            </div>
+                            <div className="col-sm-7">
+                              <h3>{post.title}</h3>
+                              <p>
+                                {post.content}
+                              </p>
+                              <p className="text-right">
+                                <Link  to={`/tin-tuc/${post._id}`}>Đọc tiếp</Link>
+                              </p>
+                            </div>
                           </div>
                         </div>
-                        <div className="col-sm-7">
-                          <h3>{post.title}</h3>
-                          <p>
-                            {post.content}
-                          </p>
-                          <p className="text-right">
-                            <Link  to={`/tin-tuc/${post._id}`}>Đọc tiếp</Link>
-                          </p>
-                        </div>
                       </div>
-                    </div>
-                  </div>
-                )
-              })
-            }
-          </Slider>
+                    )
+                  })
+                }
+            </Slider>
+            :
+            <div className="item-slider-new bg" style={{
+                backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/slider-news_zps8vnwov5h.jpg')"
+              }}>
+            </div>
+          }
         </div>
       );
     }

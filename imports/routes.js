@@ -23,6 +23,7 @@ import PostForm from './components/post/PostForm.jsx';
 import WrapFontEnd from './components/wrap/WrapFontEnd.jsx';
 import About from './components/about/About.jsx';
 import DetailNew from './components/news/DetailNew.jsx';
+import EditAbout from './components/theme/EditAbout.jsx';
 
 function requireAuth(nextState, replace){
   if (!Meteor.userId()) {
@@ -55,6 +56,7 @@ export const renderRoutes = () => (
         <Route path="/post" component={Post}/>
         <Route path="/postForm" component={PostForm}/>
         <Route path="/postForm/:_id" component={PostForm}/>
+        <Route path="/editAbout" component={EditAbout}/>
       </Route>
       <Route path="*" component={Home} />
     </Route>

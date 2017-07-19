@@ -9,26 +9,6 @@ class Sliders extends React.Component {
     super(props);
   }
   render() {
-    var settings = {
-      arrows: true,
-      dots: true,
-      speed: 500,
-      infinite: false,
-      slidesToShow: 1,
-      autoplay: true,
-      slidesToScroll: 1,
-      responsive: [
-        {
-          breakpoint: 991,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            dots: false,
-            arrows: true
-          }
-        }
-      ]
-    };
     let defaultImage = 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/img-slider_zpsdjbfpcuh.jpg';
     if(!this.props.data.slider){
         return(
@@ -40,6 +20,26 @@ class Sliders extends React.Component {
         )
     }
     else {
+      let settings = {
+        arrows: true,
+        dots: true,
+        speed: 500,
+        infinite: false,
+        slidesToShow: 1,
+        autoplay: true,
+        slidesToScroll: 1,
+        responsive: [
+          {
+            breakpoint: 991,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1,
+              dots: false,
+              arrows: true
+            }
+          }
+        ]
+      };
       return (
         <div>
           <Slider {...settings}>

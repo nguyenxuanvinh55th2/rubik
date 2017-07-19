@@ -65,6 +65,14 @@ export default class HeaderManager extends React.Component {
                 </ul>
               </li>
               <li><a onClick={() => browserHistory.push('/post')}>Bài đăng</a></li>
+              <li className="dropdown">
+                <a className="dropdown-toggle" data-toggle="dropdown">Giao diện
+                <span className="caret"></span></a>
+                <ul className="dropdown-menu">
+                  <li><a onClick={() => browserHistory.push('/editAbout')}>Chỉnh sửa trang giới thiệu</a></li>
+                  <li><a href="#">Slider</a></li>
+                </ul>
+              </li>
             </ul>
           </div>
         </nav>

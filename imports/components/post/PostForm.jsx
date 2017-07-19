@@ -244,7 +244,7 @@ const UPDATE_POST = gql`
   }
 `;
 const STOCK_TYPE = gql `
-    query stockTypes($_id: String){
+    query stockTypes($_id: String, $query: String){
         post(_id: $_id) {
         _id title  content  description
         image {
@@ -252,14 +252,18 @@ const STOCK_TYPE = gql `
         }
         stockType { _id name }
       }
-      stockTypes {
+      stockTypes(query: $query) {
           _id name
       }
 }`
 export default compose(graphql(STOCK_TYPE, {
   options: (ownProps) => ({
     variables: {
-      _id: ownProps.params._id ? ownProps.params._id : ''
+      _id: ownProps.params._id ? ownProps.params._id : '', query: JSON.stringify(
+        {
+          isNavigation: true, active : true, _id: {$ne: '0'}
+        }
+      )
     },
     fetchPolicy: 'network-only'
   })

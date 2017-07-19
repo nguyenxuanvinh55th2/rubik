@@ -5,8 +5,6 @@ import gql from 'graphql-tag';
 
 import Sliders from './Slider.jsx'
 import SliderNew from './SliderNews.jsx'
-import Header from '../main/Header.jsx'
-import Footer from '../main/Footer.jsx'
 import Product from '../product/Product.jsx'
 import {PinTop} from '../../javascript/header.js'
 import {Link} from 'react-router';
@@ -23,8 +21,7 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        {/* <Header/> */}
-        <Sliders/>
+        <Sliders/>/
         <div className="sec-cate">
           <div className="container">
             <div className="row">
@@ -107,13 +104,7 @@ class Home extends React.Component {
             </p>
           </div>
         </div>
-        <SliderNew/>
-        {/* <Footer/>
-        <div className="pin-top">
-          <Link to={'#'}>
-            <i className="fa fa-long-arrow-up" aria-hidden="true"></i>
-          </Link>
-        </div> */}
+        <SliderNew {...this.props}/>
       </div>
     )
   }

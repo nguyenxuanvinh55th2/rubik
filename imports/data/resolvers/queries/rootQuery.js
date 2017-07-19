@@ -17,8 +17,11 @@ const rootQuery = {
   getInVoice: (_, {token}) => {
     return Invoices.findOne({_id: token});
   },
-  stockTypes: (_, {}) => {
-    return StockTypes.find({active: true, isProduct: true}).fetch();
+  stockTypes: (_, {query}) => {
+    if(typeof query == 'string'){
+        query = JSON.parse(query)
+    }
+    return StockTypes.find(query).fetch();
   },
   stockModel: (_, {_id}) => {
     return StockModels.findOne({_id});
@@ -36,6 +39,9 @@ const rootQuery = {
   },
   slider: () => {
     return Sliders.findOne({_id: '0'})
+  },
+  getAllPostByType: (_, {stockTypeId}) => {
+    return Posts.find({"stockType._id": stockTypeId}).fetch();
   }
 }
 export default rootQuery;

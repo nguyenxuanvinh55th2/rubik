@@ -534,7 +534,7 @@ class StockModelForm extends React.Component {
 }
 
 const STOCK_TYPE = gql `
-    query stockTypes($_id: String){
+    query stockTypes($_id: String, $query: String){
       stockModel(_id: $_id) {
         _id code name weight isLimited  isPromotion colors
         unit averagePrice  price  quantity saleOff description
@@ -547,7 +547,7 @@ const STOCK_TYPE = gql `
           _id name
         }
       }
-      stockTypes {
+      stockTypes(query: $query) {
           _id name
       }
       categories {
@@ -570,7 +570,11 @@ const INSERT_STOCK_CATEGORY = gql `
 export default compose(graphql(STOCK_TYPE, {
   options: (ownProps) => ({
     variables: {
-      _id: ownProps.params._id
+      _id: ownProps.params._id, query: JSON.stringify(
+        {
+          isProduct: true, active : true, _id: {$ne: '0'}
+        }
+      )
     },
     fetchPolicy: 'network-only'
   })

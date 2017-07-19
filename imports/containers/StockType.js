@@ -4,8 +4,8 @@ import gql from 'graphql-tag';
 import StockType from '../components/stockType/StockType.jsx';
 
 const STOCK_TYPE = gql`
-    query stockTypes{
-        stockTypes {
+    query stockTypes($query: String){
+        stockTypes(query: $query) {
             _id
             name
         }
@@ -25,7 +25,9 @@ const INSERT_STOCKTYPE = gql`
 export default compose (
     graphql(STOCK_TYPE, {
         options: ()=> ({
-            variables: {},
+            variables: {query: JSON.stringify({
+              isProduct: true, active: true, _id: {$ne: '0'}
+            })},
             fetchPolicy: 'network-only'
         })
     }),

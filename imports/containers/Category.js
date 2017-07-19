@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 import Category from '../components/category/Category.jsx';
 
 const STOCK_CATEGORY_QUERY = gql `
-    query categories{
+    query categories($query: String){
       categories {
           _id
           name
@@ -12,7 +12,7 @@ const STOCK_CATEGORY_QUERY = gql `
             _id name
           }
       }
-      stockTypes {
+      stockTypes(query: $query) {
           _id name
       }
 }`
@@ -28,7 +28,12 @@ const INSERT_STOCK_CATEGORY = gql `
 }`
 
 export default compose(graphql(STOCK_CATEGORY_QUERY, {
-  options: () => ({variables: {}, fetchPolicy: 'network-only'})
+  options: () => ({variables: {
+    query: JSON.stringify(
+    {
+      isProduct: true, active : true, _id: {$ne: '0'}
+    }
+  )}, fetchPolicy: 'network-only'})
 }), graphql(REMOVE_STOCK_CATEGORY, {
   props: ({mutate}) => ({
     removeCategories: (userId, _id) => mutate({
