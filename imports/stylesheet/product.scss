@@ -4,15 +4,21 @@
 .item-product{
 	margin-bottom: 50px;
 	.box-item{
+		height: 260px;
 		position: relative;
 		border: 1px solid #b5b2b2;
 		text-align: center;
-		padding: 50px 0;
 		border-radius: 10px;
 		overflow: hidden;
 		-webkit-backface-visibility: hidden;
 		backface-visibility: hidden;
 		transform: translate3d(0, 0, 0);
+		img {
+    position: absolute;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    left: 50%;
+}
 		.chart{
 			position: absolute;
 			left: 0;
@@ -287,7 +293,7 @@
 		text-align: center;
 		margin-bottom: 10px;
 	}
-	
+
 	.rate{
 		color: #ed1e24;
 		font-weight: bold;
@@ -382,6 +388,9 @@
 	.sec-cate .item {
 		height: 187px;
 	}
+	.item-product .box-item {
+    height: 180px;
+}
 	.sec-cate .item-center {
 		height: 404px;
 	}

@@ -29,7 +29,7 @@ class Cart extends React.Component {
       return (
 
         <div>
-          <Header/>
+          {/* <Header/> */}
           <div className="sec-cart">
             <div className="container">
               <h3 className="text-center">GIỎ HÀNG CỦA BẠN</h3>
@@ -99,7 +99,7 @@ class Cart extends React.Component {
               </div>
             </div>
           </div>
-          <Footer/>
+          {/* <Footer/> */}
         </div>
       )
     } else {

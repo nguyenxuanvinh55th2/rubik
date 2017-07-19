@@ -25,6 +25,15 @@ const rootQuery = {
   },
   invoices: (_, {_id}) => {
     return Invoices.find({}).fetch();
+  },
+  posts: () => {
+    return Posts.find({active: true}).fetch();
+  },
+  post: (_, {_id}) => {
+    return Posts.findOne({_id: _id})
+  },
+  slider: () => {
+    return Sliders.findOne({_id: '0'})
   }
 }
 export default rootQuery;

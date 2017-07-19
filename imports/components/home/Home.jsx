@@ -23,7 +23,7 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        <Header/>
+        {/* <Header/> */}
         <Sliders/>
         <div className="sec-cate">
           <div className="container">
@@ -108,12 +108,12 @@ class Home extends React.Component {
           </div>
         </div>
         <SliderNew/>
-        <Footer/>
+        {/* <Footer/>
         <div className="pin-top">
           <Link to={'#'}>
             <i className="fa fa-long-arrow-up" aria-hidden="true"></i>
           </Link>
-        </div>
+        </div> */}
       </div>
     )
   }

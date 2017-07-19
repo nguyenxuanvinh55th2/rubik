@@ -1,6 +1,9 @@
 import React from 'react';
 import Slider from 'react-slick';
 import {Link} from 'react-router';
+import __ from 'lodash';
+import {graphql, compose} from 'react-apollo';
+import gql from 'graphql-tag';
 export default class SliderNew extends React.Component {
   constructor(props) {
     super(props);

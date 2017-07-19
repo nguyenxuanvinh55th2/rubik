@@ -23,7 +23,6 @@ class StockModelForm extends React.Component {
       color: '#FF6900',
       openDialog: false,
       data: {
-        _id: '',
         code: '',  name: '', weight: '',  colors: [],
         origin: '', isLimited: false, isPromotion: false,
         images: [],  unit: '',  averagePrice: 0,
@@ -110,7 +109,7 @@ class StockModelForm extends React.Component {
         })
         .catch((error) => {
           console.log(error);
-          this.props.addNotificationMute({fetchData: true, message: 'Thêm hàng mới hàng thất bại', level: 'error'});
+          this.props.addNotificationMute({fetchData: true, message: 'Cập nhật hàng thất bại', level: 'error'});
         })
       }
     }

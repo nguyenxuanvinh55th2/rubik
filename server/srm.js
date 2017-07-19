@@ -12,3 +12,17 @@ Meteor.publish('stockTypes', function () {
         this.ready();
     }
 });
+Meteor.publish('posts', function () {
+    if (this.userId) {
+        return StockModels.find({});
+    } else {
+        this.ready();
+    }
+});
+Meteor.publish('sliders', function () {
+    if (this.userId) {
+        return Sliders.find({});
+    } else {
+        this.ready();
+    }
+});

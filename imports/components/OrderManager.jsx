@@ -1,3 +1,5 @@
+import InvoiceDetail from 'InvoiceDetail.jsx';
+
 export default class OrderDevoice extends React.Component {
   constructor(props) {
     super(props);
@@ -8,6 +10,24 @@ export default class OrderDevoice extends React.Component {
       name: ''
     }
     this.gridOptions = {
+      icons: {
+          groupExpanded: '<span style="width: 25px;height: 25px; text-align: center;margin-left: 8px;"><i style="font-weight: bolder;" class="fa fa-angle-down"></i></span>',
+          groupContracted: '<span style="width: 25px;height: 25px; text-align: center;margin-left: 8px;"><i style="font-weight: bolder;" class="fa fa-angle-right"></i></span>',
+      },
+      getNodeChildDetails: (params) => {
+          if (params.isparent === true) {
+              return {
+                  group: true,
+                  children: params.children,
+                  expanded: params.open
+              };
+          } else {
+              return null;
+          }
+      },
+      doesDataFlower: () => {
+          return true;
+      },
       floatingFilter: true,
       onFilterChanged: () => {
         let data = [],
@@ -18,6 +38,7 @@ export default class OrderDevoice extends React.Component {
         this.gridOptions.api.setFloatingBottomRowData(this.renderFooterData(data));
         this.saveFilter = this.gridOptions.api.getFilterModel();
       }
+      fullWidthCellRendererFramework: InvoiceDetail,
     };
   }
   renderFooterData(data) {
@@ -37,7 +58,10 @@ export default class OrderDevoice extends React.Component {
     }
   }
   render() {
-    let {data} = this.props;
+    let data = __.cloneDeep(this.props.data);
+    __.forEach(data.invoies, item => {
+      item.status = (item.status === 1 ? 'Đang xử  lý' : item.status === 99 ? 'Đã duyệt' : item.status === 100? 'Đã hủy' : 'Đã giao hàng');
+    })
     if (Meteor.userId()) {
       if (!data.categories) {
         return (
@@ -156,6 +180,22 @@ export default class OrderDevoice extends React.Component {
             headerName: "Địa chỉ",
             field: "customer.address",
             width: 320,
+            cellStyle: function(params) {
+              if (params.node.data.gridType == 'footer') {
+                return {fontWeight: 'bold'};
+              } else {
+                return null;
+              }
+            },
+            filterParams: {
+              filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+            },
+            filter: 'text',
+            suppressMenu: true
+          }, {
+            headerName: "Trạng thái",
+            field: "status",
+            width: 100,
             cellStyle: function(params) {
               if (params.node.data.gridType == 'footer') {
                 return {fontWeight: 'bold'};

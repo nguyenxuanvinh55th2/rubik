@@ -225,6 +225,100 @@ const rootMutation = {
       )
     }
     return future.wait();
+  },
+  insertPost: (_,{userId, info}) => {
+    let user = Meteor.users.findOne({_id: userId});
+    let future = new Future();
+    if (user){
+      info = JSON.parse(info);
+      let imageData = {};
+      info.data.image = ''
+      info.data.createdAt = moment().valueOf();
+      info.data.createdBy = {
+         _id: user._id,
+         username: user.username
+      };
+      future.return(Posts.insert(info.data, (err,res) => {
+        if (err) {console.log(err);}
+        else if(res){
+          let docData = [info.image];
+          __.forEach(docData, (content, key)=>{
+              if(content.fileName){
+                  imageData[key] = content;
+                  imageData[key].file = content.file.replace(/^data:image\/(png|gif|jpeg);base64,/,'');
+                  content = '';
+              }
+          });
+          __.forEach(imageData, (img, key)=>{
+              buf = new Buffer(img.file, 'base64');
+              Files.write(buf, {fileName: img.fileName, userId: userId, type: img.type}, (err, fileRef)=>{
+                  if (err) {
+                    throw err;
+                  } else {
+                    Posts.update({ _id: res },{$set: {image: fileRef._id}});
+                  }
+              }, true);
+          });
+        }
+      }))
+    }
+    return future.wait();
+  },
+  updatePost: (_, {userId, _id, info}) => {
+    if(typeof info == 'string'){
+      info = JSON.parse(info);
+    }
+    let future = new Future();
+    let user = Meteor.users.findOne({_id: userId});
+    if (user){
+      let imagesExit = [], docData = [], imageData = {};
+      info.data.updatedAt = moment().valueOf();
+      info.data.updatedBy = {
+         _id: user._id,
+         username: user.username
+      };
+      if(info.image && info.image._id){
+        future.return(
+          Posts.update({_id: _id}, {$set: info.data}, (err) => {
+            if(err){
+              throw err;
+            }
+          })
+        )
+      }
+      else {
+        future.return(
+          Posts.update({_id: _id}, {$set: info.data}, (err) => {
+            if(err){
+              console.log(err);
+            }
+            else {
+              if(info.image && info.image.fileName){
+                docData = [info.image]
+                __.forEach(docData, (content, key)=>{
+                    if(content.fileName){
+                        imageData[key] = content;
+                        imageData[key].file = content.file.replace(/^data:image\/(png|gif|jpeg);base64,/,'');
+                        content = '';
+                    }
+                });
+                __.forEach(imageData, (img, key)=>{
+                    buf = new Buffer(img.file, 'base64');
+                    Files.write(buf, {fileName: img.fileName, userId: user._id, type: img.type}, (err, fileRef)=>{
+                        if (err) {
+                          throw err;
+                        } else {
+                          Posts.update({ _id: _id },{$set: { image: fileRef._id }});
+                        }
+                    }, true);
+                });
+              }
+            }
+          })
+        )
+      }
+    }
+    return future.wait();
   }
 }
 export default rootMutation

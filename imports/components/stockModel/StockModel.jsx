@@ -4,7 +4,8 @@ import { browserHistory } from 'react-router';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import Dialog from 'material-ui/Dialog';
-import { HanderEditorStockModel, RenderImage, RenderDescription, UpdateQuantity } from './ChildStockModel.jsx'
+import { HanderEditorStockModel, RenderImage, RenderDescription, UpdateQuantity } from './ChildStockModel.jsx';
+import accounting from 'accounting';
 class StockModel extends React.Component {
   constructor(props) {
     super(props);
@@ -121,7 +122,7 @@ class StockModel extends React.Component {
           }
         },
         {
-          headerName: "Loại hàng", field: "stockType.name",  width: 200, filter: 'text', suppressMenu: true,
+          headerName: "Loại hàng", field: "stockType.name",  width: 120, filter: 'text', suppressMenu: true,
           filterParams: {
             filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
           },
@@ -134,7 +135,7 @@ class StockModel extends React.Component {
           }
         },
         {
-          headerName: "Chủng loại", field: "categories",  width: 200, filter: 'text', suppressMenu: true,
+          headerName: "Chủng loại", field: "categories",  width: 150, filter: 'text', suppressMenu: true,
           filterParams: {
             filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
           },
@@ -147,7 +148,25 @@ class StockModel extends React.Component {
           }
         },
         {
-          headerName: "Số lượng", field: "quantity",  width: 200, filter: 'number', suppressMenu: true,
+          headerName: "Số lượng", field: "quantity",  width: 80, filter: 'number', suppressMenu: true,
+          cellStyle: (params) => {
+              if (params.node.data.gridType == 'footer') {
+                  return {fontWeight: 'bold'};
+              }
+              else {
+                return {textAlign: 'right'}
+              }
+          },
+          cellRenderer: (params) => {
+              if (params.node.data.gridType == 'footer') {
+                  return '';
+              } else {
+                  return accounting.formatNumber(params.value);
+              }
+          },
+        },
+        {
+          headerName: "Đơn vị", field: "unit",  width: 100, filter: 'number', suppressMenu: true,
           cellStyle: function(params) {
             if (params.node.data.gridType == 'footer') {
               return {fontWeight: 'bold'};
@@ -157,17 +176,7 @@ class StockModel extends React.Component {
           }
         },
         {
-          headerName: "Đơn vị", field: "unit",  width: 200, filter: 'number', suppressMenu: true,
-          cellStyle: function(params) {
-            if (params.node.data.gridType == 'footer') {
-              return {fontWeight: 'bold'};
-            } else {
-              return null;
-            }
-          }
-        },
-        {
-          headerName: "Cân nặng", field: "weight",  width: 200, filter: 'text', suppressMenu: true,
+          headerName: "Cân nặng", field: "weight",  width: 100, filter: 'text', suppressMenu: true,
           filterParams: {
             filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
           },
@@ -180,7 +189,7 @@ class StockModel extends React.Component {
           }
         },
         {
-          headerName: "Xuất xứ", field: "origin",  width: 200, filter: 'text', suppressMenu: true,
+          headerName: "Xuất xứ", field: "origin",  width: 100, filter: 'text', suppressMenu: true,
           filterParams: {
             filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
           },
@@ -193,7 +202,7 @@ class StockModel extends React.Component {
           }
         },
         {
-          headerName: "Hàng giới hạn", field: "isLimited",  width: 200, filter: 'text', suppressMenu: true,
+          headerName: "Hàng giới hạn", field: "isLimited",  width: 100, filter: 'text', suppressMenu: true,
           filterParams: {
             filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
           },
@@ -206,47 +215,79 @@ class StockModel extends React.Component {
           }
         },
         {
-          headerName: "Hàng giảm giá", field: "isPromotion",  width: 200, filter: 'text', suppressMenu: true,
+          headerName: "Hàng giảm giá", field: "isPromotion",  width: 100, filter: 'text', suppressMenu: true,
           filterParams: {
             filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
           },
-          cellStyle: function(params) {
-            if (params.node.data.gridType == 'footer') {
-              return {fontWeight: 'bold'};
-            } else {
-              return null;
-            }
-          }
+          cellStyle: (params) => {
+              if (params.node.data.gridType == 'footer') {
+                  return {fontWeight: 'bold'};
+              }
+              else {
+                return {textAlign: 'right'}
+              }
+          },
+          cellRenderer: (params) => {
+              if (params.node.data.gridType == 'footer') {
+                  return '';
+              } else {
+                  return accounting.formatNumber(params.value);
+              }
+          },
         },
         {
-          headerName: "Giá nhập", field: "averagePrice",  width: 200, filter: 'number', suppressMenu: true,
-          cellStyle: function(params) {
-            if (params.node.data.gridType == 'footer') {
-              return {fontWeight: 'bold'};
-            } else {
-              return null;
-            }
-          }
+          headerName: "Giá nhập", field: "averagePrice",  width: 120, filter: 'number', suppressMenu: true,
+          cellStyle: (params) => {
+              if (params.node.data.gridType == 'footer') {
+                  return {fontWeight: 'bold'};
+              }
+              else {
+                return {textAlign: 'right'}
+              }
+          },
+          cellRenderer: (params) => {
+              if (params.node.data.gridType == 'footer') {
+                  return '';
+              } else {
+                  return accounting.formatNumber(params.value);
+              }
+          },
         },
         {
-          headerName: "Giá bán", field: "price",  width: 200, filter: 'number', suppressMenu: true,
-          cellStyle: function(params) {
-            if (params.node.data.gridType == 'footer') {
-              return {fontWeight: 'bold'};
-            } else {
-              return null;
-            }
-          }
+          headerName: "Giá bán", field: "price",  width: 120, filter: 'number', suppressMenu: true,
+          cellStyle: (params) => {
+              if (params.node.data.gridType == 'footer') {
+                  return {fontWeight: 'bold'};
+              }
+              else {
+                return {textAlign: 'right'}
+              }
+          },
+          cellRenderer: (params) => {
+              if (params.node.data.gridType == 'footer') {
+                  return '';
+              } else {
+                  return accounting.formatNumber(params.value);
+              }
+          },
         },
         {
-          headerName: "Giá giảm", field: "saleOff",  width: 200, filter: 'number', suppressMenu: true,
-          cellStyle: function(params) {
-            if (params.node.data.gridType == 'footer') {
-              return {fontWeight: 'bold'};
-            } else {
-              return null;
-            }
-          }
+          headerName: "Giá giảm", field: "saleOff",  width: 120, filter: 'number', suppressMenu: true,
+          cellStyle: (params) => {
+              if (params.node.data.gridType == 'footer') {
+                  return {fontWeight: 'bold'};
+              }
+              else {
+                return {textAlign: 'right'}
+              }
+          },
+          cellRenderer: (params) => {
+              if (params.node.data.gridType == 'footer') {
+                  return '';
+              } else {
+                  return accounting.formatNumber(params.value);
+              }
+          },
         },
       ];
       return(
