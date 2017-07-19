@@ -22,6 +22,9 @@ const rootQuery = {
   },
   stockModel: (_, {_id}) => {
     return StockModels.findOne({_id});
+  },
+  invoices: (_, {_id}) => {
+    return Invoices.find({}).fetch();
   }
 }
 export default rootQuery;

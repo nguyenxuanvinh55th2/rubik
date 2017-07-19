@@ -11,6 +11,7 @@ import Manager from './components/manager/Manager.jsx';
 import Dashboard from './components/dashboard/Dashboard.jsx';
 import StockModel from './components/stockModel/StockModel.jsx';
 import StockModelForm from './components/stockModel/StockModelForm.jsx';
+import OrderDevoice from './components/OrderDevoice.jsx';
 
 import DetailProduct from './components/product/DetailProduct.jsx';
 import Cart from './components/product/Cart.jsx';
@@ -38,6 +39,7 @@ export const renderRoutes = () => (
         <Route path="/stockModelForm" component={StockModelForm}/>
         <Route path="/stockModelForm/:_id" component={StockModelForm}/>
         <Route path="/stockType" component={StockType}/>
+        <Route path="/orderDevoice" component={OrderDevoice}/>
       </Route>
       <Route path="/productDetail/:id" component={DetailProduct} />
       <Route path="/shoppingCart" component={Cart} />

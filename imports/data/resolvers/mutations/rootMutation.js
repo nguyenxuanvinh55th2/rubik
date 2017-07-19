@@ -156,6 +156,24 @@ const rootMutation = {
       votes: info
     }});
   },
+  cancelInvoice: (_, {userId, _id}) => {
+    let user = Meteor.users.findOne({_id: userId});
+    if(user) {
+      return Invoices.update({_id}, {$set: {
+        status: 100
+      }});
+    }
+    return
+  },
+  verifyInvoice: (_, {userId, _id}) => {
+    let user = Meteor.users.findOne({_id: userId});
+    if(user) {
+      return Invoices.update({_id}, {$set: {
+        status: 99
+      }});
+    }
+    return
+  },
   updateStockModel: (_, {userId,_id, info}) => {
     if(typeof info == 'string'){
       info = JSON.parse(info);
