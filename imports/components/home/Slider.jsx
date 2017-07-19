@@ -32,8 +32,10 @@ class Sliders extends React.Component {
     let defaultImage = 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/img-slider_zpsdjbfpcuh.jpg';
     if(!this.props.data.slider){
         return(
-          <div className="loading">
-              <i className="fa fa-spinner fa-spin" style={{fontSize: 20}}></i>
+          <div className="item-slider">
+            <div className="loading">
+                <i className="fa fa-spinner fa-spin" style={{fontSize: 20}}></i>
+            </div>
           </div>
         )
     }

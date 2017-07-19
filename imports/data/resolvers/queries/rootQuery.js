@@ -18,16 +18,24 @@ const rootQuery = {
     return Invoices.findOne({_id: token});
   },
   stockTypes: (_, {}) => {
-    return StockTypes.find({active: true}).fetch();
+    return StockTypes.find({active: true, isProduct: true}).fetch();
   },
   stockModel: (_, {_id}) => {
     return StockModels.findOne({_id});
   },
   invoices: (_, {_id}) => {
-    return Invoices.find({}).fetch();
+    return Invoices.find({status: {$ne: 100}, status: {$ne: 0}}).fetch();
   },
   posts: () => {
     return Posts.find({active: true}).fetch();
+  },
+  posts: (_,{limit}) => {
+    if(limit){
+      return Posts.find({active: true},{limit}).fetch();
+    }
+    else {
+      return Posts.find({active: true}).fetch();
+    }
   },
   post: (_, {_id}) => {
     return Posts.findOne({_id: _id})

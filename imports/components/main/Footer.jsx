@@ -15,20 +15,22 @@ export default class Footer extends React.Component {
                 <div className="col-sm-3">
                   <div className="left-footer">
                     <div className="logo">
-                      <Link to={'#'}><img src="http://i1266.photobucket.com/albums/jj538/dinhvnquang/LASTEST-01_zpsymk9eoks.png" alt=""/></Link>
+                      <Link to={'#'}><img src="imgs/logo.png" alt=""/></Link>
                     </div>
-                    <p>
-                      <i className="fa fa-home" aria-hidden="true"></i>
-                      rubiknhatrang.com</p>
-                    <p>
-                      <i className="fa fa-phone" aria-hidden="true"></i>
-                      21121212</p>
-                    <p>
-                      <i className="fa fa-envelope-o" aria-hidden="true"></i>
-                      rubiknhatrang.gmail.com</p>
-                    <p>
-                      <i className="fa fa-map-marker" aria-hidden="true"></i>
-                      33 nha trang</p>
+                    <ul className="list-ft">
+                      <p>
+                        <i className="fa fa-home" aria-hidden="true"></i>
+                        rubiknhatrang.com</p>
+                      <p>
+                        <i className="fa fa-phone" aria-hidden="true"></i>
+                        21121212</p>
+                      <p>
+                        <i className="fa fa-envelope-o" aria-hidden="true"></i>
+                        rubiknhatrang.gmail.com</p>
+                      <p>
+                        <i className="fa fa-map-marker" aria-hidden="true"></i>
+                        33 nha trang</p>
+                    </ul>
                   </div>
                 </div>
                 <div className="col-sm-5">

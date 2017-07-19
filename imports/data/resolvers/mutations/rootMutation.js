@@ -174,6 +174,15 @@ const rootMutation = {
     }
     return
   },
+  completeInvoice: (_, {userId, _id}) => {
+    let user = Meteor.users.findOne({_id: userId});
+    if(user) {
+      return Invoices.update({_id}, {$set: {
+        status: 101
+      }});
+    }
+    return
+  },
   updateStockModel: (_, {userId,_id, info}) => {
     if(typeof info == 'string'){
       info = JSON.parse(info);

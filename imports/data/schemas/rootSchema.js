@@ -86,6 +86,7 @@ const rootSchema = `
       description: String
       image: File
       stockType: StockType
+      createdAt: Float
     }
     type Slider {
       _id: String
@@ -105,8 +106,10 @@ const rootSchema = `
       stockModel(_id: String): StockModel
       invoices: [Invoice]
       posts: [Post]
+      posts(limit: Int): [Post]
       post(_id: String): Post
       slider: Slider
+      aboutPost: Post
     }
     type Mutation {
       removeCategories(userId: String!, _id: String!): String
@@ -123,6 +126,7 @@ const rootSchema = `
       updateStockModel(userId: String ,_id: String, info: String): String
       cancelInvoice(userId: String, _id: String): String
       verifyInvoice(userId: String, _id: String): String
+      completeInvoice(userId: String, _id: String): String
       insertPost(userId: String, info: String): String
       updatePost(userId: String, _id: String, info: String): String
     }

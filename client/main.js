@@ -20,6 +20,7 @@ import '../imports/stylesheet/product.scss';
 import '../imports/stylesheet/slider.scss';
 import '../imports/stylesheet/ag-pattern.css';
 import '../imports/stylesheet/manager.scss';
+import '../imports/stylesheet/news.scss';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 injectTapEventPlugin();
 Meteor.startup(() => {

@@ -1,6 +1,55 @@
-import InvoiceDetail from 'InvoiceDetail.jsx';
+import React from 'react';
+import { AgGridReact } from 'ag-grid-react';
+import { graphql, compose } from 'react-apollo';
+import gql from 'graphql-tag';
+import __ from 'lodash';
+import moment from 'moment';
 
-export default class OrderDevoice extends React.Component {
+import InvoiceDetail from './InvoiceDetail.jsx';
+
+class DeleteButton extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+  render(){
+    let { t } = this.props;
+    return (
+        <div style={{width: '100%'}}>
+          <button className="btn btn-default" disabled={this.props.data.status === 99} style={{borderWidth: 0, width: 56, color:'red'}}>Hủy</button>
+        </div>
+    )
+  }
+}
+
+class VerifyButton extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+  render(){
+    let { t } = this.props;
+    return (
+        <div style={{width: '100%'}}>
+          <button className="btn btn-primary" disabled={!this.props.data.status === 1} style={{borderWidth: 0, width: 56}}>Duyệt</button>
+        </div>
+    )
+  }
+}
+
+class CompleteButton extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+  render(){
+    let { t } = this.props;
+    return (
+        <div style={{width: '100%'}}>
+          <button className="btn btn-primary" disabled={!this.props.data.status === 99} style={{borderWidth: 0, width: 56}}>Hoàn thành</button>
+        </div>
+    )
+  }
+}
+
+class OrderDevoice extends React.Component {
   constructor(props) {
     super(props);
     this.data = [];
@@ -37,33 +86,28 @@ export default class OrderDevoice extends React.Component {
         });
         this.gridOptions.api.setFloatingBottomRowData(this.renderFooterData(data));
         this.saveFilter = this.gridOptions.api.getFilterModel();
-      }
-      fullWidthCellRendererFramework: InvoiceDetail,
+      },
     };
   }
   renderFooterData(data) {
     return [
       {
         gridType: 'footer',
-        name: 'Total: ' + data.length
+        name: 'Total: ' + (data ? data.length : 0)
       }
     ];
   }
   componentDidUpdate() {
     if (this.gridOptions.api) {
       this.gridOptions.api.showLoadingOverlay();
-      this.gridOptions.api.setRowData(this.props.data.categories);
-      this.gridOptions.api.setFloatingBottomRowData(this.renderFooterData(this.props.data.categories));
+      this.gridOptions.api.setFloatingBottomRowData(this.renderFooterData(this.props.data.invoices));
       this.gridOptions.api.hideOverlay();
     }
   }
   render() {
-    let data = __.cloneDeep(this.props.data);
-    __.forEach(data.invoies, item => {
-      item.status = (item.status === 1 ? 'Đang xử  lý' : item.status === 99 ? 'Đã duyệt' : item.status === 100? 'Đã hủy' : 'Đã giao hàng');
-    })
     if (Meteor.userId()) {
-      if (!data.categories) {
+      let data = __.cloneDeep(this.props.data);
+      if (data.loading) {
         return (
           <div className="loading">
             <i className="fa fa-spinner fa-spin" style={{
@@ -72,6 +116,9 @@ export default class OrderDevoice extends React.Component {
           </div>
         )
       } else {
+        __.forEach(data.invoies, item => {
+          item.createdAt = moment(createdAt).format('DD/MM/YYYY');
+        })
         let columnDefs = [
           {
             headerName: "",
@@ -81,7 +128,7 @@ export default class OrderDevoice extends React.Component {
             cellClass: 'agaction',
             pinned: 'left',
             filter: '',
-            cellRendererFramework: <button className="btn btn-default" style={{color: 'red'}}>Hủy</button>,
+            cellRendererFramework: DeleteButton,
             cellStyle: (params) => {
               if (params.node.data.gridType == 'footer') {
                 return {display: 'none'};
@@ -98,7 +145,7 @@ export default class OrderDevoice extends React.Component {
             }
           }, {
             headerName: "Mã đơn hàng",
-            field: "name",
+            field: "code",
             width: 320,
             cellStyle: function(params) {
               if (params.node.data.gridType == 'footer') {
@@ -127,7 +174,10 @@ export default class OrderDevoice extends React.Component {
               filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
             },
             filter: 'text',
-            suppressMenu: true
+            suppressMenu: true,
+            cellRenderer: (params)=> {
+              return moment(params.value).format('DD/MM/YYYY');
+            }
           }, {
             headerName: "Tên khách hàng",
             field: "customer.name",
@@ -207,16 +257,28 @@ export default class OrderDevoice extends React.Component {
               filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
             },
             filter: 'text',
-            suppressMenu: true
+            suppressMenu: true,
+            cellRenderer: (params)=> {
+              let showText = '';
+              if(params.value === 1)
+                showText = "Đang xử  lý";
+              if(params.value === 99)
+                showText = "Đã duyệt";
+              if(params.value === 100)
+                showText = "Đã hủy";
+              if(params.value === 101)
+                showText = "Hoàn thành";
+              return showText;
+            }
           }, {
             headerName: "",
             field: 'verify',
             minWidth: 56,
             width: 56,
             cellClass: 'agaction',
-            pinned: 'left',
+            pinned: 'right',
             filter: '',
-            cellRendererFramework: <button className="btn btn-primary">Duyệt</button>
+            cellRendererFramework: VerifyButton,
             cellStyle: (params) => {
               if (params.node.data.gridType == 'footer') {
                 return {display: 'none'};
@@ -225,6 +287,29 @@ export default class OrderDevoice extends React.Component {
             onCellClicked: (params) => {
               if (params.data && params.data._id) {
                 this.props.verifyInvoice(Meteor.userId(), params.data._id).then(({data}) => {
+                  if (data) {
+                    this.props.data.refetch();
+                  }
+                })
+              }
+            }
+          }, {
+            headerName: "",
+            field: 'complete',
+            minWidth: 56,
+            width: 56,
+            cellClass: 'agaction',
+            pinned: 'right',
+            filter: '',
+            cellRendererFramework: CompleteButton,
+            cellStyle: (params) => {
+              if (params.node.data.gridType == 'footer') {
+                return {display: 'none'};
+              }
+            },
+            onCellClicked: (params) => {
+              if (params.data && params.data._id) {
+                this.props.completeInvoice(Meteor.userId(), params.data._id).then(({data}) => {
                   if (data) {
                     this.props.data.refetch();
                   }
@@ -246,9 +331,9 @@ export default class OrderDevoice extends React.Component {
               </li>
             </ol>
             <div style={{
-              height: this.state.height - 167
+              height: this.state.height - 136
             }} className="ag-fresh">
-              <AgGridReact gridOptions={this.gridOptions} columnDefs={columnDefs} rowData={this.data} enableColResize="true" enableSorting="true" enableFilter="true"/>
+              <AgGridReact gridOptions={this.gridOptions} columnDefs={columnDefs} rowData={data.invoices} enableColResize="true" enableSorting="true" enableFilter="true"/>
             </div>
           </div>
         )
@@ -290,24 +375,10 @@ const VERIFY_INVOICE = gql`
         verifyInvoice(userId: $userId, _id: $_id)
 }`
 
-
-
-export default compose (
-    graphql(STOCK_CATEGORY_QUERY, {
-        options: ()=> ({
-            variables: {},
-            fetchPolicy: 'network-only'
-        })
-    }),
-    graphql(REMOVE_STOCK_CATEGORY, {
-        props: ({mutate})=> ({
-            removeCategories : (userId, _id) => mutate({variables:{userId, _id}})
-        })
-    }),
-    graphql(INSERT_STOCK_CATEGORY, {
-        props: ({mutate})=> ({
-            insertCategories : (userId, info) => mutate({variables:{userId, info}})
-        })
+const COMPLETE_INVOICE = gql`
+    mutation completeInvoice($userId: String!, $_id: String!){
+        completeInvoice(userId: $userId, _id: $_id)
+}`
 
 export default compose(graphql(INVOICE_QUERY, {
   options: () => ({
@@ -321,4 +392,10 @@ export default compose(graphql(INVOICE_QUERY, {
 graphql(VERIFY_INVOICE, {
     props: ({mutate})=> ({
         verifyInvoice : (userId, _id) => mutate({variables:{userId, _id}})
-    }))(OrderDevoice);
+    })
+}),
+graphql(COMPLETE_INVOICE, {
+    props: ({mutate})=> ({
+        completeInvoice : (userId, _id) => mutate({variables:{userId, _id}})
+    })
+}))(OrderDevoice);

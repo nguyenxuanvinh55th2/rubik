@@ -4,7 +4,7 @@ import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import __ from 'lodash';
 
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+//import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 class InvoiceDetail extends React.Component {
   constructor(props) {
@@ -89,46 +89,19 @@ class InvoiceDetail extends React.Component {
           }
         },
     ];
-    if(country && country.length > 0) {
-      let data = __.cloneDeep(country);
-      data[0]['isparent'] = true;
-      data[0]['children'] = country[0].provinces;
-      __.forEach(data[0].children, item => {
-        item['isparent'] = true;
-        item['children'] = item.cities;
-      })
-      return (
-        <Tabs style={{paddingLeft: 49, height: 150}}>
-            <TabList style={{margin: 0}}>
-                <Tab>{t('srm:country.labelCountry')}</Tab>
-            </TabList>
-            <TabPanel>
-                <div style={{height: 125}} className="ag-fresh">
-                  <AgGridReact
-                    gridOptions={this.gridOptions}
-                    columnDefs={columnDefs}
-                    rowData={data}
-                    enableColResize="true"
-                    enableSorting="true"
-                    enableFilter="true"
-                    animateRows= "true"
-                  />
-                </div>
-            </TabPanel>
-        </Tabs>
-      )
-    } else {
-        return (
-          <Tabs style={{paddingLeft: 49, height: 150}}>
-              <TabList style={{margin: 0}}>
-                  <Tab>{t('srm:country.labelCountry')}</Tab>
-              </TabList>
-              <TabPanel>
-                  {t('srm:common.notificationNoInfoToShow')}
-              </TabPanel>
-          </Tabs>
-        )
-    }
+    return (
+      <div style={{height: 125}} className="ag-fresh">
+        <AgGridReact
+          gridOptions={this.gridOptions}
+          columnDefs={columnDefs}
+          rowData={data}
+          enableColResize="true"
+          enableSorting="true"
+          enableFilter="true"
+          animateRows= "true"
+        />
+      </div>
+    )
   }
 }
 
