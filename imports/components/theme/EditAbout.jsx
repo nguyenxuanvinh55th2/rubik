@@ -27,7 +27,38 @@ class EditAbout extends React.Component{
     }
   }
   handleSave(){
-
+    if(this.state._id){
+      Posts.update({_id: this.state._id}, {$set: {content: this.state.content}},(error) => {
+        if(error){
+          throw error;
+          this.props.addNotificationMute({fetchData: true, message: 'Cập nhật thất bại', level: 'error'});
+        }
+        else {
+          this.props.addNotificationMute({fetchData: true, message: 'Cập nhật thành công', level: 'success'});
+        }
+      })
+    }
+    else {
+      let info = {
+        title: 'Trang giới thiệu Rubik nha trang',
+        content: this.state.content,
+        image: {}, description: '', stockType: {
+          _id: '0',
+          name: 'Giới thiệu'
+        }
+      }
+      Posts.insert(info,(error, result) => {
+        if(error){
+          throw error;
+          this.props.addNotificationMute({fetchData: true, message: 'Cập nhật thất bại', level: 'error'});
+        }
+        else {
+          this.setState({_id: result});
+          this.props.data.refetch();
+          this.props.addNotificationMute({fetchData: true, message: 'Cập nhật thành công', level: 'success'});
+        }
+      })
+    }
   }
   render(){
     if(!this.props.data.getAllPostByType){
