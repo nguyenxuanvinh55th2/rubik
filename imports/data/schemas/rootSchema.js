@@ -102,14 +102,19 @@ const rootSchema = `
       stockModels(limit: Int): [StockModel]
       stockModelById(_id: String!): StockModel
       getInVoice(token: String!): Invoice
-      stockTypes: [StockType]
+      stockTypes(query: String): [StockType]
       stockModel(_id: String): StockModel
+<<<<<<< HEAD
       invoices: [Invoice]
       posts: [Post]
       posts(limit: Int): [Post]
+=======
+      posts(limit: Int): [Post]
+      invoices: [Invoice]
+>>>>>>> b62d7873871e1959f0ba7d9be5d32b51af9ee280
       post(_id: String): Post
       slider: Slider
-      aboutPost: Post
+      getAllPostByType(stockTypeId: String): [Post]
     }
     type Mutation {
       removeCategories(userId: String!, _id: String!): String

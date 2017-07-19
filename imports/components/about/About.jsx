@@ -1,24 +1,23 @@
 import React from 'react';
-import {AgGridReact} from 'ag-grid-react';
-import {Meteor} from 'meteor/meteor';
-import {Link} from 'react-router';
-import __ from 'lodash';
-import Dialog from 'material-ui/Dialog';
-import {browserHistory} from 'react-router';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
+import  { Link } from 'react-router';
+import QuillRender from '../editor/QuillRender.jsx';
 class About extends React.Component {
   constructor(props) {
     super(props)
   }
   render(){
-    console.log(this.props.data);
-    if(!this.props.data.post){
+    let defaultString = `<p>Chào các bạn đến với Shop Rubik Nha Trang website chính thức của Youtuber Lão Bá Đạo.
+Bên mình cung cấp nhiều loại rubik khác nhau từ speed cube đến biến thể chính hãng với giá tốt.
+Nếu các bạn không tìm được mặt hàng các bạn cần hãy liên hệ bên mình sẽ order hàng về cho các bạn.
+Chúc các bạn mua sắm vui vẻ.</p>`;
+    if(!this.props.data.getAllPostByType){
       return (
-        <div className="loading">
-          <i className="fa fa-spinner fa-spin" style={{
-            fontSize: 50
-          }}></i>
+        <div className="item-slider">
+          <div className="loading">
+              <i className="fa fa-spinner fa-spin" style={{fontSize: 20}}></i>
+          </div>
         </div>
       )
     }
@@ -44,7 +43,7 @@ class About extends React.Component {
 
               </div>
               <div className="contents col-md-9">
-
+                <QuillRender value={this.props.data.getAllPostByType[0] ? this.props.data.getAllPostByType[0].content : defaultString} />
               </div>
             </div>
           </div>
@@ -55,21 +54,17 @@ class About extends React.Component {
   }
 }
 const POST = gql `
-    query post($_id: String){
-        post(_id: $_id) {
-        _id title  content  description
-        image {
-          _id  file fileName
-        }
-        stockType { _id name }
+    query post($stockTypeId: String){
+        getAllPostByType(stockTypeId: $stockTypeId) {
+        _id content
       }
 }`
 export default compose(graphql(POST, {
   options: (ownProps) => ({
     variables: {
-      _id: '0'
+      stockTypeId: '0'
     },
     fetchPolicy: 'network-only'
   })
-})
+}),
 )(About);

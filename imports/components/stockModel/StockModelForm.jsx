@@ -23,15 +23,26 @@ class StockModelForm extends React.Component {
       color: '#FF6900',
       openDialog: false,
       data: {
-        code: '',  name: '', weight: '',  colors: [], votes: [],
-        origin: '', isLimited: false, isPromotion: false,
-        images: [],  unit: '',  averagePrice: 0,
-        price: 0,  quantity: 0, saleOff: 0,
+        code: '',
+        name: '',
+        weight: '',
+        colors: [],
+        votes: [],
+        origin: '',
+        isLimited: false,
+        isPromotion: false,
+        images: [],
+        unit: '',
+        averagePrice: 0,
+        price: 0,
+        quantity: 0,
+        saleOff: 0,
         stockType: {
           _id: '',
           name: ''
         },
-        categories: [],  description: '',
+        categories: [],
+        description: '',
         active: true
       },
       isCreateNew: false
@@ -46,13 +57,13 @@ class StockModelForm extends React.Component {
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
   }
-  componentWillReceiveProps(nextProps){
-    if(nextProps.data.stockModel){
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.data.stockModel) {
       let stockModel = __.cloneDeep(nextProps.data.stockModel);
       let categories = []
       __.forEach(stockModel.categories, (category) => {
         let idx = __.findIndex(nextProps.data.categories, (cate) => cate.name == category);
-        if(idx > -1){
+        if (idx > -1) {
           categories.push(nextProps.data.categories[idx]);
         }
       });
@@ -101,19 +112,17 @@ class StockModelForm extends React.Component {
       images: this.state.data.images
     }
     info.data.images = [];
-    if(this.props.params._id){
-      if(this.props.updateStockModel){
-        this.props.updateStockModel(Meteor.userId(),this.props.params._id, JSON.stringify(info)).then(({data}) => {
+    if (this.props.params._id) {
+      if (this.props.updateStockModel) {
+        this.props.updateStockModel(Meteor.userId(), this.props.params._id, JSON.stringify(info)).then(({data}) => {
           this.props.addNotificationMute({fetchData: true, message: 'Cập nhật thành công', level: 'success'});
           browserHistory.push('/stockModels');
-        })
-        .catch((error) => {
+        }).catch((error) => {
           console.log(error);
           this.props.addNotificationMute({fetchData: true, message: 'Cập nhật hàng thất bại', level: 'error'});
         })
       }
-    }
-    else {
+    } else {
       if (this.props.insertStockModel) {
         this.props.insertStockModel(Meteor.userId(), JSON.stringify(info)).then(({data}) => {
           if (data.insertStockModel) {
@@ -217,10 +226,8 @@ class StockModelForm extends React.Component {
               justifyContent: 'flex-end',
               marginTop: 5
             }}>
-            {
-              !this.props.params._id &&
-              <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit || !data.code || !data.stockType._id} onClick={() => this.handleSave(true)}>Lưu và khởi tạo</button>
-            }
+              {!this.props.params._id && <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit || !data.code || !data.stockType._id} onClick={() => this.handleSave(true)}>Lưu và khởi tạo</button>
+}
               <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit || !data.code || !data.stockType._id} style={{
                 marginLeft: 10
               }} onClick={() => {
@@ -534,7 +541,7 @@ class StockModelForm extends React.Component {
 }
 
 const STOCK_TYPE = gql `
-    query stockTypes($_id: String){
+    query stockTypes($_id: String, $query: String){
       stockModel(_id: $_id) {
         _id code name weight isLimited  isPromotion colors
         unit averagePrice  price  quantity saleOff description
@@ -547,14 +554,14 @@ const STOCK_TYPE = gql `
           _id name
         }
       }
-      stockTypes {
+      stockTypes(query: $query) {
           _id name
       }
       categories {
         _id name
       }
 }`
-const UPDATE_STOCKMODEL = gql`
+const UPDATE_STOCKMODEL = gql `
   mutation updateStockModel($userId: String,$_id:String,$info:String){
     updateStockModel(userId: $userId,_id:$_id,info:$info)
   }
@@ -570,7 +577,14 @@ const INSERT_STOCK_CATEGORY = gql `
 export default compose(graphql(STOCK_TYPE, {
   options: (ownProps) => ({
     variables: {
-      _id: ownProps.params._id
+      _id: ownProps.params._id,
+      query: JSON.stringify({
+        isProduct: true,
+        active: true,
+        _id: {
+          $ne: '0'
+        }
+      })
     },
     fetchPolicy: 'network-only'
   })
@@ -592,10 +606,14 @@ export default compose(graphql(STOCK_TYPE, {
       }
     })
   })
-}),
-graphql(UPDATE_STOCKMODEL,{
-    props:({mutate})=>({
-    updateStockModel : (userId,_id,info) =>mutate({variables:{userId,_id,info}})
+}), graphql(UPDATE_STOCKMODEL, {
+  props: ({mutate}) => ({
+    updateStockModel: (userId, _id, info) => mutate({
+      variables: {
+        userId,
+        _id,
+        info
+      }
+    })
   })
-}),
-)(StockModelForm);
+}),)(StockModelForm);

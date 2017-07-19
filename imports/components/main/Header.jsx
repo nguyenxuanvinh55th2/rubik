@@ -48,7 +48,7 @@ export default class Header extends React.Component {
               <div className="row">
                 <div className="col-sm-3 col-xs-4">
                   <div className="logo">
-                    <Link to={'#'}><img src="imgs/logo.png" alt=""/></Link>
+                    <Link to={'/'}><img src="imgs/logo.png" alt=""/></Link>
                   </div>
                 </div>
                 <div className="col-sm-9 col-xs-8 text-right">
