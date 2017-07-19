@@ -21,6 +21,8 @@ import StockType from './containers/StockType.js';
 import Post from './components/post/Post.jsx';
 import PostForm from './components/post/PostForm.jsx';
 import WrapFontEnd from './components/wrap/WrapFontEnd.jsx';
+import About from './components/about/About.jsx';
+import DetailNew from './components/news/DetailNew.jsx';
 
 function requireAuth(nextState, replace){
   if (!Meteor.userId()) {
@@ -39,6 +41,8 @@ export const renderRoutes = () => (
           <Route path="/productDetail/:id" component={DetailProduct} />
           <Route path="/shoppingCart" component={Cart} />
           <Route path="/checkOut" component={Checkout} />
+          <Route path="/gioi-thieu" component={About} />
+          <Route path="/tin-tuc/:_id" component={DetailNew} />
       </Route>
       <Route path="login" component={Login}/>
       <Route path="dashboard" component={Manager} onEnter={requireAuth}>

@@ -144,7 +144,8 @@ export default class StockType extends React.Component {
                   <button type="button" className="btn btn-primary" disabled={!this.state.name} onClick={() => {
                     this.props.insertStockType(Meteor.userId(), JSON.stringify({
                       name: this.state.name,
-                      active: true
+                      active: true,
+                      isProduct: true,
                     })).then(({data}) => {
                       if(data){
                         this.props.data.refetch();

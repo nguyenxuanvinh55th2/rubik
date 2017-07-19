@@ -48,7 +48,7 @@ export default class Header extends React.Component {
               <div className="row">
                 <div className="col-sm-3 col-xs-4">
                   <div className="logo">
-                    <Link to={'#'}><img src="http://i1266.photobucket.com/albums/jj538/dinhvnquang/LASTEST-01_zpsymk9eoks.png" alt=""/></Link>
+                    <Link to={'#'}><img src="imgs/logo.png" alt=""/></Link>
                   </div>
                 </div>
                 <div className="col-sm-9 col-xs-8 text-right">
@@ -58,7 +58,7 @@ export default class Header extends React.Component {
                         <Link to={'/'}>TRANG CHỦ</Link>
                       </li>
                       <li>
-                        <Link to={'#'}>GIỚI THIỆU</Link>
+                        <Link to={'/gioi-thieu'}>GIỚI THIỆU</Link>
                       </li>
                       <li>
                         <Link to={'#'}>SẢN PHẨM</Link>

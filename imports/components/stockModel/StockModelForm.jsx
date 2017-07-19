@@ -23,7 +23,7 @@ class StockModelForm extends React.Component {
       color: '#FF6900',
       openDialog: false,
       data: {
-        code: '',  name: '', weight: '',  colors: [],
+        code: '',  name: '', weight: '',  colors: [], votes: [],
         origin: '', isLimited: false, isPromotion: false,
         images: [],  unit: '',  averagePrice: 0,
         price: 0,  quantity: 0, saleOff: 0,
@@ -123,6 +123,7 @@ class StockModelForm extends React.Component {
                 data: {
                   code: '',
                   name: '',
+                  votes: [],
                   weight: '',
                   colors: [],
                   origin: '',

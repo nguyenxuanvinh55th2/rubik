@@ -166,8 +166,8 @@ class Post extends React.Component {
   }
 }
 const POST_QUERY = gql `
-    query posts{
-      posts {
+    query posts($limit: Int){
+      posts(limit: $limit) {
       _id title  content  description
       image {
         _id  file fileName
@@ -178,6 +178,7 @@ const POST_QUERY = gql `
 
 export default compose(graphql(POST_QUERY, {
   options: () => ({
+    variables: {limit: null},
     fetchPolicy: 'network-only'
   })
 }),)(Post);
