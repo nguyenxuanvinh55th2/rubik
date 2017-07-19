@@ -3,7 +3,7 @@ import __ from 'lodash';
 import Header from '../main/Header.jsx'
 import Footer from '../main/Footer.jsx'
 import {Link} from 'react-router';
-export default class Test extends React.Component {
+export default class WrapFontEnd extends React.Component {
   constructor(props) {
     super(props)
   }

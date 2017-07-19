@@ -28,6 +28,9 @@ const rootQuery = {
   },
   post: (_, {_id}) => {
     return Posts.findOne({_id: _id})
+  },
+  slider: () => {
+    return Sliders.findOne({_id: '0'})
   }
 }
 export default rootQuery;

@@ -1,7 +1,10 @@
 import React from 'react';
 import Slider from 'react-slick';
 import {Link} from 'react-router';
-export default class Sliders extends React.Component {
+import {graphql, compose} from 'react-apollo';
+import gql from 'graphql-tag';
+import __ from 'lodash'
+class Sliders extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -26,20 +29,51 @@ export default class Sliders extends React.Component {
         }
       ]
     };
-    return (
-      <div>
-        <Slider {...settings}>
-          <div className="item-slider" style={{
-            backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/img-slider_zpsdjbfpcuh.jpg')"
-          }}></div>
-          <div className="item-slider" style={{
-            backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/img-slider_zpsdjbfpcuh.jpg')"
-          }}></div>
-          <div className="item-slider" style={{
-            backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/img-slider_zpsdjbfpcuh.jpg')"
-          }}></div>
-        </Slider>
-      </div>
-    );
+    let defaultImage = 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/img-slider_zpsdjbfpcuh.jpg';
+    if(!this.props.data.slider){
+        return(
+          <div className="loading">
+              <i className="fa fa-spinner fa-spin" style={{fontSize: 20}}></i>
+          </div>
+        )
+    }
+    else {
+      return (
+        <div>
+          <Slider {...settings}>
+            {
+              __.map(this.props.data.slider.sliders,(slider,idx) =>{
+                return(
+                  <div key={idx} className="item-slider" style={{
+                    backgroundImage: `url(${slider.image && slider.image.file && slider.image._id ? slider.image.file : defaultImage})`
+                  }}></div>
+                )
+              })
+            }
+          </Slider>
+        </div>
+      );
+    }
   }
 }
+const SLIDER = gql `
+    query slider{
+      slider {
+        _id
+        name
+        sliders {
+          image {
+            _id
+            file
+            fileName
+            type
+          }
+          link
+        }
+      }
+}`
+
+export default compose(
+  graphql(SLIDER, {
+    options: () => ({variables: {}, fetchPolicy: 'network-only'})
+  }))(Sliders);

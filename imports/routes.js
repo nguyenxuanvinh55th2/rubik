@@ -20,7 +20,7 @@ import StockType from './containers/StockType.js';
 
 import Post from './components/post/Post.jsx';
 import PostForm from './components/post/PostForm.jsx';
-import Test from './components/test/Test.jsx';
+import WrapFontEnd from './components/wrap/WrapFontEnd.jsx';
 
 function requireAuth(nextState, replace){
   if (!Meteor.userId()) {
@@ -34,7 +34,7 @@ export const renderRoutes = () => (
   <Router history={history}>
     <Route path="/" component={App} >
       {/* <IndexRoute component={Home}/> */}
-      <Route component={Test}>
+      <Route component={WrapFontEnd}>
           <IndexRoute component={Home}/>
           <Route path="/productDetail/:id" component={DetailProduct} />
           <Route path="/shoppingCart" component={Cart} />

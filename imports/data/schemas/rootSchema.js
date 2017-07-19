@@ -87,6 +87,15 @@ const rootSchema = `
       image: File
       stockType: StockType
     }
+    type Slider {
+      _id: String
+      name: String
+      sliders: [DetailSlider]
+    }
+    type DetailSlider {
+      image: File
+      link: String
+    }
     type Query {
       categories: [Classify]
       stockModels(limit: Int): [StockModel]
@@ -96,6 +105,7 @@ const rootSchema = `
       stockModel(_id: String): StockModel
       posts: [Post]
       post(_id: String): Post
+      slider: Slider
     }
     type Mutation {
       removeCategories(userId: String!, _id: String!): String
