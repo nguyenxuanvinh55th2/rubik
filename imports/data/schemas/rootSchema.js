@@ -105,6 +105,7 @@ const rootSchema = `
       stockTypes(query: String): [StockType]
       stockModel(_id: String): StockModel
       posts(limit: Int): [Post]
+      invoices: [Invoice]
       post(_id: String): Post
       slider: Slider
       getAllPostByType(stockTypeId: String): [Post]
@@ -122,6 +123,8 @@ const rootSchema = `
       orderDevoice(token: String!, info: String): String
       ratingStockModel(token: String!, _id: String, info: String): String
       updateStockModel(userId: String ,_id: String, info: String): String
+      cancelInvoice(userId: String, _id: String): String
+      verifyInvoice(userId: String, _id: String): String
       insertPost(userId: String, info: String): String
       updatePost(userId: String, _id: String, info: String): String
     }

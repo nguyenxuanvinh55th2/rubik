@@ -34,6 +34,9 @@ const rootQuery = {
       return Posts.find({active: true}).fetch();
     }
   },
+  invoices: (_, {_id}) => {
+    return Invoices.find({}).fetch();
+  },
   post: (_, {_id}) => {
     return Posts.findOne({_id: _id})
   },
