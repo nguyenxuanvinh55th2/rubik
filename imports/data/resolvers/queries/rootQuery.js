@@ -45,6 +45,9 @@ const rootQuery = {
   },
   getAllPostByType: (_, {stockTypeId}) => {
     return Posts.find({"stockType._id": stockTypeId}).fetch();
+  },
+  getPostTypeLimit: (_, {stockTypeId, offset, limit}) => {
+    return Posts.find({"stockType._id": stockTypeId}, {skip: offset, limit: limit}).fetch();
   }
 }
 export default rootQuery;

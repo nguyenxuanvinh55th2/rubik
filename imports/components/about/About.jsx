@@ -3,6 +3,7 @@ import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import  { Link } from 'react-router';
 import QuillRender from '../editor/QuillRender.jsx';
+import LeftNews from '../news/LeftNews.jsx';
 class About extends React.Component {
   constructor(props) {
     super(props)
@@ -29,18 +30,7 @@ Chúc các bạn mua sắm vui vẻ.</p>`;
           <div className="main-content container">
             <div className="row">
               <div className="sidebar col-md-3">
-                <div className="latest-news block">
-                  <h3>Bài viết mới</h3>
-                  <div className="content-block">
-                    <ul>
-                      <li><Link to={'#'}>Video hướng dẫn rubik cho người mới chơi</Link></li>
-                      <li><Link to={'#'}>Khối rubik khổng lồ nặng 800kg thách thức người chơi</Link></li>
-                      <li><Link to={'#'}>Hướng dẫn chơi Ribik 3x3x3 nhanh nhất</Link></li>
-                      <li><Link to={'#'}>Giới thiệt về website bán hàng trực tuyến Rubik Việt</Link></li>
-                    </ul>
-                  </div>
-                </div>
-
+                <LeftNews {...this.props} />
               </div>
               <div className="contents col-md-9">
                 <QuillRender value={this.props.data.getAllPostByType[0] ? this.props.data.getAllPostByType[0].content : defaultString} />

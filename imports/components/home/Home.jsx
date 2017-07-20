@@ -6,7 +6,6 @@ import gql from 'graphql-tag';
 import Sliders from './Slider.jsx'
 import SliderNew from './SliderNews.jsx'
 import Product from '../product/Product.jsx'
-import {PinTop} from '../../javascript/header.js'
 import {Link} from 'react-router';
 import {showProduct} from '../../javascript/header.js'
 
@@ -15,7 +14,6 @@ class Home extends React.Component {
     super(props)
   }
   componentDidMount() {
-    PinTop();
     showProduct();
   }
   render() {
@@ -49,7 +47,7 @@ class Home extends React.Component {
                 }}>
                   <Link to={'#'} className="gray"></Link>
                   <p>
-                    <Link to={'#'} className="btn btn-cate">Hướng dẫn chơi</Link>
+                    <Link to={'/huong-dan-choi/2'} className="btn btn-cate">Hướng dẫn chơi</Link>
                   </p>
                 </div>
               </div>

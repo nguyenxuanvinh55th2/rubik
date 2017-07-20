@@ -8,28 +8,7 @@ export default class Product extends React.Component{
 	constructor(props) {
 		super(props);
 		this.state={
-			'data':[
-			{
-				image: "",
-				name: "",
-				price: ""
-			},
-			{
-				image: "",
-				name: "",
-				price: ""
-			},
-			{
-				image: "",
-				name: "",
-				price: ""
-			},
-			{
-				image: "",
-				name: "",
-				price: ""
-			}
-			]
+			'data': []
 		}
 	}
 

@@ -26,6 +26,8 @@ import WrapFontEnd from './components/wrap/WrapFontEnd.jsx';
 import About from './components/about/About.jsx';
 import DetailNew from './components/news/DetailNew.jsx';
 import EditAbout from './components/theme/EditAbout.jsx';
+import News from './containers/News';
+import Product from './components/product/Product.jsx';
 
 function requireAuth(nextState, replace){
   if (!Meteor.userId()) {
@@ -36,16 +38,18 @@ function requireAuth(nextState, replace){
 }
 
 export const renderRoutes = () => (
-  <Router history={history}>
+  <Router onUpdate={() => window.scrollTo(0, 0)} history={history}>
     <Route path="/" component={App} >
-      {/* <IndexRoute component={Home}/> */}
       <Route component={WrapFontEnd}>
           <IndexRoute component={Home}/>
           <Route path="/productDetail/:id" component={DetailProduct} />
           <Route path="/shoppingCart" component={Cart} />
           <Route path="/checkOut" component={Checkout} />
           <Route path="/gioi-thieu" component={About} />
-          <Route path="/tin-tuc/:_id" component={DetailNew} />
+          <Route path="/chi-tiet/:_id" component={DetailNew} />
+          <Route path="/tin-tuc/:_id" component={News} />
+          <Route path="/huong-dan-choi/:_id" component={News} />
+          <Route path="/san-pham" component={Product} />
       </Route>
       <Route path="login" component={Login}/>
       <Route path="dashboard" component={Manager} onEnter={requireAuth}>

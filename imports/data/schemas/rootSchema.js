@@ -109,6 +109,7 @@ const rootSchema = `
       post(_id: String): Post
       slider: Slider
       getAllPostByType(stockTypeId: String): [Post]
+      getPostTypeLimit(stockTypeId: String, offset: Int, limit: Int): [Post]
     }
     type Mutation {
       removeCategories(userId: String!, _id: String!): String

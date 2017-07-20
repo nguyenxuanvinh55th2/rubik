@@ -48,7 +48,7 @@ export default class Header extends React.Component {
               <div className="row">
                 <div className="col-sm-3 col-xs-4">
                   <div className="logo">
-                    <Link to={'/'}><img src="imgs/logo.png" alt=""/></Link>
+                    <Link to={'/'}><img src="/imgs/logo.png" alt=""/></Link>
                   </div>
                 </div>
                 <div className="col-sm-9 col-xs-8 text-right">
@@ -61,13 +61,13 @@ export default class Header extends React.Component {
                         <Link to={'/gioi-thieu'}>GIỚI THIỆU</Link>
                       </li>
                       <li>
-                        <Link to={'#'}>SẢN PHẨM</Link>
+                        <Link to={'san-pham'}>SẢN PHẨM</Link>
                       </li>
                       <li>
-                        <Link to={'#'}>TIN TỨC</Link>
+                        <Link to={`/tin-tuc/1`}>TIN TỨC</Link>
                       </li>
                       <li>
-                        <Link to={'#'}>HƯỚNG DẪN CHƠI</Link>
+                        <Link to={'/huong-dan-choi/2'}>HƯỚNG DẪN CHƠI</Link>
                       </li>
                       <li>
                         <Link to={'/shoppingCart'}>
@@ -93,19 +93,19 @@ export default class Header extends React.Component {
           <div className="menu-mobile">
             <ul>
               <li className="active">
-                <Link to={'#'}>TRANG CHỦ</Link>
+                <Link to={'/'}>TRANG CHỦ</Link>
               </li>
               <li>
-                <Link to={'#'}>GIỚI THIỆU</Link>
+                <Link to={'/gioi-thieu'}>GIỚI THIỆU</Link>
               </li>
               <li>
-                <Link to={'#'}>SẢN PHẨM</Link>
+                <Link to={'san-pham'}>SẢN PHẨM</Link>
               </li>
               <li>
-                <Link to={'#'}>TIN TỨC</Link>
+                <Link to={'/tin-tuc/1'}>TIN TỨC</Link>
               </li>
               <li>
-                <Link to={'#'}>HƯỚNG DẪN CHƠI</Link>
+                <Link to={'/huong-dan-choi/2'}>HƯỚNG DẪN CHƠI</Link>
               </li>
             </ul>
           </div>

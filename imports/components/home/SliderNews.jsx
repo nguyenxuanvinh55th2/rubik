@@ -68,7 +68,7 @@ class SliderNew extends React.Component {
                                 {post.content}
                               </p>
                               <p className="text-right">
-                                <Link  to={`/tin-tuc/${post._id}`}>Đọc tiếp</Link>
+                                <Link  to={`/chi-tiet/${post._id}`}>Đọc tiếp</Link>
                               </p>
                             </div>
                           </div>

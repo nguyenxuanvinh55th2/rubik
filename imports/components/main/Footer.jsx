@@ -1,11 +1,16 @@
 import React from 'react'
 import {Link} from 'react-router';
+import {PinTop} from '../../javascript/header.js'
 export default class Footer extends React.Component {
   constructor(props) {
     super(props);
 
   }
+  componentDidMount() {
+    PinTop();
+  }
   render() {
+    let image = 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/LASTEST-01_zpsymk9eoks.png';
     return (
       <div>
         <div id="footer">
@@ -15,7 +20,7 @@ export default class Footer extends React.Component {
                 <div className="col-sm-3">
                   <div className="left-footer">
                     <div className="logo">
-                      <Link to={'#'}><img src="imgs/logo.png" alt=""/></Link>
+                      <Link to={'#'}><img src="/imgs/logo.png" alt=""/></Link>
                     </div>
                     <ul className="list-ft">
                       <p>
@@ -23,13 +28,13 @@ export default class Footer extends React.Component {
                         rubiknhatrang.com</p>
                       <p>
                         <i className="fa fa-phone" aria-hidden="true"></i>
-                        21121212</p>
+                        01867634580 - 01658529638</p>
                       <p>
                         <i className="fa fa-envelope-o" aria-hidden="true"></i>
-                        rubiknhatrang.gmail.com</p>
+                        rubiknhatrang@gmail.com</p>
                       <p>
                         <i className="fa fa-map-marker" aria-hidden="true"></i>
-                        33 nha trang</p>
+                        41/43 Lang Liêu, Vĩnh Phước, Nha Trang</p>
                     </ul>
                   </div>
                 </div>
