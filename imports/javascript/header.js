@@ -5,6 +5,7 @@ function Search(){
 }
 function removeSearch() {
 	var $val =  $(".form-group .form-control");
+
 	$(document).click(function(event){
 		if(!$(event.target).is(".form-group *, .form-group .form-control")){
 			$val.each(function(index, el) {
@@ -13,11 +14,25 @@ function removeSearch() {
 				}
 			});
 		}
+
+
+	});
+}
+function removeMenu() {
+var $val2 =  $("#header .menu-control");
+	$(document).click(function(){
+		if(!$(event.target).is(".menu-control *, #header .menu-control")){
+			$val2.each(function(index, el) {
+				if ($(this).val().length<1) {
+					$(this).parents('#header').removeClass('active-menu');
+				}
+			});
+		}
 	});
 }
 function PinHeader(){
 	$(window).scroll(function() {
-		if($(window).scrollTop() >38){
+		if($(window).scrollTop() >0){
 			$('#header').addClass('pin-header');
 		}
 		else{
@@ -78,4 +93,4 @@ export {PinTop}
 export {showProduct}
 export {menuMobile}
 export {slideChitiet}
-
+export {removeMenu}

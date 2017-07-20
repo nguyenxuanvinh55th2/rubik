@@ -3,7 +3,7 @@ import {Search} from '../../javascript/header.js'
 import {removeSearch} from '../../javascript/header.js'
 import {menuMobile} from '../../javascript/header.js'
 import {Link} from 'react-router';
-import {PinHeader} from '../../javascript/header.js'
+import {PinHeader, removeMenu} from '../../javascript/header.js'
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -14,6 +14,7 @@ export default class Header extends React.Component {
     removeSearch();
     PinHeader();
     menuMobile();
+    removeMenu();
   }
   render() {
     return (

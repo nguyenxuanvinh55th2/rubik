@@ -44,7 +44,7 @@ export default class Footer extends React.Component {
                     <input type="text" className="form-control"/>
                     <Link to={'#'} className="btn btn-danger">ĐĂNG KÍ</Link>
                   </div>
-                  <ul>
+                  <ul className="text-center">
                     <li>
                       <Link to={'#'}>
                         <i className="fa fa-facebook" aria-hidden="true"></i>

@@ -7,7 +7,7 @@ import Sliders from './Slider.jsx'
 import SliderNew from './SliderNews.jsx'
 import Product from '../product/Product.jsx'
 import {Link} from 'react-router';
-import {showProduct} from '../../javascript/header.js'
+import {showProduct, removeMenu } from '../../javascript/header.js'
 
 class Home extends React.Component {
   constructor(props) {
@@ -56,7 +56,7 @@ class Home extends React.Component {
                   backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/image-cate_zpsl60oehs8.jpg')"
                 }}>
                   <Link to={'#'} className="gray"></Link>
-                  <p>
+                  <p>stockModels
                     <Link to={'#'} className="btn btn-cate">Sản phẩm mới</Link>
                   </p>
                 </div>

@@ -31,10 +31,10 @@ const rootQuery = {
   },
   posts: (_,{limit}) => {
     if(limit){
-      return Posts.find({active: true},{limit}).fetch();
+      return Posts.find({active: true},{limit}, {'stockType._id': {$ne: '0'}}).fetch();
     }
     else {
-      return Posts.find({active: true}).fetch();
+      return Posts.find({active: true}, {'stockType._id': {$ne: '0'}}).fetch();
     }
   },
   post: (_, {_id}) => {

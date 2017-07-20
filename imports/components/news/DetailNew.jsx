@@ -9,7 +9,12 @@ class DetailNew extends React.Component {
 	constructor(props) {
 		super(props);
 	}
-
+	componentDidUpdate(){
+    let description = document.getElementById('description');
+    if(description) {
+      description.innerHTML = this.props.data.post.content;
+    }
+  }
 	render() {
     if(!this.props.data.post){
       return (
@@ -29,7 +34,7 @@ class DetailNew extends React.Component {
                 <LeftNews />
               </div>
               <div className="contents col-md-9">
-                <QuillRender value={this.props.data.post.content} />
+                <div id="description"></div>
                 <p>Viết bởi Lão Bá Đạo. Đăng ngày {moment(this.props.data.post.createdAt).format('HH:mm DD/MM/YYYY')}</p>
               </div>
             </div>
