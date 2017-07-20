@@ -104,14 +104,8 @@ const rootSchema = `
       getInVoice(token: String!): Invoice
       stockTypes(query: String): [StockType]
       stockModel(_id: String): StockModel
-<<<<<<< HEAD
-      invoices: [Invoice]
-      posts: [Post]
-      posts(limit: Int): [Post]
-=======
       posts(limit: Int): [Post]
       invoices: [Invoice]
->>>>>>> b62d7873871e1959f0ba7d9be5d32b51af9ee280
       post(_id: String): Post
       slider: Slider
       getAllPostByType(stockTypeId: String): [Post]
