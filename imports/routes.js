@@ -11,11 +11,7 @@ import Manager from './components/manager/Manager.jsx';
 import Dashboard from './components/dashboard/Dashboard.jsx';
 import StockModel from './components/stockModel/StockModel.jsx';
 import StockModelForm from './components/stockModel/StockModelForm.jsx';
-<<<<<<< HEAD
 import OrderDevoice from './components/OrderManager.jsx';
-=======
-// import OrderDevoice from './components/OrderDevoice.jsx';
->>>>>>> b62d7873871e1959f0ba7d9be5d32b51af9ee280
 
 import DetailProduct from './components/product/DetailProduct.jsx';
 import Cart from './components/product/Cart.jsx';
@@ -31,11 +27,11 @@ import DetailNew from './components/news/DetailNew.jsx';
 import EditAbout from './components/theme/EditAbout.jsx';
 
 function requireAuth(nextState, replace){
-  // if (!Meteor.userId()) {
-  //   replace({
-  //     pathname: '/login'
-  //   })
-  // }
+  if (!Meteor.userId()) {
+    replace({
+      pathname: '/login'
+    })
+  }
 }
 
 export const renderRoutes = () => (
@@ -58,7 +54,7 @@ export const renderRoutes = () => (
         <Route path="/stockModelForm" component={StockModelForm}/>
         <Route path="/stockModelForm/:_id" component={StockModelForm}/>
         <Route path="/stockType" component={StockType}/>
-        {/* <Route path="/orderDevoice" component={OrderDevoice}/> */}
+        <Route path="/orderDevoice" component={OrderDevoice}/>
         <Route path="/post" component={Post}/>
         <Route path="/postForm" component={PostForm}/>
         <Route path="/postForm/:_id" component={PostForm}/>

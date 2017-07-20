@@ -79,7 +79,7 @@ class Home extends React.Component {
             <h2 className="text-center">SẢN PHẨM MỚI</h2>
             <div className="two-space"></div>
             <div className="row">
-              {< Product stockModels = {
+              {< Product {...this.props} stockModels = {
                 this.props.data.stockModels
               } />
 }
@@ -94,7 +94,7 @@ class Home extends React.Component {
             <h2 className="text-center">TOP SẢN PHẨM BÁN CHẠY</h2>
             <div className="two-space"></div>
             <div className="row">
-              {< Product stockModels = {
+              {< Product {...this.props} stockModels = {
                 this.props.data.stockModels
               } />
 }

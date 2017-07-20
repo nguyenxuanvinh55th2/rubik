@@ -1,13 +1,72 @@
 import React from 'react'
-import {Link} from 'react-router';
+import {Link, browserHistory} from 'react-router';
+
+import __ from 'lodash';
+import {graphql, compose} from 'react-apollo';
+import gql from 'graphql-tag';
 import accounting from 'accounting';
+import moment from 'moment';
 
 import Rating from './Rating.jsx';
 
-export default class ItemProduct extends React.Component {
+class ItemProduct extends React.Component {
   constructor(props) {
     super(props);
   }
+
+  codeBill(number) {
+    var randomChar = '',
+      string = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+    for (var i = 0; i < number; i++) {
+      randomChar += string.substr(Math.floor(Math.random() * string.length), 1);
+    }
+    return randomChar;
+  }
+
+  addToCart(linkTo) {
+    let token = localStorage.getItem('invoiceId');
+    let stockModelById = __.cloneDeep(this.props.value);
+    if (!token || token === '') {
+      token = 'DH' +
+        '-' + this.codeBill(4);
+      localStorage.setItem('invoiceId', token);
+    }
+    console.log("stockModelById ", stockModelById);
+    let invoice = {
+      _id: token,
+      code: token,
+      status: 0,
+      customer: {},
+      amount: 0,
+      discount: 100,
+      total: 0,
+      createdAt: moment().valueOf(),
+      shipFee: 0
+    }
+    let imageId = stockModelById.images.map(item => item._id);
+    delete stockModelById['images'];
+    stockModelById['images'] = imageId;
+    console.log("stockModelById ", stockModelById);
+    let detail = {
+      stockModel: stockModelById,
+      quantity: 1,
+      amount: 1 * stockModelById.price,
+      invoice: {
+        _id: token,
+        code: token
+      },
+      createdAt: moment().valueOf()
+    }
+    invoice = JSON.stringify(invoice);
+    detail = JSON.stringify(detail);
+    this.props.insertInvoice(token, invoice).then(() => {
+      this.props.insertInvoiceDetail(token, detail).then(() => {
+        browserHistory.push(linkTo);
+        this.props.addNotificationMute({fetchData: true, message: 'Sản phẩm ' + stockModelById.name + ' đã được thêm vào giỏ hàng của bạn', level:'success'});
+      });
+    })
+  }
+
   render() {
     return (
       <div className="col-sm-3 col-xs-6">
@@ -17,7 +76,7 @@ export default class ItemProduct extends React.Component {
             <Link to={'/productDetail/' + this.props.value._id} className="hover-product"></Link>
             <div className="chart">
               <Link to={'#'}>
-                <i className="fa fa-shopping-cart" aria-hidden="true"></i>
+                <i className="fa fa-shopping-cart" aria-hidden="true" onClick={this.addToCart.bind(this, '/shoppingCart')}></i>
               </Link>
             </div>
             <div className="link-detail">
@@ -41,3 +100,36 @@ export default class ItemProduct extends React.Component {
     )
   }
 }
+
+const INSERT_INVOICE = gql `
+    mutation insertInvoice($token: String!, $info: String){
+        insertInvoice(token: $token, info: $info)
+}`
+
+const INSERT_INVOICE_DETAIL = gql `
+    mutation insertInvoiceDetail($token: String!, $info: String){
+        insertInvoiceDetail(token: $token, info: $info)
+}`
+
+export default compose(
+  graphql(INSERT_INVOICE, {
+    props: ({mutate}) => ({
+      insertInvoice: (token, info) => mutate({
+        variables: {
+          token,
+          info
+        }
+      })
+    })
+  }),
+  graphql(INSERT_INVOICE_DETAIL, {
+    props: ({mutate}) => ({
+      insertInvoiceDetail: (token, info) => mutate({
+        variables: {
+          token,
+          info
+        }
+      })
+    })
+  })
+)(ItemProduct);

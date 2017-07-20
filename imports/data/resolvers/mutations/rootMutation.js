@@ -1,5 +1,20 @@
 import { Classifies } from '../../../../collections/classifies';
 
+function sendMail_Notification(notification){
+  let content = '<div>' + notification + '</div>';
+  Email.send({
+      from: 'noreply.lokatech@gmail.com',
+      bcc: 'sanghuynh@gmail.com',
+      subject: 'Thông báo đặt hàng',
+      html: content
+  }, (err) => {
+      if (err) {
+        console.log(err);
+      }
+  });
+  return;
+}
+
 const rootMutation = {
   insertCategories: (_,{ userId, info }) => {
     let user = Meteor.users.findOne({_id: userId});
@@ -82,7 +97,7 @@ const rootMutation = {
       return future.wait();
   },
   insertInvoice(_, {token, info}) {
-    let invoice = Invoices.findOne({_id: token});
+    let invoice = Invoices.findOne({_id: token, status: 0});
     if(invoice) {
       return invoice._id
     }
@@ -92,7 +107,7 @@ const rootMutation = {
   },
   insertInvoiceDetail(_, {token, info}) {
     info = JSON.parse(info);
-    let invoice = Invoices.findOne({_id: token});
+    let invoice = Invoices.findOne({_id: token, status: 0});
     let invoiceDetail = InvoiceDetails.findOne({'invoice._id': token, 'stockModel._id': info.stockModel._id});
     let amount = info.quantity * (invoiceDetail ? invoiceDetail.stockModel.price : info.stockModel.price);
     let docAmount = invoice.amount + amount;
@@ -149,6 +164,7 @@ const rootMutation = {
       customer: info,
       status: 1
     }});
+    sendMail_Notification(info.customer.name + ' Đã đặt hàng trên website của bạn');
   },
   ratingStockModel: (_, {token, _id, info}) => {
     info = JSON.parse(info);
