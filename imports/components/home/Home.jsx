@@ -55,9 +55,9 @@ class Home extends React.Component {
                 <div className="item bg" style={{
                   backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/image-cate_zpsl60oehs8.jpg')"
                 }}>
-                  <Link to={'#'} className="gray"></Link>
-                  <p>stockModels
-                    <Link to={'#'} className="btn btn-cate">Sản phẩm mới</Link>
+                  <Link to={'/san-pham'} className="gray"></Link>
+                  <p>
+                    <Link to={'/san-pham'} className="btn btn-cate">Sản phẩm mới</Link>
                   </p>
                 </div>
                 <div className="item bg" style={{

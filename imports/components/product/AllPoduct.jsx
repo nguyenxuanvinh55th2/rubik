@@ -26,7 +26,7 @@ class AllPoduct extends React.Component {
     else {
       return (
         <div id="news">
-            <h2 className="text-center">Hướng dẫn chơi</h2>
+            {/* <h2 className="text-center">Hướng dẫn chơi</h2> */}
           <div className="main-content container">
             <div className="row">
               <div className="sidebar col-md-3">
