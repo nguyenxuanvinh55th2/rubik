@@ -62,7 +62,7 @@ export default class Header extends React.Component {
                         <Link to={'/gioi-thieu'}>GIỚI THIỆU</Link>
                       </li>
                       <li>
-                        <Link to={'san-pham'}>SẢN PHẨM</Link>
+                        <Link to={'/san-pham'}>SẢN PHẨM</Link>
                       </li>
                       <li>
                         <Link to={`/tin-tuc/1`}>TIN TỨC</Link>
@@ -100,7 +100,7 @@ export default class Header extends React.Component {
                 <Link to={'/gioi-thieu'}>GIỚI THIỆU</Link>
               </li>
               <li>
-                <Link to={'san-pham'}>SẢN PHẨM</Link>
+                <Link to={'/san-pham'}>SẢN PHẨM</Link>
               </li>
               <li>
                 <Link to={'/tin-tuc/1'}>TIN TỨC</Link>
