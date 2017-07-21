@@ -202,7 +202,7 @@ class DetailProduct extends React.Component {
     })
   }
   render() {
-    let {stockModelById} = this.props.data;
+    let {stockModelById, stockTypes} = this.props.data;
     let {page, pageCount} = this.state;
     if (stockModelById) {
       let images = [];
@@ -211,8 +211,8 @@ class DetailProduct extends React.Component {
           images.push(item.file);
         }
       });
+      console.log(this.props.data);
       return (
-
         <div>
           <div className="product-detail">
             <div className="container">
@@ -220,27 +220,24 @@ class DetailProduct extends React.Component {
                 <div className="col-sm-3">
                   <div className="danhmuc-sp">
                     <h3>DANH MỤC SẢN PHẨM</h3>
-                    <h4>
-                      <a role="button" data-toggle="collapse" href="#collapsePlus1" aria-expanded="false" aria-controls="collapsePlus8" data-parent="#accordion">RUBIK</a>
-                    </h4>
-                    <div className="more collapse" id="collapsePlus1">
-                      <p>Comic Spinner</p>
-                      <p>Fidget Cube</p>
-                    </div>
-                    <h4>
-                      <a role="button" data-toggle="collapse" href="#collapsePlus2" aria-expanded="false" aria-controls="collapsePlus8" data-parent="#accordion">Spiner</a>
-                    </h4>
-                    <div className="more collapse" id="collapsePlus2">
-                      <p>Comic Spinner</p>
-                      <p>Fidget Cube</p>
-                    </div>
-                    <h4>
-                      <a role="button" data-toggle="collapse" href="#collapsePlus3" aria-expanded="false" aria-controls="collapsePlus8" data-parent="#accordion">Các phụ kiện khác</a>
-                    </h4>
-                    <div className="more collapse" id="collapsePlus3">
-                      <p>Comic Spinner</p>
-                      <p>Fidget Cube</p>
-                    </div>
+                    {
+                      __.map(stockTypes, (stockType, idx) => {
+                        return (
+                          <div key={idx}>
+                            <h4>
+                              <a role="button" data-toggle="collapse" href={`#${stockType._id}`} aria-expanded="false" aria-controls="collapsePlus8" data-parent="#accordion">{stockType.name}</a>
+                            </h4>
+                            <div className="more collapse" id={stockType._id}>
+                              {
+                                __.map(stockType.categories, (category, index) => {
+                                  return <p key={index} ref={category._id}>{category.name}</p>
+                                })
+                              }
+                            </div>
+                          </div>
+                        )
+                      })
+                    }
                   </div>
                 </div>
                 <div className="col-sm-9">
@@ -255,7 +252,7 @@ class DetailProduct extends React.Component {
                               <img src={item} alt=""/>
                             </div>
                           ))
-}
+                        }
                         </div>
                         <div className="click-anh">
                           <ul>
@@ -264,7 +261,7 @@ class DetailProduct extends React.Component {
                                 <img src={item} alt=""/>
                               </li>
                             ))
-}
+                          }
                           </ul>
                         </div>
                       </div>
@@ -339,7 +336,7 @@ class DetailProduct extends React.Component {
                                   ? false
                                   : true} idx={idx}/>))
                                 : null
-}
+                              }
                             </div>
                             <div className="col-sm-10" style={{
                               textAlign: 'center'
@@ -347,7 +344,7 @@ class DetailProduct extends React.Component {
                               {pageCount > 0
                                 ? <ReactPaginate previousLabel={"previous"} nextLabel={"next"} breakLabel={< a href = "" > ...</a>} breakClassName={"break-me"} pageCount={pageCount} marginPagesDisplayed={2} pageRangeDisplayed={5} onPageChange={this.handlePageClick.bind(this)} containerClassName={"pagination"} subContainerClassName={"pages pagination"} activeClassName={"active"}/>
                                 : null
-}
+                              }
                             </div>
                           </div>
                         </div>
@@ -425,6 +422,9 @@ const STOCK_MODEL_QUERY = gql `
         stockTypes(query: $query) {
             _id
             name
+            categories {
+              _id name
+            }
         }
 }`
 
@@ -447,13 +447,7 @@ export default compose(graphql(STOCK_MODEL_QUERY, {
   options: (ownProps) => ({
     variables: {
       _id: ownProps.params.id,
-      query: JSON.stringify({
-        isProduct: true,
-        active: true,
-        _id: {
-          $ne: '0'
-        }
-      })
+      query: JSON.stringify({isProduct: true, active: true})
     },
     fetchPolicy: 'network-only'
   })

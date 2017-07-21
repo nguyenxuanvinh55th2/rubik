@@ -1,3 +1,4 @@
+import { Classifies } from '../../../collections/classifies';
 const NonScalars = {
   StockModel :{
     images: ({images}) => {
