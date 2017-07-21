@@ -49,7 +49,7 @@ export default class Product extends React.Component{
 			{
 				__.map(this.state.data, (value,idx) => {
 					return(
-						<ItemProduct key={idx} value ={value} />
+						<ItemProduct {...this.props} key={idx} value ={value} />
 
 						)
 				})

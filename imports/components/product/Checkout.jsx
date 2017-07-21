@@ -25,17 +25,19 @@ class Checkout extends React.Component {
 			mobileError: null,
 			addressError: null,
 		}
+    this.allowClick = false;
   }
 
 	orderDevoice() {
 		let token = localStorage.getItem('invoiceId') ? localStorage.getItem('invoiceId') : '';
 		let { info, emailError, nameError, mobileError, addressError } = this.state;
-		if(!emailError && !nameError && !mobileError && !addressError) {
+		if(!emailError && !nameError && !mobileError && !addressError && !this.allowClick) {
 			info = JSON.stringify(info);
 			this.props.orderDevoice(token, info).then(() => {
         this.props.addNotificationMute({fetchData: true, message: 'Đặt hàng thành công', level:'success'});
         browserHistory.push('/')
 				localStorage.removeItem('invoiceId');
+        this.allowClick = true;
 			})
 		}
 	}

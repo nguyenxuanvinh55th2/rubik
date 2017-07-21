@@ -161,12 +161,13 @@ class DetailProduct extends React.Component {
   }
   addToCart(linkTo) {
     let token = localStorage.getItem('invoiceId');
-    let {stockModelById} = this.props.data;
+    let stockModelById = __.cloneDeep(this.props.data.stockModelById);
     if (!token || token === '') {
       token = 'DH' +
         '-' + this.codeBill(4);
       localStorage.setItem('invoiceId', token);
     }
+    console.log("stockModelById ", stockModelById);
     let invoice = {
       _id: token,
       code: token,
@@ -178,10 +179,14 @@ class DetailProduct extends React.Component {
       createdAt: moment().valueOf(),
       shipFee: 0
     }
+    let imageId = stockModelById.images.map(item => item._id);
+    delete stockModelById['images'];
+    stockModelById['images'] = imageId;
+    console.log("stockModelById ", stockModelById);
     let detail = {
       stockModel: stockModelById,
       quantity: this.state.number,
-      amount: this.state.number * stockModelById.price,
+      amount: this.state.number * stockModelById.price - this.state.number * stockModelById.price * stockModelById.saleOff,
       invoice: {
         _id: token,
         code: token

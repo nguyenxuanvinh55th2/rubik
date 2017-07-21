@@ -3,350 +3,404 @@ import { AgGridReact } from 'ag-grid-react';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import __ from 'lodash';
-import moment from 'moment';
+import accounting from 'accounting'
+import moment from 'moment'
+
+import FlatButton from 'material-ui/FlatButton';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
 
 import InvoiceDetail from './InvoiceDetail.jsx';
 
-class DeleteButton extends React.Component {
+class ChoseButton extends React.Component {
   constructor(props) {
     super(props)
   }
   render(){
-    let { t } = this.props;
+    let { t, status, invoiceId, data } = this.props;
     return (
-        <div style={{width: '100%'}}>
-          <button className="btn btn-default" disabled={this.props.data.status === 99} style={{borderWidth: 0, width: 56, color:'red'}}>Hủy</button>
-        </div>
-    )
-  }
-}
-
-class VerifyButton extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-  render(){
-    let { t } = this.props;
-    return (
-        <div style={{width: '100%'}}>
-          <button className="btn btn-primary" disabled={!this.props.data.status === 1} style={{borderWidth: 0, width: 56}}>Duyệt</button>
-        </div>
-    )
-  }
-}
-
-class CompleteButton extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-  render(){
-    let { t } = this.props;
-    return (
-        <div style={{width: '100%'}}>
-          <button className="btn btn-primary" disabled={!this.props.data.status === 99} style={{borderWidth: 0, width: 56}}>Hoàn thành</button>
-        </div>
+      <button className="btn btn-default" disabled={status === 99} style={{borderWidth: 0, width: 56, color: data._id === invoiceId ? 'red' : 'blue'}}>Chọn</button>
     )
   }
 }
 
 class OrderDevoice extends React.Component {
-  constructor(props) {
-    super(props);
-    this.data = [];
-    this.state = {
-      height: window.innerHeight,
-      open: false,
-      name: ''
+    constructor(props) {
+        super(props);
+        this.width = Math.floor((window.innerWidth - 100) / 29);
+        this.state = {filterCol: 'code', height: window.innerHeight, width: this.width, rows: 29, setting: {storeManagement: null, general: null}, stockModel: 'abc', preventComponentUpdate: false, invoice: null};
+        this.removeRows = [];
+        this.error = false;
+
+        this.gridOptionFooter = {
+            onGridReady: (params) => {
+                this.gridOptionFooter.api.setRowData(this.renderFooterData());
+            },
+            rowData: null,
+            rowClass: 'bold-row',
+            headerHeight: 0,
+            slaveGrids: []
+        };
+
+        this.gridOptions = {
+            isFullWidthCell: (rowNode) => {
+                return rowNode.level == 1;
+            },
+            getRowHeight: (params) => {
+                return params.node.level == 1 ? 230 : 25;
+            },
+            doesDataFlower: () => {
+                return true;
+            },
+            getNodeChildDetails: (params) => {
+                if (params.isparent === true) {
+                    return {
+                        group: true,
+                        children: params.children,
+                        expanded: params.open
+                    };
+                } else {
+                    return null;
+                }
+            },
+            onFilterChanged: () => {
+                if (this.gridOptionFooter && this.gridOptionFooter.api) {
+                    this.gridOptionFooter.api.setRowData(this.renderFooterData());
+                }
+            },
+            icons: {
+                groupExpanded: '<span style="width: 25px;height: 25px; text-align: center;margin-left: 8px;"><i style="font-weight: bolder;" class="fa fa-angle-down"></i></span>',
+                groupContracted: '<span style="width: 25px;height: 25px; text-align: center;margin-left: 8px;"><i style="font-weight: bolder;" class="fa fa-angle-right"></i></span>',
+            },
+            fullWidthCellRendererFramework: InvoiceDetail,
+            enableFilter: true,
+            slaveGrids: [],
+            floatingFilter: true
+        };
+
+        this.gridOptions.slaveGrids.push(this.gridOptionFooter);
+        this.gridOptionFooter.slaveGrids.push(this.gridOptions);
     }
-    this.gridOptions = {
-      icons: {
-          groupExpanded: '<span style="width: 25px;height: 25px; text-align: center;margin-left: 8px;"><i style="font-weight: bolder;" class="fa fa-angle-down"></i></span>',
-          groupContracted: '<span style="width: 25px;height: 25px; text-align: center;margin-left: 8px;"><i style="font-weight: bolder;" class="fa fa-angle-right"></i></span>',
-      },
-      getNodeChildDetails: (params) => {
-          if (params.isparent === true) {
-              return {
-                  group: true,
-                  children: params.children,
-                  expanded: params.open
-              };
-          } else {
-              return null;
-          }
-      },
-      doesDataFlower: () => {
-          return true;
-      },
-      floatingFilter: true,
-      onFilterChanged: () => {
-        let data = [],
-          models = this.gridOptions.api.getModel().rowsToDisplay;
-        __.forEach(models, (model) => {
-          data.push(model.data);
-        });
-        this.gridOptions.api.setFloatingBottomRowData(this.renderFooterData(data));
-        this.saveFilter = this.gridOptions.api.getFilterModel();
-      },
-    };
-  }
-  renderFooterData(data) {
-    return [
-      {
-        gridType: 'footer',
-        name: 'Total: ' + (data ? data.length : 0)
+
+    handleResize(e) {
+        this.setState({width: this.width, height: window.innerHeight});
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.handleResize.bind(this));
+    }
+
+    renderFooterData(data) {
+      return [
+        {
+          gridType: 'footer',
+          name: 'Total: ' + (data ? data.length : 0)
+        }
+      ];
+    }
+
+    componentDidUpdate() {
+      if (this.gridOptions.api) {
+        this.gridOptions.api.setFloatingBottomRowData(this.renderFooterData(this.props.data.invoices));
       }
-    ];
-  }
-  componentDidUpdate() {
-    if (this.gridOptions.api) {
-      this.gridOptions.api.showLoadingOverlay();
-      this.gridOptions.api.setFloatingBottomRowData(this.renderFooterData(this.props.data.invoices));
-      this.gridOptions.api.hideOverlay();
+      window.addEventListener('resize', this.handleResize.bind(this));
     }
-  }
-  render() {
-    if (Meteor.userId()) {
-      let data = __.cloneDeep(this.props.data);
-      if (data.loading) {
-        return (
-          <div className="loading">
-            <i className="fa fa-spinner fa-spin" style={{
-              fontSize: 50
-            }}></i>
-          </div>
-        )
-      } else {
-        __.forEach(data.invoies, item => {
-          item.createdAt = moment(createdAt).format('DD/MM/YYYY');
-        })
-        let columnDefs = [
-          {
-            headerName: "",
-            field: 'delete',
-            minWidth: 56,
-            width: 56,
-            cellClass: 'agaction',
-            pinned: 'left',
-            filter: '',
-            cellRendererFramework: DeleteButton,
-            cellStyle: (params) => {
-              if (params.node.data.gridType == 'footer') {
-                return {display: 'none'};
-              }
-            },
-            onCellClicked: (params) => {
-              if (params.data && params.data._id) {
-                this.props.cancelInvoice(Meteor.userId(), params.data._id).then(({data}) => {
-                  if (data) {
-                    this.props.data.refetch();
-                  }
-                })
-              }
-            }
-          }, {
-            headerName: "Mã đơn hàng",
-            field: "code",
-            width: 320,
-            cellStyle: function(params) {
-              if (params.node.data.gridType == 'footer') {
-                return {fontWeight: 'bold'};
-              } else {
-                return null;
-              }
-            },
-            filterParams: {
-              filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
-            },
-            filter: 'text',
-            suppressMenu: true
-          }, {
-            headerName: "Ngày tạo",
-            field: "createdAt",
-            width: 320,
-            cellStyle: function(params) {
-              if (params.node.data.gridType == 'footer') {
-                return {fontWeight: 'bold'};
-              } else {
-                return null;
-              }
-            },
-            filterParams: {
-              filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
-            },
-            filter: 'text',
-            suppressMenu: true,
-            cellRenderer: (params)=> {
-              return moment(params.value).format('DD/MM/YYYY');
-            }
-          }, {
-            headerName: "Tên khách hàng",
-            field: "customer.name",
-            width: 320,
-            cellStyle: function(params) {
-              if (params.node.data.gridType == 'footer') {
-                return {fontWeight: 'bold'};
-              } else {
-                return null;
-              }
-            },
-            filterParams: {
-              filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
-            },
-            filter: 'text',
-            suppressMenu: true
-          }, {
-            headerName: "Email",
-            field: "customer.email",
-            width: 320,
-            cellStyle: function(params) {
-              if (params.node.data.gridType == 'footer') {
-                return {fontWeight: 'bold'};
-              } else {
-                return null;
-              }
-            },
-            filterParams: {
-              filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
-            },
-            filter: 'text',
-            suppressMenu: true
-          }, {
-            headerName: "Số điện thoại",
-            field: "customer.mobile",
-            width: 320,
-            cellStyle: function(params) {
-              if (params.node.data.gridType == 'footer') {
-                return {fontWeight: 'bold'};
-              } else {
-                return null;
-              }
-            },
-            filterParams: {
-              filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
-            },
-            filter: 'text',
-            suppressMenu: true
-          }, {
-            headerName: "Địa chỉ",
-            field: "customer.address",
-            width: 320,
-            cellStyle: function(params) {
-              if (params.node.data.gridType == 'footer') {
-                return {fontWeight: 'bold'};
-              } else {
-                return null;
-              }
-            },
-            filterParams: {
-              filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
-            },
-            filter: 'text',
-            suppressMenu: true
-          }, {
-            headerName: "Trạng thái",
-            field: "status",
-            width: 100,
-            cellStyle: function(params) {
-              if (params.node.data.gridType == 'footer') {
-                return {fontWeight: 'bold'};
-              } else {
-                return null;
-              }
-            },
-            filterParams: {
-              filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
-            },
-            filter: 'text',
-            suppressMenu: true,
-            cellRenderer: (params)=> {
-              let showText = '';
-              if(params.value === 1)
-                showText = "Đang xử  lý";
-              if(params.value === 99)
-                showText = "Đã duyệt";
-              if(params.value === 100)
-                showText = "Đã hủy";
-              if(params.value === 101)
-                showText = "Hoàn thành";
-              return showText;
-            }
-          }, {
-            headerName: "",
-            field: 'verify',
-            minWidth: 56,
-            width: 56,
-            cellClass: 'agaction',
-            pinned: 'right',
-            filter: '',
-            cellRendererFramework: VerifyButton,
-            cellStyle: (params) => {
-              if (params.node.data.gridType == 'footer') {
-                return {display: 'none'};
-              }
-            },
-            onCellClicked: (params) => {
-              if (params.data && params.data._id) {
-                this.props.verifyInvoice(Meteor.userId(), params.data._id).then(({data}) => {
-                  if (data) {
-                    this.props.data.refetch();
-                  }
-                })
-              }
-            }
-          }, {
-            headerName: "",
-            field: 'complete',
-            minWidth: 56,
-            width: 56,
-            cellClass: 'agaction',
-            pinned: 'right',
-            filter: '',
-            cellRendererFramework: CompleteButton,
-            cellStyle: (params) => {
-              if (params.node.data.gridType == 'footer') {
-                return {display: 'none'};
-              }
-            },
-            onCellClicked: (params) => {
-              if (params.data && params.data._id) {
-                this.props.completeInvoice(Meteor.userId(), params.data._id).then(({data}) => {
-                  if (data) {
-                    this.props.data.refetch();
-                  }
-                })
-              }
-            }
-          },
-        ];
-        return (
-          <div>
-            <ol className="breadcrumb" style={{
-              marginBottom: 0
-            }}>
-              <li>
-                <a onClick={() => browserHistory.push('/dashboard')}>Dashboard</a>
-              </li>
-              <li>
-                <a onClick={() => browserHistory.push('/category')}>Quản lý đơn hàng</a>
-              </li>
-            </ol>
-            <div style={{
-              height: this.state.height - 136
-            }} className="ag-fresh">
-              <AgGridReact gridOptions={this.gridOptions} columnDefs={columnDefs} rowData={data.invoices} enableColResize="true" enableSorting="true" enableFilter="true"/>
+
+    render() {
+      console.log("message ", this.state.invoice);
+      if (Meteor.userId()) {
+        let data = __.cloneDeep(this.props.data);
+        if (data.loading) {
+          return (
+            <div className="loading">
+              <i className="fa fa-spinner fa-spin" style={{
+                fontSize: 50
+              }}></i>
             </div>
-          </div>
-        )
+          )
+        } else {
+              let columnDefs= [
+                  {
+                    headerName: "",
+                    field: 'chose',
+                    minWidth: 56,
+                    width: 56,
+                    maxWidth: 56,
+                    cellClass: 'agaction',
+                    pinned: 'left',
+                    filter: '',
+                    cellRendererFramework: ChoseButton,
+                    cellStyle: (params) => {
+                      if (params.node.data.gridType == 'footer') {
+                        return {display: 'none'};
+                      }
+                    },
+                    cellRendererParams: {invoiceId: this.state.invoice ? this.state.invoice._id : ''},
+                    onCellClicked: (params) => {
+                      this.setState({invoice: params.data});
+                    }
+                  },{
+                    headerName: "Mã đơn hàng",
+                    field: "code",
+                    width: 100,
+                    cellStyle: function(params) {
+                      if (params.node.data.gridType == 'footer') {
+                        return {fontWeight: 'bold'};
+                      } else {
+                        return null;
+                      }
+                    },
+                    filterParams: {
+                      filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+                    },
+                    filter: 'text',
+                    suppressMenu: true
+                  },{
+                    headerName: "Tổng tiền",
+                    field: "amount",
+                    width: 100,
+                    cellStyle: function(params) {
+                      if (params.node.data.gridType == 'footer') {
+                        return {fontWeight: 'bold'};
+                      } else {
+                        return null;
+                      }
+                    },
+                    filterParams: {
+                      filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+                    },
+                    filter: 'text',
+                    suppressMenu: true
+                  }, {
+                    headerName: "Ngày tạo",
+                    field: "createdAt",
+                    width: 100,
+                    cellStyle: function(params) {
+                      if (params.node.data.gridType == 'footer') {
+                        return {fontWeight: 'bold'};
+                      } else {
+                        return null;
+                      }
+                    },
+                    filterParams: {
+                      filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+                    },
+                    filter: 'text',
+                    suppressMenu: true,
+                    cellRenderer: (params)=> {
+                      if (params.node.data.gridType !== 'footer') {
+                        return moment(params.value).format('DD/MM/YYYY');
+                      } else {
+                          return '';
+                      }
+                    }
+                  }, {
+                    headerName: "Tên khách hàng",
+                    field: "customer.name",
+                    width: 150,
+                    cellStyle: function(params) {
+                      if (params.node.data.gridType == 'footer') {
+                        return {fontWeight: 'bold'};
+                      } else {
+                        return null;
+                      }
+                    },
+                    filterParams: {
+                      filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+                    },
+                    filter: 'text',
+                    suppressMenu: true
+                  }, {
+                    headerName: "Email",
+                    field: "customer.email",
+                    width: 200,
+                    cellStyle: function(params) {
+                      if (params.node.data.gridType == 'footer') {
+                        return {fontWeight: 'bold'};
+                      } else {
+                        return null;
+                      }
+                    },
+                    filterParams: {
+                      filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+                    },
+                    filter: 'text',
+                    suppressMenu: true
+                  }, {
+                    headerName: "Số điện thoại",
+                    field: "customer.mobile",
+                    width: 100,
+                    cellStyle: function(params) {
+                      if (params.node.data.gridType == 'footer') {
+                        return {fontWeight: 'bold'};
+                      } else {
+                        return null;
+                      }
+                    },
+                    filterParams: {
+                      filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+                    },
+                    filter: 'text',
+                    suppressMenu: true
+                  }, {
+                    headerName: "Địa chỉ",
+                    field: "customer.address",
+                    width: 320,
+                    cellStyle: function(params) {
+                      if (params.node.data.gridType == 'footer') {
+                        return {fontWeight: 'bold'};
+                      } else {
+                        return null;
+                      }
+                    },
+                    filterParams: {
+                      filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+                    },
+                    filter: 'text',
+                    suppressMenu: true
+                  }, {
+                    headerName: "Trạng thái",
+                    field: "status",
+                    width: 100,
+                    cellStyle: function(params) {
+                      if (params.node.data.gridType == 'footer') {
+                        return {fontWeight: 'bold'};
+                      } else {
+                        return null;
+                      }
+                    },
+                    filterParams: {
+                      filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+                    },
+                    filter: 'text',
+                    suppressMenu: true,
+                    cellRenderer: (params)=> {
+                      let showText = '';
+                      if(params.value === 1)
+                        showText = "Đang xử  lý";
+                      if(params.value === 99)
+                        showText = "Đã duyệt";
+                      if(params.value === 100)
+                        showText = "Đã hủy";
+                      if(params.value === 101)
+                        showText = "Hoàn thành";
+                      return showText;
+                    }
+                  }
+              ];
+              // if (!stockManagement.fetchData) {
+              //     setTimeout(()=>{
+              //         stockManagementMutate({
+              //             fetchData: true,
+              //             stocks: data.stockManagement,
+              //             setting: this.state.setting,
+              //             colDefs: columnDefs
+              //         });
+              //     }, 500);
+              // }
+              // this.gridOptions.fullWidthCellRendererParams = {
+              //   t: this.props.t
+              // }
+              return (
+                <div>
+                  <ol className="breadcrumb" style={{
+                    marginBottom: 0
+                  }}>
+                    <li>
+                      <a onClick={() => browserHistory.push('/dashboard')}>Dashboard</a>
+                    </li>
+                    <li>
+                      <a onClick={() => browserHistory.push('/category')}>Quản lý đơn hàng</a>
+                    </li>
+                  </ol>
+                  <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <div style={{
+                      height: this.state.height - 126,
+                      width: '50%'
+                    }} className="ag-fresh">
+                      <AgGridReact
+                        gridOptions={this.gridOptions}
+                        columnDefs={columnDefs}
+                        rowData={data.invoices}
+                        enableColResize="true"
+                        enableSorting="true"
+                        enableFilter="true"
+                      />
+                    </div>
+                    <div style={{
+                      height: this.state.height - 126,
+                      width: '50%'
+                    }}>
+                    {
+                      this.state.invoice &&
+                      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: 15}}>
+                        <div style={{width: '100%', textAlign: 'left'}}>
+                          <h4>{'Mã hóa đơn: ' + this.state.invoice.code}</h4>
+                        </div>
+                        <button className="btn btn-danger" disabled={this.state.invoice.status === 99} style={{borderWidth: 0, width: 100}} onClick={() => {
+                            console.log("message cancel");
+                            this.props.cancelInvoice(Meteor.userId(), this.state.invoice._id).then(({data}) => {
+                              if (data) {
+                                this.setState({invoice: null});
+                                this.props.data.refetch();
+                              }
+                            })
+                          }}>
+                          Hủy
+                        </button>
+                        <div style={{width:15}}>
+                        </div>
+                        <button className="btn btn-primary" style={{borderWidth: 0, width: 100}}  onClick={() => {
+                            if(this.state.invoice.status === 1) {
+                              this.props.verifyInvoice(Meteor.userId(), this.state.invoice._id).then(({data}) => {
+                                if (data) {
+                                  this.props.data.refetch();
+                                }
+                              });
+                            } else {
+                                this.props.completeInvoice(Meteor.userId(), this.state.invoice._id).then(({data}) => {
+                                  if (data) {
+                                    this.props.data.refetch();
+                                  }
+                                });
+                            }
+                          }}>
+                          {this.state.invoice.status === 1 ? 'Duyệt' : 'Hoàn thành'}
+                        </button>
+                      </div>
+                    }
+                    {
+                      this.state.invoice &&
+                      <table style={{width: '100%', borderCollapse: 'collapse', borderSpacing: 0, fontSize: 14, padding: 15}}>
+                          <thead style={{color: '#8f8f8d', borderBottom: '1px solid #8f8f8d'}}>
+                              <th style={{width: 110, textAlign: 'center'}}>Hình ảnh</th>
+                              <th style={{width: 110, textAlign: 'center'}}>Sản phẩm</th>
+                              <th style={{width: 145, textAlign: 'center'}}>Giá</th>
+                              <th style={{width: 100, textAlign: 'center'}}>Số lượng</th>
+                              <th style={{width: 145, textAlign: 'center'}}>Tổng tiền</th>
+                          </thead>
+                          <tbody>
+                          {
+                            this.state.invoice.invoiceDetails.map((detail, idx) => (<InvoiceDetail key={idx} item={detail}/>))
+                          }
+                          </tbody>
+                      </table>
+                    }
+                    </div>
+                  </div>
+                </div>
+              )
+          }
+        } else {
+            return <div style={{
+              textAlign: 'center'
+            }}>{'Vui lòng đăng nhập'}</div>;
+        }
       }
-    } else {
-      return <div style={{
-        textAlign: 'center'
-      }}>{'Vui lòng đăng nhập'}</div>;
-    }
-  }
 }
+
 const INVOICE_QUERY = gql `
-    query invoies {
+    query invoices {
         invoices {
 					_id
 					code
@@ -362,6 +416,25 @@ const INVOICE_QUERY = gql `
             mobile
             address
           }
+          invoiceDetails {
+						_id
+						stockModel {
+							_id
+							code
+	            name
+							quantity
+							saleOff
+							isPromotion
+							images {
+								_id
+								file
+							}
+	            price
+							description
+						}
+						quantity
+						amount
+					}
         }
 }`
 

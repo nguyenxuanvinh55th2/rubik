@@ -1,4 +1,23 @@
 import { Classifies } from '../../../../collections/classifies';
+import { Email } from 'meteor/email';
+
+function sendMail_Notification(notification){
+  console.log("notification ", notification);
+  let content = '<div>' + notification + '</div>';
+  Email.send({
+      from: 'noreply.lokatech@gmail.com',
+      bcc: 'sanghuynh@gmail.com',
+      subject: 'Thông báo đặt hàng',
+      html: content
+  }, (err) => {
+      if (err) {
+        console.log('err ', err);
+      } else {
+          console.log("message send mail");
+      }
+  });
+  return;
+}
 
 const rootMutation = {
   insertCategories: (_,{ userId, info }) => {
@@ -82,7 +101,7 @@ const rootMutation = {
       return future.wait();
   },
   insertInvoice(_, {token, info}) {
-    let invoice = Invoices.findOne({_id: token});
+    let invoice = Invoices.findOne({_id: token, status: 0});
     if(invoice) {
       return invoice._id
     }
@@ -92,7 +111,7 @@ const rootMutation = {
   },
   insertInvoiceDetail(_, {token, info}) {
     info = JSON.parse(info);
-    let invoice = Invoices.findOne({_id: token});
+    let invoice = Invoices.findOne({_id: token, status: 0});
     let invoiceDetail = InvoiceDetails.findOne({'invoice._id': token, 'stockModel._id': info.stockModel._id});
     let amount = info.quantity * (invoiceDetail ? invoiceDetail.stockModel.price : info.stockModel.price);
     let docAmount = invoice.amount + amount;
@@ -145,6 +164,7 @@ const rootMutation = {
   },
   orderDevoice: (_, {token, info}) => {
     info = JSON.parse(info);
+    sendMail_Notification(info.name + ' Đã đặt hàng trên website của bạn');
     return Invoices.update({_id: token}, {$set: {
       customer: info,
       status: 1

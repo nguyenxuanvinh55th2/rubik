@@ -27,7 +27,6 @@ class Cart extends React.Component {
     let {getInVoice} = this.props.data;
     if (getInVoice) {
       return (
-
         <div>
           {/* <Header/> */}
           <div className="sec-cart">
@@ -103,13 +102,21 @@ class Cart extends React.Component {
         </div>
       )
     } else {
-      return (
-        <div className="loading">
-          <i className="fa fa-spinner fa-spin" style={{
-            fontSize: 50
-          }}></i>
-        </div>
-      )
+        if(this.props.data.loading) {
+          return (
+            <div className="loading">
+              <i className="fa fa-spinner fa-spin" style={{
+                fontSize: 50
+              }}></i>
+            </div>
+          )
+        } else {
+            return (
+              <div style={{height: 210, width: '100%', textAlign: 'center'}}>
+                không có hàng để hiển thị
+              </div>
+            )
+        }
     }
   }
 }

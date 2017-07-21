@@ -16,7 +16,7 @@ li.ag-action-item:hover{
   cursor: pointer;
 }
 .ag-fresh .ag-ltr .ag-root {
-  font-size: 12px;
+  font-size: 14px;
 }
 .ag-fresh .ag-ltr .ag-cell.ag-cell-no-focus{
   padding: 3px 5px 2px;
@@ -171,7 +171,7 @@ li.ag-action-item:hover{
     width: 100%;
 }
 .table-scroll .table thead {
-    width: calc(100% - 1.2em);
+    width: calc(100% - 1.25em);
 }
 .table-scroll .table tbody {
     display: block;
