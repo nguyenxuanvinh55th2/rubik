@@ -27,17 +27,15 @@ class Home extends React.Component {
                 <div className="item bg" style={{
                   backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/image-cate_zpsl60oehs8.jpg')"
                 }}>
-                  <Link to={'#'} className="gray"></Link>
                   <p>
-                    <Link to={'#'} className="btn btn-cate">Spinner</Link>
+                    <Link to={'/san-pham/loai-hang/100'} className="btn btn-cate">Spinner</Link>
                   </p>
                 </div>
                 <div className="item bg" style={{
                   backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/img2-cate_zpsj29lzkqx.jpg')"
                 }}>
-                  <Link to={'#'} className="gray"></Link>
                   <p>
-                    <Link to={'#'} className="btn btn-cate">rubik</Link>
+                    <Link to={'/san-pham/loai-hang/99'} className="btn btn-cate">rubik</Link>
                   </p>
                 </div>
               </div>
@@ -45,7 +43,6 @@ class Home extends React.Component {
                 <div className="item-center bg" style={{
                   backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/img3-cate_zpsogr7lgka.jpg')"
                 }}>
-                  <Link to={'#'} className="gray"></Link>
                   <p>
                     <Link to={'/huong-dan-choi/2'} className="btn btn-cate">Hướng dẫn chơi</Link>
                   </p>
@@ -55,7 +52,6 @@ class Home extends React.Component {
                 <div className="item bg" style={{
                   backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/image-cate_zpsl60oehs8.jpg')"
                 }}>
-                  <Link to={'/san-pham'} className="gray"></Link>
                   <p>
                     <Link to={'/san-pham'} className="btn btn-cate">Sản phẩm mới</Link>
                   </p>
@@ -63,9 +59,8 @@ class Home extends React.Component {
                 <div className="item bg" style={{
                   backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/img2-cate_zpsj29lzkqx.jpg')"
                 }}>
-                  <Link to={'#'} className="gray"></Link>
                   <p>
-                    <Link to={'#'} className="btn btn-cate">phụ kiện</Link>
+                    <Link to={'/san-pham/loai-hang/101'} className="btn btn-cate">phụ kiện</Link>
                   </p>
                 </div>
               </div>
@@ -80,7 +75,7 @@ class Home extends React.Component {
               {< Product {...this.props} stockModels = {
                 this.props.data.stockModels
               } />
-}
+            }
             </div>
             <p className="text-center">
               <Link to={'#'} className="btn-more">Xem thêm</Link>
@@ -95,7 +90,7 @@ class Home extends React.Component {
               {< Product {...this.props} stockModels = {
                 this.props.data.stockModels
               } />
-}
+            }
             </div>
             <p className="text-center">
               <Link to={'#'} className="btn-more">Xem thêm</Link>

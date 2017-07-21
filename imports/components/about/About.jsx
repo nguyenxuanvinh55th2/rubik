@@ -10,9 +10,9 @@ class About extends React.Component {
   }
   render(){
     let defaultString = `<p>Chào các bạn đến với Shop Rubik Nha Trang website chính thức của Youtuber Lão Bá Đạo.
-Bên mình cung cấp nhiều loại rubik khác nhau từ speed cube đến biến thể chính hãng với giá tốt.
-Nếu các bạn không tìm được mặt hàng các bạn cần hãy liên hệ bên mình sẽ order hàng về cho các bạn.
-Chúc các bạn mua sắm vui vẻ.</p>`;
+                        Bên mình cung cấp nhiều loại rubik khác nhau từ speed cube đến biến thể chính hãng với giá tốt.
+                        Nếu các bạn không tìm được mặt hàng các bạn cần hãy liên hệ bên mình sẽ order hàng về cho các bạn.
+                        Chúc các bạn mua sắm vui vẻ.</p>`;
     if(!this.props.data.getAllPostByType){
       return (
         <div className="item-slider">

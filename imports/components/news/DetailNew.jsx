@@ -16,6 +16,7 @@ class DetailNew extends React.Component {
     }
   }
 	render() {
+		let linkDat = 'https://www.facebook.com/badathb?hc_ref=ARTZmrU2-LeqNyyLYFlUDFcz3EV8QSvZVjOMcl9xneT6OCcQedn6rCxNZ-0765zS4lI&fref=nf';
     if(!this.props.data.post){
       return (
 				<div className="item-slider">
@@ -35,7 +36,7 @@ class DetailNew extends React.Component {
               </div>
               <div className="contents col-md-9">
                 <div id="description"></div>
-                <p>Viết bởi Lão Bá Đạo. Đăng ngày {moment(this.props.data.post.createdAt).format('HH:mm DD/MM/YYYY')}</p>
+								<p>Viết bởi <Link to={linkDat}><span className="author">Lão Bá Đạo</span></Link>, Đăng ngày <span className="date">{moment(this.props.value.createdAt).format('HH:mm DD/MM/YYYY')}</span></p>
               </div>
             </div>
           </div>

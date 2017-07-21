@@ -16,7 +16,7 @@ export default class WrapFontEnd extends React.Component {
           {React.cloneElement(this.props.children, childProps)}
           <Footer/>
           <div className="pin-top">
-            <Link to={'#'}>
+            <Link>
               <i className="fa fa-long-arrow-up" aria-hidden="true"></i>
             </Link>
           </div>

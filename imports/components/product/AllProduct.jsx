@@ -72,8 +72,7 @@ export default class AllPoduct extends React.Component {
                       }}
                       onChange={(st) => {
                         if(st && st._id){
-                          console.log(st);
-                          browserHistory.push(`/productDetail/${st._id}`)
+                          browserHistory.push(`/chi-tiet-san-pham/${st._id}`)
                         }
                       }}
                     />
@@ -87,19 +86,19 @@ export default class AllPoduct extends React.Component {
                           <div className="item-product">
                             <div className="box-item">
                               <img src={value.images [0] ? value.images[0].file : 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/sp1_zpssqbqw0b3.png'} alt=""/>
-                              <Link to={`/productDetail/${value._id}`} className="hover-product"></Link>
+                              <Link to={`/chi-tiet-san-pham/${value._id}`} className="hover-product"></Link>
                               <div className="chart">
                                 <Link to={'#'}>
                                   <i className="fa fa-shopping-cart" aria-hidden="true"></i>
                                 </Link>
                               </div>
                               <div className="link-detail">
-                                <Link to={`/productDetail/${value._id}`} className="btn btn-cate">Xem chi tiết</Link>
+                                <Link to={`/chi-tiet-san-pham/${value._id}`} className="btn btn-cate">Xem chi tiết</Link>
                               </div>
                             </div>
                             <div className="info-product">
                               <h4>
-                                <Link to={`/productDetail/${value._id}`}>{value.name}</Link>
+                                <Link to={`/chi-tiet-san-pham/${value._id}`}>{value.name}</Link>
                               </h4>
                               <div className="star">
                                 <div className="group-star">
@@ -145,7 +144,7 @@ const SEARCH_STOCKMODEL = gql`
 `;
 const AutocompleteStockModel = graphql(SEARCH_STOCKMODEL, {
     withRef: true,
-    options: ({accountingId,searchValue}) => ({ variables: {keyCode: searchValue},   fetchPolicy: 'network-only' }),
+    options: ({searchValue}) => ({ variables: {keyCode: searchValue},   fetchPolicy: 'network-only' }),
     props: ({ ownProps, data: { loading, getAllStockModelSearch, refetch } }) => ({
         options: getAllStockModelSearch ? __.map(__.cloneDeep(getAllStockModelSearch), (stockModel) => {
           stockModel.stringValueParse = stockModel.code + stockModel.name + stockModel.categories + stockModel.stockType.name;

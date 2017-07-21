@@ -31,7 +31,6 @@ class ItemProduct extends React.Component {
         '-' + this.codeBill(4);
       localStorage.setItem('invoiceId', token);
     }
-    console.log("stockModelById ", stockModelById);
     let invoice = {
       _id: token,
       code: token,
@@ -46,7 +45,6 @@ class ItemProduct extends React.Component {
     let imageId = stockModelById.images.map(item => item._id);
     delete stockModelById['images'];
     stockModelById['images'] = imageId;
-    console.log("stockModelById ", stockModelById);
     let detail = {
       stockModel: stockModelById,
       quantity: 1,
@@ -73,19 +71,19 @@ class ItemProduct extends React.Component {
         <div className="item-product">
           <div className="box-item">
             <img src={this.props.value.image} alt=""/>
-            <Link to={'/productDetail/' + this.props.value._id} className="hover-product"></Link>
+            <Link to={'/chi-tiet-san-pham/' + this.props.value._id} className="hover-product"></Link>
             <div className="chart">
-              <Link to={'#'}>
-                <i className="fa fa-shopping-cart" aria-hidden="true" onClick={this.addToCart.bind(this, '/shoppingCart')}></i>
+              <Link>
+                <i className="fa fa-shopping-cart" aria-hidden="true" onClick={this.addToCart.bind(this, '/gio-hang')}></i>
               </Link>
             </div>
             <div className="link-detail">
-              <Link to={'/productDetail/' + this.props.value._id} className="btn btn-cate">Xem chi tiết</Link>
+              <Link to={'/chi-tiet-san-pham/' + this.props.value._id} className="btn btn-cate">Xem chi tiết</Link>
             </div>
           </div>
           <div className="info-product">
             <h4>
-              <Link to={'/productDetail/' + this.props.value._id}>{this.props.value.name}</Link>
+              <Link to={'/chi-tiet-san-pham/' + this.props.value._id}>{this.props.value.name}</Link>
             </h4>
             <div className="star">
               <div className="group-star">

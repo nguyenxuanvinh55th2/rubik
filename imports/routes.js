@@ -41,16 +41,17 @@ export const renderRoutes = () => (
     <Route path="/" component={App} >
       <Route component={WrapFontEnd}>
           <IndexRoute component={Home}/>
-          <Route path="/productDetail/:id" component={DetailProduct} />
-          <Route path="/shoppingCart" component={Cart} />
-          <Route path="/checkOut" component={Checkout} />
+          <Route path="/chi-tiet-san-pham/:id" component={DetailProduct} />
+          <Route path="/gio-hang" component={Cart} />
+          <Route path="/thanh-toan" component={Checkout} />
           <Route path="/gioi-thieu" component={About} />
           <Route path="/chi-tiet/:_id" component={DetailNew} />
           <Route path="/tin-tuc/:_id" component={News} />
           <Route path="/huong-dan-choi/:_id" component={News} />
           <Route path="/san-pham" component={AllProduct} />
+          <Route path="/san-pham/:keyCode" component={AllProduct} />
           <Route path="/san-pham/loai-hang/:stockTypeId" component={AllProduct} />
-          <Route path="/san-pham/chung-loai/:categoryId" component={AllProduct} />
+          <Route path="/san-pham/chung-loai/:name" component={AllProduct} />
       </Route>
       <Route path="login" component={Login}/>
       <Route path="dashboard" component={Manager} onEnter={requireAuth}>
@@ -69,7 +70,6 @@ export const renderRoutes = () => (
       <Route path="*" component={Home} />
     </Route>
     <Router>
-
     </Router>
   </Router>
 )

@@ -91,7 +91,7 @@ class Cart extends React.Component {
                     </p>
                     <p className="text-right rate">{accounting.format(getInVoice.total) + ' đ'}</p>
                     <p className="text-center">
-                      <a className="btn-more btn-red" href="#" onClick={() => browserHistory.push('/checkout')}>Thanh toán</a>
+                      <a className="btn-more btn-red" href="#" onClick={() => browserHistory.push('/thanh-toan')}>Thanh toán</a>
                     </p>
                   </div>
                 </div>

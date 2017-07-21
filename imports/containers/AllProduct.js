@@ -21,8 +21,23 @@ const POSTS = gql `
 export default compose (
   graphql(POSTS, {
     options: (ownProps) => {
-      let query ={
-        active: true
+      let query = {};
+      if(ownProps.params.stockTypeId){
+        query ={
+          active: true,
+          'stockType._id': ownProps.params.stockTypeId
+        }
+      }
+      else if (ownProps.params.name) {
+        query ={
+          active: true,
+          categories: ownProps.params.name
+        }
+      }
+      else {
+        query ={
+          active: true
+        }
       }
       return {
         variables: {
