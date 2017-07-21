@@ -49,6 +49,11 @@ const NonScalars = {
       }
       return {}
     }
+  },
+  StockType: {
+    categories: ({_id}) => {
+      return Classifies.find({isCategory: true, active: true, "stockType._id": _id}).fetch()
+    }
   }
 }
 export default NonScalars;

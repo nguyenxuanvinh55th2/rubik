@@ -30,6 +30,7 @@ const rootSchema = `
       _id: String
       name: String
       active: Boolean
+      categories: [Classify]
     }
     type StockModel {
       _id: String
