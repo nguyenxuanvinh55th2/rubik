@@ -211,7 +211,6 @@ class DetailProduct extends React.Component {
           images.push(item.file);
         }
       });
-      console.log(this.props.data);
       return (
         <div>
           <div className="product-detail">
@@ -225,12 +224,12 @@ class DetailProduct extends React.Component {
                         return (
                           <div key={idx}>
                             <h4>
-                              <a role="button" data-toggle="collapse" href={`#${stockType._id}`} aria-expanded="false" aria-controls="collapsePlus8" data-parent="#accordion">{stockType.name}</a>
+                              <a role="button" data-toggle="collapse" href={`#${stockType._id}`} aria-expanded="false" aria-controls="collapsePlus8" data-parent="#accordion" onClick={() => {console.log('dd');}}>{stockType.name}</a>
                             </h4>
                             <div className="more collapse" id={stockType._id}>
                               {
                                 __.map(stockType.categories, (category, index) => {
-                                  return <p key={index} ref={category._id}>{category.name}</p>
+                                  return <p style={{cursor: 'pointer'}} key={index} ref={category._id}>{category.name}</p>
                                 })
                               }
                             </div>

@@ -27,7 +27,7 @@ import About from './components/about/About.jsx';
 import DetailNew from './components/news/DetailNew.jsx';
 import EditAbout from './components/theme/EditAbout.jsx';
 import News from './containers/News';
-import AllPoduct from './components/product/AllPoduct.jsx';
+import AllProduct from './containers/AllProduct.js';
 
 function requireAuth(nextState, replace){
   if (!Meteor.userId()) {
@@ -49,7 +49,9 @@ export const renderRoutes = () => (
           <Route path="/chi-tiet/:_id" component={DetailNew} />
           <Route path="/tin-tuc/:_id" component={News} />
           <Route path="/huong-dan-choi/:_id" component={News} />
-          <Route path="/san-pham" component={AllPoduct} />
+          <Route path="/san-pham" component={AllProduct} />
+          <Route path="/san-pham/loai-hang/:stockTypeId" component={AllProduct} />
+          <Route path="/san-pham/chung-loai/:categoryId" component={AllProduct} />
       </Route>
       <Route path="login" component={Login}/>
       <Route path="dashboard" component={Manager} onEnter={requireAuth}>

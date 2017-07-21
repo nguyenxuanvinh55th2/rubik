@@ -48,6 +48,28 @@ const rootQuery = {
   },
   getPostTypeLimit: (_, {stockTypeId, offset, limit}) => {
     return Posts.find({"stockType._id": stockTypeId}, {skip: offset, limit: limit}).fetch();
+  },
+  findProduct: (_, {query, offset, limit}) => {
+    if(typeof query == 'string') {
+      query = JSON.parse(query);
+    }
+    return StockModels.find(query, {skip: offset, limit: limit}, {sort: {createdAt: -1}}).fetch();
+  },
+  getAllStockModelSearch: (_, { keyCode }) => {
+    if (keyCode) {
+      let condition = {
+        $or: [
+          {code: {$regex: keyCode, $options: 'iu'}},
+          {name: {$regex: keyCode, $options: 'iu'}},
+          {origin: {$regex: keyCode, $options: 'iu'}},
+          {'stockType.name': {$regex: keyCode, $options: 'iu'}},
+          {categories: {$regex: keyCode, $options: 'iu'}}
+        ]
+      }
+      return StockModels.find(condition, {active: true}, {sort: {createdAt: -1}}).fetch();
+    } else {
+      return [];
+    }
   }
 }
 export default rootQuery;

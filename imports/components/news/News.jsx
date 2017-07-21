@@ -10,7 +10,6 @@ export default class News extends React.Component {
 	constructor(props) {
 		super(props);
 	}
-
 	render() {
 		if(!this.props.getPostTypeLimit.data){
 			return(
@@ -39,6 +38,11 @@ export default class News extends React.Component {
 										)
 									})
 								}
+								<p className="text-center">
+		              <Link onClick={() => {
+										this.props.getPostTypeLimit.loadMoreEntries();
+									}} className="btn-more">Xem thêm</Link>
+		            </p>
 							</div>
 						</div>
 					</div>

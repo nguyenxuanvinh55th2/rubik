@@ -9,12 +9,17 @@ import {Link} from 'react-router';
 import accounting from 'accounting';
 import Rating from './Rating.jsx';
 
-class AllPoduct extends React.Component {
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
+import match from 'autosuggest-highlight/match';
+import parse from 'autosuggest-highlight/parse';
+
+export default class AllPoduct extends React.Component {
   constructor(props) {
     super(props)
   }
   render(){
-    if(!this.props.data.stockModels){
+    if(!this.props.findProduct.stockModels){
       return(
         <div className="item-slider">
           <div className="loading">
@@ -26,15 +31,15 @@ class AllPoduct extends React.Component {
     else {
       return (
         <div id="news">
-            {/* <h2 className="text-center">Hướng dẫn chơi</h2> */}
           <div className="main-content container">
             <div className="row">
               <div className="sidebar col-md-3">
                 <LeftNews {...this.props} />
               </div>
               <div className="contents col-md-9">
+
                 {
-                  __.map(this.props.data.stockModels, (value,idx) => {
+                  __.map(this.props.findProduct.stockModels, (value,idx) => {
                     return(
                       <div key={idx} className="col-sm-4 col-xs-12 col-md-3">
                         <div className="item-product">
@@ -67,6 +72,11 @@ class AllPoduct extends React.Component {
                     )
                   })
                 }
+                <p className="text-center">
+                  <Link onClick={() => {
+                    this.props.findProduct.loadMoreEntries();
+                  }} className="btn-more">Xem thêm</Link>
+                </p>
               </div>
             </div>
           </div>
@@ -75,22 +85,3 @@ class AllPoduct extends React.Component {
     }
   }
 }
-const STOCK_MODEL_QUERY = gql `
-    query stockModels($limit: Int){
-      stockModels(limit: $limit) {
-          _id    name
-          images {
-            _id file
-          }
-          price
-          votes {
-            stars
-          }
-      }
-}`
-
-export default compose(graphql(STOCK_MODEL_QUERY, {
-  options: () => ({
-    fetchPolicy: 'network-only'
-  })
-}),)(AllPoduct);
