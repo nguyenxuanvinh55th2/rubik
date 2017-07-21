@@ -384,6 +384,12 @@
 		}
 	}
 }
+.search-custormer {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin-bottom: 15px;
+}
 @media only screen and (max-width: 991px) and(min-width: 768px){
 	.sec-cate .item {
 		height: 187px;
@@ -401,6 +407,10 @@
 	.item-product img{
 		max-width: 90px;
 	}
+	.search-custormer {
+		flex-direction: column;
+		margin-bottom: 15px;
+	}
 }
 @media only screen and (max-width: 767px){
 	.sec-cate .item-center {
@@ -415,5 +425,9 @@
 	}
 	.sec-product h2 {
 		font-size: 20px;
+	}
+	.search-custormer {
+		flex-direction: column;
+		margin-bottom: 15px;
 	}
 }
