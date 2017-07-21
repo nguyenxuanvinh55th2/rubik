@@ -371,7 +371,20 @@ class OrderDevoice extends React.Component {
                     }
                     {
                       this.state.invoice &&
-                      this.state.invoice.invoiceDetails.map((detail, idx) => (<InvoiceDetail key={idx} item={detail}/>))
+                      <table style={{width: '100%', borderCollapse: 'collapse', borderSpacing: 0, fontSize: 14, padding: 15}}>
+                          <thead style={{color: '#8f8f8d', borderBottom: '1px solid #8f8f8d'}}>
+                              <th style={{width: 110, textAlign: 'center'}}>Hình ảnh</th>
+                              <th style={{width: 110, textAlign: 'center'}}>Sản phẩm</th>
+                              <th style={{width: 145, textAlign: 'center'}}>Giá</th>
+                              <th style={{width: 100, textAlign: 'center'}}>Số lượng</th>
+                              <th style={{width: 145, textAlign: 'center'}}>Tổng tiền</th>
+                          </thead>
+                          <tbody>
+                          {
+                            this.state.invoice.invoiceDetails.map((detail, idx) => (<InvoiceDetail key={idx} item={detail}/>))
+                          }
+                          </tbody>
+                      </table>
                     }
                     </div>
                   </div>

@@ -1,6 +1,8 @@
 import { Classifies } from '../../../../collections/classifies';
+import { Email } from 'meteor/email';
 
 function sendMail_Notification(notification){
+  console.log("notification ", notification);
   let content = '<div>' + notification + '</div>';
   Email.send({
       from: 'noreply.lokatech@gmail.com',
@@ -9,7 +11,9 @@ function sendMail_Notification(notification){
       html: content
   }, (err) => {
       if (err) {
-        console.log(err);
+        console.log('err ', err);
+      } else {
+          console.log("message send mail");
       }
   });
   return;
@@ -160,11 +164,11 @@ const rootMutation = {
   },
   orderDevoice: (_, {token, info}) => {
     info = JSON.parse(info);
+    sendMail_Notification(info.name + ' Đã đặt hàng trên website của bạn');
     return Invoices.update({_id: token}, {$set: {
       customer: info,
       status: 1
     }});
-    sendMail_Notification(info.customer.name + ' Đã đặt hàng trên website của bạn');
   },
   ratingStockModel: (_, {token, _id, info}) => {
     info = JSON.parse(info);

@@ -165,7 +165,7 @@ class DetailProduct extends React.Component {
     let detail = {
       stockModel: stockModelById,
       quantity: this.state.number,
-      amount: this.state.number * stockModelById.price,
+      amount: this.state.number * stockModelById.price - this.state.number * stockModelById.price * stockModelById.saleOff,
       invoice: {
         _id: token,
         code: token

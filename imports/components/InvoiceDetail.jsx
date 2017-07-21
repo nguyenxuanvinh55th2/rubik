@@ -14,24 +14,20 @@ class InvoiceDetail extends React.Component {
     let { item } = this.props;
     console.log("message", item);
     return (
-      <div style={{padding: 15}} className={"box-cart"}>
-        <div className="row">
-          <div className="col-sm-3">
-            <div style={{width: '100%', margin: 0}}>
-              <img src={item.stockModel.images[0]
-                ? item.stockModel.images[0].file
-                : ''} alt=""/>
-            </div>
-          </div>
-          <div className="col-sm-9">
-            <h4>{item.stockModel.name}</h4>
-            <h4>Danh mục: Rubik 2x2x2</h4>
-            <h4>{'Giá: ' + accounting.format(item.stockModel.price) + 'đ'}</h4>
-            <h4>{'Số  lượng: ' + item.quantity}</h4>
-            <h4>{'Tổng tiền: ' + accounting.format(item.amount) + 'đ'}</h4>
-          </div>
-        </div>
-      </div>
+      <tr style={{borderBottom: '1px solid #8f8f8d'}}>
+          <td style={{textAlign: 'left'}}>
+              <img width="105"
+                  src={item.stockModel.images && item.stockModel.images[0] ? item.stockModel.images[0].file : 'https://i1117.photobucket.com/albums/k593/ngocsang1501/st4Sp6Aw_zpsdaqtubup.jpg'} />
+          </td>
+          <td style={{textAlign: 'center'}}>{item.stockModel.name}</td>
+          <td style={{textAlign: 'center'}}>{accounting.format(item.stockModel.price) + ' VNĐ'}</td>
+          <td style={{textAlign: 'center'}}>
+            { item.quantity }
+          </td>
+          <td style={{textAlign: 'center'}}>
+            { accounting.format(item.amount) + 'đ' }
+          </td>
+      </tr>
     )
   }
 }
