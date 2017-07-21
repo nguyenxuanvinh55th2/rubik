@@ -150,6 +150,9 @@ class OrderDevoice extends React.Component {
                         return null;
                       }
                     },
+                    onCellClicked: (params) => {
+                      this.setState({invoice: params.data});
+                    },
                     filterParams: {
                       filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
                     },
@@ -166,34 +169,14 @@ class OrderDevoice extends React.Component {
                         return null;
                       }
                     },
+                    onCellClicked: (params) => {
+                      this.setState({invoice: params.data});
+                    },
                     filterParams: {
                       filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
                     },
                     filter: 'text',
                     suppressMenu: true
-                  }, {
-                    headerName: "Ngày tạo",
-                    field: "createdAt",
-                    width: 100,
-                    cellStyle: function(params) {
-                      if (params.node.data.gridType == 'footer') {
-                        return {fontWeight: 'bold'};
-                      } else {
-                        return null;
-                      }
-                    },
-                    filterParams: {
-                      filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
-                    },
-                    filter: 'text',
-                    suppressMenu: true,
-                    cellRenderer: (params)=> {
-                      if (params.node.data.gridType !== 'footer') {
-                        return moment(params.value).format('DD/MM/YYYY');
-                      } else {
-                          return '';
-                      }
-                    }
                   }, {
                     headerName: "Tên khách hàng",
                     field: "customer.name",
@@ -204,6 +187,9 @@ class OrderDevoice extends React.Component {
                       } else {
                         return null;
                       }
+                    },
+                    onCellClicked: (params) => {
+                      this.setState({invoice: params.data});
                     },
                     filterParams: {
                       filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
@@ -224,6 +210,9 @@ class OrderDevoice extends React.Component {
                     filterParams: {
                       filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
                     },
+                    onCellClicked: (params) => {
+                      this.setState({invoice: params.data});
+                    },
                     filter: 'text',
                     suppressMenu: true
                   }, {
@@ -240,6 +229,9 @@ class OrderDevoice extends React.Component {
                     filterParams: {
                       filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
                     },
+                    onCellClicked: (params) => {
+                      this.setState({invoice: params.data});
+                    },
                     filter: 'text',
                     suppressMenu: true
                   }, {
@@ -253,11 +245,40 @@ class OrderDevoice extends React.Component {
                         return null;
                       }
                     },
+                    onCellClicked: (params) => {
+                      this.setState({invoice: params.data});
+                    },
                     filterParams: {
                       filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
                     },
                     filter: 'text',
                     suppressMenu: true
+                  }, {
+                    headerName: "Ngày tạo",
+                    field: "createdAt",
+                    width: 100,
+                    cellStyle: function(params) {
+                      if (params.node.data.gridType == 'footer') {
+                        return {fontWeight: 'bold'};
+                      } else {
+                        return null;
+                      }
+                    },
+                    onCellClicked: (params) => {
+                      this.setState({invoice: params.data});
+                    },
+                    filterParams: {
+                      filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+                    },
+                    filter: 'text',
+                    suppressMenu: true,
+                    cellRenderer: (params)=> {
+                      if (params.node.data.gridType !== 'footer') {
+                        return moment(params.value).format('DD/MM/YYYY');
+                      } else {
+                          return '';
+                      }
+                    }
                   }, {
                     headerName: "Trạng thái",
                     field: "status",
@@ -268,6 +289,9 @@ class OrderDevoice extends React.Component {
                       } else {
                         return null;
                       }
+                    },
+                    onCellClicked: (params) => {
+                      this.setState({invoice: params.data});
                     },
                     filterParams: {
                       filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
@@ -329,15 +353,19 @@ class OrderDevoice extends React.Component {
                     </div>
                     <div style={{
                       height: this.state.height - 126,
-                      width: '50%'
+                      width: '50%',
+                      padding: '15px'
                     }}>
                     {
                       this.state.invoice &&
-                      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: 15}}>
+                      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
                         <div style={{width: '100%', textAlign: 'left'}}>
                           <h4>{'Mã hóa đơn: ' + this.state.invoice.code}</h4>
+                          <h5>{'Tên khách hàng: ' + this.state.invoice.customer.name}</h5>
+                          <h5>{'Email: ' +  this.state.invoice.customer.email}</h5>
+                          <h5>{'Điện thoại: ' + this.state.invoice.customer.mobile}</h5>
                         </div>
-                        <button className="btn btn-danger" disabled={this.state.invoice.status === 99} style={{borderWidth: 0, width: 100}} onClick={() => {
+                        <button className="btn btn-danger" disabled={this.state.invoice.status === 99} style={{borderWidth: 0, width: 100, height: 30}} onClick={() => {
                             console.log("message cancel");
                             this.props.cancelInvoice(Meteor.userId(), this.state.invoice._id).then(({data}) => {
                               if (data) {
@@ -350,7 +378,7 @@ class OrderDevoice extends React.Component {
                         </button>
                         <div style={{width:15}}>
                         </div>
-                        <button className="btn btn-primary" style={{borderWidth: 0, width: 100}}  onClick={() => {
+                        <button className="btn btn-primary" style={{borderWidth: 0, width: 100, height: 30}}  onClick={() => {
                             if(this.state.invoice.status === 1) {
                               this.props.verifyInvoice(Meteor.userId(), this.state.invoice._id).then(({data}) => {
                                 if (data) {
@@ -371,20 +399,33 @@ class OrderDevoice extends React.Component {
                     }
                     {
                       this.state.invoice &&
-                      <table style={{width: '100%', borderCollapse: 'collapse', borderSpacing: 0, fontSize: 14, padding: 15}}>
-                          <thead style={{color: '#8f8f8d', borderBottom: '1px solid #8f8f8d'}}>
-                              <th style={{width: 110, textAlign: 'center'}}>Hình ảnh</th>
-                              <th style={{width: 110, textAlign: 'center'}}>Sản phẩm</th>
-                              <th style={{width: 145, textAlign: 'center'}}>Giá</th>
-                              <th style={{width: 100, textAlign: 'center'}}>Số lượng</th>
-                              <th style={{width: 145, textAlign: 'center'}}>Tổng tiền</th>
-                          </thead>
-                          <tbody>
-                          {
-                            this.state.invoice.invoiceDetails.map((detail, idx) => (<InvoiceDetail key={idx} item={detail}/>))
-                          }
-                          </tbody>
-                      </table>
+                      <div>
+                        <div style={{height: this.state.height - 280, overflowY: 'auto'}}>
+                          <table style={{width: '100%', borderCollapse: 'collapse', borderSpacing: 0, fontSize: 14, marginTop: 20}}>
+                              <thead style={{color: '#8f8f8d'}}>
+                                  <th style={{width: 110, textAlign: 'center'}}>Hình ảnh</th>
+                                  <th style={{width: 110, textAlign: 'center'}}>Sản phẩm</th>
+                                  <th style={{width: 145, textAlign: 'center'}}>Giá</th>
+                                  <th style={{width: 100, textAlign: 'center'}}>Số lượng</th>
+                                  <th style={{width: 145, textAlign: 'center'}}>Tổng tiền</th>
+                              </thead>
+                              <tbody>
+                              {
+                                this.state.invoice.invoiceDetails.map((detail, idx) => (<InvoiceDetail key={idx} item={detail}/>))
+                              }
+                              </tbody>
+                          </table>
+                        </div>
+                        <table style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
+                            <tfoot>
+                              <td></td>
+                              <td></td>
+                              <td></td>
+                              <td style={{textAlign: 'center', fontWeight: 'bold', width: 100, textAlign: 'center'}}>Tổng tiền:&nbsp;</td>
+                              <td style={{textAlign: 'center', width: 145, textAlign: 'center'}}>{accounting.format(this.state.invoice.amount) + 'đ'}</td>
+                            </tfoot>
+                        </table>
+                      </div>
                     }
                     </div>
                   </div>
