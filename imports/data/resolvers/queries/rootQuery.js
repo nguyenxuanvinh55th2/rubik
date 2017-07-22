@@ -27,7 +27,7 @@ const rootQuery = {
     return StockModels.findOne({_id});
   },
   invoices: (_, {_id}) => {
-    return Invoices.find({status: {$nin: [100, 0]}}).fetch();
+    return Invoices.find({status: {$nin: [100, 0, 101]}}, {sort: {createdAt: -1}}).fetch();
   },
   posts: (_,{limit}) => {
     if(limit){

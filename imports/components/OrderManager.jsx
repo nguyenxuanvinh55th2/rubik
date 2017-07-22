@@ -75,7 +75,12 @@ class OrderDevoice extends React.Component {
             fullWidthCellRendererFramework: InvoiceDetail,
             enableFilter: true,
             slaveGrids: [],
-            floatingFilter: true
+            floatingFilter: true,
+            getRowStyle: (params) => {
+              if (params.data.status === 99) {
+                return {'background-color': 'yellow'};
+              }
+            },
         };
 
         this.gridOptions.slaveGrids.push(this.gridOptionFooter);
@@ -84,6 +89,12 @@ class OrderDevoice extends React.Component {
 
     handleResize(e) {
         this.setState({width: this.width, height: window.innerHeight});
+    }
+
+    componentWillReceiveProps(nextProps) {
+      if(nextProps.data.invoices) {
+        this.setState({invoice: nextProps.data.invoices[0]});
+      }
     }
 
     componentWillUnmount() {
@@ -361,6 +372,7 @@ class OrderDevoice extends React.Component {
                       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
                         <div style={{width: '100%', textAlign: 'left'}}>
                           <h4>{'Mã hóa đơn: ' + this.state.invoice.code}</h4>
+                          <h5>{'Ngày đặt: ' + moment(this.state.invoice.createdAt).format('HH:mm DD/MM/YYYY')}</h5>
                           <h5>{'Tên khách hàng: ' + this.state.invoice.customer.name}</h5>
                           <h5>{'Email: ' +  this.state.invoice.customer.email}</h5>
                           <h5>{'Điện thoại: ' + this.state.invoice.customer.mobile}</h5>
@@ -379,15 +391,30 @@ class OrderDevoice extends React.Component {
                         <div style={{width:15}}>
                         </div>
                         <button className="btn btn-primary" style={{borderWidth: 0, width: 100, height: 30}}  onClick={() => {
+                            let checkTotal = true;
+                            __.forEach(this.state.invoice.invoiceDetails, item => {
+                              if(item.countInStore < item.quantity) {
+                                this.props.addNotificationMute({fetchData: true, message: 'Bạn không thể  duyệt khi đơn hàng tồn tại hàng hóa có số lượng đặt lớn hơn số lượng thực tế', level: 'warning'});
+                                return;
+                              }
+                            })
                             if(this.state.invoice.status === 1) {
                               this.props.verifyInvoice(Meteor.userId(), this.state.invoice._id).then(({data}) => {
                                 if (data) {
+                                  let invoice = this.state.invoice;
+                                  invoice.status = 99;
+                                  this.setState({invoice});
+                                  this.props.addNotificationMute({fetchData: true, message: 'Đơn hàng đã được duyệt', level: 'success'});
                                   this.props.data.refetch();
                                 }
                               });
                             } else {
                                 this.props.completeInvoice(Meteor.userId(), this.state.invoice._id).then(({data}) => {
                                   if (data) {
+                                    let invoice = this.state.invoice;
+                                    invoice.status = 101;
+                                    this.props.addNotificationMute({fetchData: true, message: 'Giao hàng hoàn tất', level: 'success'});
+                                    this.setState({invoice});
                                     this.props.data.refetch();
                                   }
                                 });
@@ -400,7 +427,7 @@ class OrderDevoice extends React.Component {
                     {
                       this.state.invoice &&
                       <div>
-                        <div style={{height: this.state.height - 280, overflowY: 'auto'}}>
+                        <div style={{height: this.state.height - 300, overflowY: 'auto'}}>
                           <table style={{width: '100%', borderCollapse: 'collapse', borderSpacing: 0, fontSize: 14, marginTop: 20}}>
                               <thead style={{color: '#8f8f8d'}}>
                                   <th style={{width: 110, textAlign: 'center'}}>Hình ảnh</th>
