@@ -277,7 +277,8 @@ class DetailProduct extends React.Component {
                       <div className="thongtin-sp">
                         <h3>{stockModelById.name.toUpperCase()}</h3>
                         <h4 className="ma">{'Mã: ' + stockModelById.code}</h4>
-                        <h4 className="gia">{'Giá ' + accounting.format(stockModelById.price)}</h4>
+                        <h4 className="gia">Giá trước kia:&nbsp;<span className="rate-cu">{ accounting.format(stockModelById.price) + 'đ'}</span></h4>
+                        <h4 className="gia">{'Giá hiện tại: ' + accounting.format(stockModelById.price - stockModelById.saleOff) + 'đ'}</h4>
                         <h4 className="trangthai">{stockModelById.quantity > 0
                             ? 'Còn hàng'
                             : 'Hết hàng'}</h4>

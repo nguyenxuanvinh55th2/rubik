@@ -15,6 +15,7 @@ import Rating from './Rating.jsx';
 class Cart extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {quantity: null};
   }
 
   removeInvoiceDetail(_id) {
@@ -77,7 +78,16 @@ class Cart extends React.Component {
                         {__.map(getInVoice.invoiceDetails, (item, idx) => (
                           <tr key={idx}>
                             <td>{item.stockModel.name}</td>
-                            <td>{item.quantity}</td>
+                            <td style={{display: 'flex', flexDirection: 'row',justifyContent: 'center'}}>
+                              <input value={this.state.quantity ? this.state.quantity : item.quantity} style={{width: 75}} type="number" className="form-control" onChange={({target}) => {
+                                  this.setState({quantity: parseInt(target.value)});
+                                }}
+                                onBlur={() => {
+                                  let token = localStorage.getItem('invoiceId');
+                                  this.props.updateInvoiceDetail(token, item._id, this.state.quantity).then(() => {
+                                    this.props.data.refetch();
+                                  });
+                                }}/></td>
                             <td>{accounting.format(item.stockModel.price - item.stockModel.saleOff) + ' đ'}</td>
                           </tr>
                         ))
@@ -178,7 +188,7 @@ const REMOVE_INVOICE_DETAIL = gql `
 
 const UPDATE_INVOICE_DETAIL = gql `
     mutation updateInvoiceDetail($token: String!, $_id: String!, $number: Int){
-        removeInvoiceDetail(token: $token, _id: $_id, number: $number)
+        updateInvoiceDetail(token: $token, _id: $_id, number: $number)
 }`
 
 export default compose(graphql(INVOICE_QUERY, {
@@ -194,9 +204,12 @@ export default compose(graphql(INVOICE_QUERY, {
   props: ({mutate}) => ({
     removeInvoiceDetail: (_id) => mutate({variables: {
         _id
-      }}),
+    }}),
+  })
+}), graphql(UPDATE_INVOICE_DETAIL, {
+  props: ({mutate}) => ({
     updateInvoiceDetail: (token, _id, number) => mutate({variables: {
         token, _id, number
       }})
   })
-}),)(Cart);
+}))(Cart);

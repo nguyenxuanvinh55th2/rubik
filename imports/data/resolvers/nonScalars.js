@@ -29,6 +29,9 @@ const NonScalars = {
       else {
         return []
       }
+    },
+    countInStore: ({stockModel}) => {
+      return StockModels.findOne({_id: stockModel._id}).quantity;
     }
   },
   Post: {

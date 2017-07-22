@@ -73,6 +73,7 @@ const rootSchema = `
     }
     type InvoiceDetail {
       _id: String
+      countInStore: Int
       stockModel: StockModel
       quantity: Int
       amount: String
