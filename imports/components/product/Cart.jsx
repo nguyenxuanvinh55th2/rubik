@@ -25,7 +25,7 @@ class Cart extends React.Component {
 
   render() {
     let {getInVoice} = this.props.data;
-    if (getInVoice) {
+    if (getInVoice && getInVoice.invoiceDetails && getInVoice.invoiceDetails.length > 0) {
       return (
         <div>
           {/* <Header/> */}
@@ -49,7 +49,7 @@ class Cart extends React.Component {
 	                          <div className="col-sm-9">
 	                            <h4>{item.stockModel.name}</h4>
 	                            <h4>Danh mục: Rubik 2x2x2</h4>
-	                            <h4>{'Giá: ' + accounting.format(item.stockModel.price) + 'đ'}</h4>
+	                            <h4>{'Giá: ' + accounting.format(item.stockModel.price - item.stockModel.saleOff) + 'đ'}</h4>
 	                            <div className="group-star">
                                 <Rating {...this.props} iconSize={20} factor={'10%'} rating = {item.votes} allowEdit = {false} showStarText = {false}/>
 	                            </div>
@@ -79,7 +79,7 @@ class Cart extends React.Component {
                           <tr key={idx}>
                             <td>{item.stockModel.name}</td>
                             <td>{item.quantity}</td>
-                            <td>{accounting.format(item.stockModel.price) + ' đ'}</td>
+                            <td>{accounting.format(item.stockModel.price - item.stockModel.saleOff) + ' đ'}</td>
                           </tr>
                         ))
 }
@@ -162,6 +162,11 @@ const REMOVE_INVOICE_DETAIL = gql `
         removeInvoiceDetail(_id: $_id)
 }`
 
+const UPDATE_INVOICE_DETAIL = gql `
+    mutation updateInvoiceDetail($token: String!, $_id: String!, $number: Int){
+        removeInvoiceDetail(token: $token, _id: $_id, number: $number)
+}`
+
 export default compose(graphql(INVOICE_QUERY, {
   options: (ownProps) => ({
     variables: {
@@ -175,6 +180,9 @@ export default compose(graphql(INVOICE_QUERY, {
   props: ({mutate}) => ({
     removeInvoiceDetail: (_id) => mutate({variables: {
         _id
+      }}),
+    updateInvoiceDetail: (token, _id, number) => mutate({variables: {
+        token, _id, number
       }})
   })
 }),)(Cart);

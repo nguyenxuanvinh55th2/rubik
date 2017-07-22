@@ -167,7 +167,6 @@ class DetailProduct extends React.Component {
         '-' + this.codeBill(4);
       localStorage.setItem('invoiceId', token);
     }
-    console.log("stockModelById ", stockModelById);
     let invoice = {
       _id: token,
       code: token,
@@ -182,11 +181,10 @@ class DetailProduct extends React.Component {
     let imageId = stockModelById.images.map(item => item._id);
     delete stockModelById['images'];
     stockModelById['images'] = imageId;
-    console.log("stockModelById ", stockModelById);
     let detail = {
       stockModel: stockModelById,
       quantity: this.state.number,
-      amount: this.state.number * stockModelById.price - this.state.number * stockModelById.price * stockModelById.saleOff,
+      amount: this.state.number * stockModelById.price - this.state.number * stockModelById.saleOff,
       invoice: {
         _id: token,
         code: token
