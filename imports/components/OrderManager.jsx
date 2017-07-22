@@ -372,7 +372,7 @@ class OrderDevoice extends React.Component {
                       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
                         <div style={{width: '100%', textAlign: 'left'}}>
                           <h4>{'Mã hóa đơn: ' + this.state.invoice.code}</h4>
-                          <h5>{'Ngày đặt: ' + moment(this.state.invoice.createdAt).format('DD/MM/YYYY HH:mm')}</h5>
+                          <h5>{'Ngày đặt: ' + moment(this.state.invoice.createdAt).format('HH:mm DD/MM/YYYY')}</h5>
                           <h5>{'Tên khách hàng: ' + this.state.invoice.customer.name}</h5>
                           <h5>{'Email: ' +  this.state.invoice.customer.email}</h5>
                           <h5>{'Điện thoại: ' + this.state.invoice.customer.mobile}</h5>
