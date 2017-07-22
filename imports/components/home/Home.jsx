@@ -105,18 +105,18 @@ class Home extends React.Component {
 
 const STOCK_MODEL_QUERY = gql `
     query stockModels($limit: Int){
-        stockModels(limit: $limit) {
-            _id
-            name
-						images {
-							_id
-							file
-						}
-            price isPromotion saleOff
-            votes {
-              stars
-            }
-        }
+      stockModels(limit: $limit) {
+          _id
+          name
+					images {
+						_id
+						file
+					}
+          price isPromotion saleOff
+          votes {
+            stars
+          }
+      }
 }`
 
 export default compose(graphql(STOCK_MODEL_QUERY, {

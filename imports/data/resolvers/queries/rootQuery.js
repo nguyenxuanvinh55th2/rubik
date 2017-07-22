@@ -70,6 +70,10 @@ const rootQuery = {
     } else {
       return [];
     }
+  },
+  getTopStockModel: (_, {limit}) => {
+    let invoice = [];
+    return []
   }
 }
 export default rootQuery;

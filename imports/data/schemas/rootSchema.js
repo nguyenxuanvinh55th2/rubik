@@ -113,6 +113,7 @@ const rootSchema = `
       getPostTypeLimit(stockTypeId: String, offset: Int, limit: Int): [Post]
       findProduct(query: String, offset: Int, limit: Int): [StockModel]
       getAllStockModelSearch(keyCode: String): [StockModel]
+      getTopStockModel(limit: Int) : [StockModel]
     }
     type Mutation {
       removeCategories(userId: String!, _id: String!): String
