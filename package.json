@@ -43,6 +43,7 @@
     "react-router-redux": "^4.0.8",
     "react-select": "^1.0.0-rc.5",
     "react-slick": "^0.14.11",
+    "react-tabs": "^1.1.0",
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0"
   }

@@ -66,7 +66,7 @@ const rootQuery = {
           {categories: {$regex: keyCode, $options: 'iu'}}
         ]
       }
-      return StockModels.find(condition, {active: true}, {sort: {createdAt: -1}}).fetch();
+      return StockModels.find({$and: [condition, {active: true}]}, {sort: {createdAt: -1}}).fetch();
     } else {
       return [];
     }

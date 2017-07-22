@@ -4,10 +4,13 @@ import {removeSearch} from '../../javascript/header.js'
 import {menuMobile} from '../../javascript/header.js'
 import {Link} from 'react-router';
 import {PinHeader, removeMenu} from '../../javascript/header.js'
-
+import { browserHistory } from 'react-router';
 export default class Header extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      keyCode: ''
+    }
   }
   componentDidMount() {
     Search();
@@ -15,6 +18,11 @@ export default class Header extends React.Component {
     PinHeader();
     menuMobile();
     removeMenu();
+  }
+  onKeyPressHandle(event) {
+    if((event.keyCode == 13 || event.charCode == 13) && this.state.keyCode){
+      browserHistory.push(`/san-pham/${this.state.keyCode}`)
+    }
   }
   render() {
     return (
@@ -25,8 +33,10 @@ export default class Header extends React.Component {
               <ul>
                 <li>
                   <div className="form-group">
-                    <input type="text" className="form-control" placeholder="Tìm kiếm"/>
-                    <Link to={'#'} className="icon-search">
+                    <input type="text" className="form-control" value={this.state.keyCode} onChange={({target}) =>{
+                      this.setState({keyCode: target.value})
+                    }} placeholder="Tìm kiếm" onKeyPress={this.onKeyPressHandle.bind(this)}/>
+                    <Link className="icon-search">
                       <i className="fa fa-search" aria-hidden="true"></i>
                     </Link>
                   </div>
@@ -71,13 +81,13 @@ export default class Header extends React.Component {
                         <Link to={'/huong-dan-choi/2'}>HƯỚNG DẪN CHƠI</Link>
                       </li>
                       <li>
-                        <Link to={'/shoppingCart'}>
+                        <Link to={'/gio-hang'}>
                           <i className="fa fa-cart-arrow-down" aria-hidden="true"></i>
                         </Link>
                       </li>
                     </ul>
                   </nav>
-                  <Link to={'#'} className="cart">
+                  <Link className="cart">
                     <i className="fa fa-cart-arrow-down visible-xs" aria-hidden="true"></i>
                   </Link>
                   <button type="button" className="menu-control color-red visible-xs" id="open-menu">

@@ -14,14 +14,22 @@ const NonScalars = {
       }
       return []
     },
-    votes: ({votes}) => votes,
+    votes: ({votes}) => votes ? votes : [],
   },
   Invoice: {
     invoiceDetails: ({_id}) => InvoiceDetails.find({'invoice._id': _id}).fetch()
   },
   InvoiceDetail: {
     stockModel: ({stockModel}) => stockModel,
-    votes: ({stockModel}) => StockModels.findOne({_id: stockModel._id}).votes
+    votes: ({stockModel}) => {
+      let info = StockModels.findOne({_id: stockModel._id});
+      if(info){
+        return info.votes;
+      }
+      else {
+        return []
+      }
+    }
   },
   Post: {
     image: ({image}) => {

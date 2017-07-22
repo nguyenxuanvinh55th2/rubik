@@ -22,6 +22,7 @@ import '../imports/stylesheet/ag-pattern.css';
 import '../imports/stylesheet/manager.scss';
 import '../imports/stylesheet/news.scss';
 import '../imports/stylesheet/react-select.css';
+import '../imports/stylesheet/react-tab.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 injectTapEventPlugin();
 Meteor.startup(() => {

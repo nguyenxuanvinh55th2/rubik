@@ -20,7 +20,7 @@ export default class Footer extends React.Component {
                 <div className="col-sm-3">
                   <div className="left-footer">
                     <div className="logo">
-                      <Link to={'#'}><img src="/imgs/logo.png" alt=""/></Link>
+                      <Link to={'/'}><img src="/imgs/logo.png" alt=""/></Link>
                     </div>
                     <ul className="list-ft">
                       <p>
@@ -46,12 +46,12 @@ export default class Footer extends React.Component {
                   </div>
                   <ul className="text-center">
                     <li>
-                      <Link to={'#'}>
+                      <Link to={'https://www.facebook.com/rubiknt'} target="blank">
                         <i className="fa fa-facebook" aria-hidden="true"></i>
                       </Link>
                     </li>
                     <li>
-                      <Link to={'#'}>
+                      <Link to={'https://www.youtube.com/channel/UCdrq9JuGSPd0aCJH-tAOXZQ'} target="blank">
                         <i className="fa fa-youtube-play" aria-hidden="true"></i>
                       </Link>
                     </li>
@@ -76,7 +76,7 @@ export default class Footer extends React.Component {
                   <a style={{
                     color: '#fff',
                     textDecoration: 'underline'
-                  }} target="blank" href="http://lokatech.net/">LokaTech.</a>
+                  }} target="blank" href="http://lokatech.net/"> LokaTech.</a>
                 </span>
               </p>
             </div>

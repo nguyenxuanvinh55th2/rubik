@@ -28,7 +28,6 @@ class Cart extends React.Component {
     if (getInVoice && getInVoice.invoiceDetails && getInVoice.invoiceDetails.length > 0) {
       return (
         <div>
-          {/* <Header/> */}
           <div className="sec-cart">
             <div className="container">
               <h3 className="text-center">GIỎ HÀNG CỦA BẠN</h3>
@@ -48,7 +47,7 @@ class Cart extends React.Component {
 	                          </div>
 	                          <div className="col-sm-9">
 	                            <h4>{item.stockModel.name}</h4>
-	                            <h4>Danh mục: Rubik 2x2x2</h4>
+	                            <h4>Danh mục: {item.stockModel.categories.toString()}</h4>
 	                            <h4>{'Giá: ' + accounting.format(item.stockModel.price - item.stockModel.saleOff) + 'đ'}</h4>
 	                            <div className="group-star">
                                 <Rating {...this.props} iconSize={20} factor={'10%'} rating = {item.votes} allowEdit = {false} showStarText = {false}/>
@@ -82,38 +81,53 @@ class Cart extends React.Component {
                             <td>{accounting.format(item.stockModel.price - item.stockModel.saleOff) + ' đ'}</td>
                           </tr>
                         ))
-}
+                      }
                       </tbody>
                     </table>
                     <hr/>
+                    <p>
+                      Giá chưa bao gồm phí ship COD(shop sẽ liên hệ với bạn)
+                    </p>
                     <p>Thành tiền
                       <span>(Tổng số tiền thanh toán)</span>
                     </p>
                     <p className="text-right rate">{accounting.format(getInVoice.total) + ' đ'}</p>
                     <p className="text-center">
-                      <a className="btn-more btn-red" href="#" onClick={() => browserHistory.push('/checkout')}>Thanh toán</a>
+                      <a className="btn-more btn-red" onClick={() => browserHistory.push('/thanh-toan')}>Thanh toán</a>
                     </p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          {/* <Footer/> */}
         </div>
       )
     } else {
         if(this.props.data.loading) {
           return (
-            <div className="loading">
-              <i className="fa fa-spinner fa-spin" style={{
-                fontSize: 50
-              }}></i>
-            </div>
+            <div className="item-slider">
+    					<div className="loading">
+    							<i className="fa fa-spinner fa-spin" style={{fontSize: 50}}></i>
+    					</div>
+    				</div>
           )
         } else {
             return (
-              <div style={{height: 210, width: '100%', textAlign: 'center'}}>
-                không có hàng để hiển thị
+              <div className="column">
+                <p className="text-center">Xin lỗi, bạn chưa thêm hàng vào giỏ, vui lòng chọn sản phẩm để thêm vào giỏ hàng<span style={{color: '#f94949'}}><Link to="/san-pham">Sản phẩm</Link></span></p>
+                <p className="text-center">Bạn có thể theo dõi thông tin của shop trên facebook
+                    <span style={{padding: '0 10px'}}>
+                      <a href="https://www.facebook.com/rubiknt/" target="blank">
+                        <i className="fa fa-facebook" aria-hidden="true" style={{fontSize: 20, color: '#f94949'}}></i>
+                      </a>
+                  </span>
+                  hoặc tại kênh youtube
+                   <span style={{padding: '0 10px'}}>
+                     <a href="https://www.youtube.com/channel/UCdrq9JuGSPd0aCJH-tAOXZQ" target="blank">
+                        <i className="fa fa-youtube-play" aria-hidden="true" style={{fontSize: 20, color: '#f94949'}}></i>
+                      </a>
+                  </span>
+                </p>
               </div>
             )
         }
@@ -135,7 +149,7 @@ const INVOICE_QUERY = gql `
 					invoiceDetails {
 						_id
 						stockModel {
-							_id
+							_id categories
 							code
 	            name
 							quantity

@@ -71,6 +71,7 @@ class DetailProduct extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      indexImage: 0,
       number: 1,
       pageCount: 0,
       updatePage: true,
@@ -248,7 +249,7 @@ class DetailProduct extends React.Component {
                       <div className="slider-anh">
                         <div className="show-anh">
                           {images.map((item, idx) => (
-                            <div key={idx} className={idx === 0
+                            <div key={idx} className={this.state.indexImage === idx
                               ? "item" + idx + " item active"
                               : "item" + idx + " item"}>
                               <img src={item} alt=""/>
@@ -259,7 +260,7 @@ class DetailProduct extends React.Component {
                         <div className="click-anh">
                           <ul>
                             {images.map((item, idx) => (
-                              <li key={idx} data={idx}>
+                              <li key={idx} data={idx} onClick={() => this.setState({indexImage: idx})}>
                                 <img src={item} alt=""/>
                               </li>
                             ))
@@ -301,11 +302,11 @@ class DetailProduct extends React.Component {
                           })} type="number" min="1" className="form-control"/>
                         </h4>
                         <p>
-                          <a className="btn-more btn-red" href="#" onClick={this.addToCart.bind(this, '/checkout')}>MUA HÀNG</a>
+                          <a className="btn-more btn-red" href="#" onClick={this.addToCart.bind(this, '/thanh-toan')}>MUA HÀNG</a>
                         </p>
                         <div className="one-space"></div>
                         <p>
-                          <a className="btn-more" href="#" onClick={this.addToCart.bind(this, '/shoppingCart')}>THÊM VÀO GIỎ HÀNG</a>
+                          <a className="btn-more" href="#" onClick={this.addToCart.bind(this, '/gio-hang')}>THÊM VÀO GIỎ HÀNG</a>
                         </p>
                       </div>
                     </div>

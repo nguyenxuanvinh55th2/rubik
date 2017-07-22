@@ -130,6 +130,7 @@ class StockModelForm extends React.Component {
             if (type) {
               this.setState({
                 data: {
+                  active: true,
                   code: '',
                   name: '',
                   votes: [],

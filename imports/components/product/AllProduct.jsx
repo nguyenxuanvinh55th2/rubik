@@ -72,54 +72,76 @@ export default class AllPoduct extends React.Component {
                       }}
                       onChange={(st) => {
                         if(st && st._id){
-                          console.log(st);
-                          browserHistory.push(`/productDetail/${st._id}`)
+                          browserHistory.push(`/chi-tiet-san-pham/${st._id}`)
                         }
                       }}
                     />
                   </div>
                 </div>
-                <div className="row">
-                  {
-                    __.map(this.props.findProduct.stockModels, (value,idx) => {
-                      return(
-                        <div key={idx} className="col-sm-4 col-xs-12 col-md-3">
-                          <div className="item-product">
-                            <div className="box-item">
-                              <img src={value.images [0] ? value.images[0].file : 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/sp1_zpssqbqw0b3.png'} alt=""/>
-                              <Link to={`/productDetail/${value._id}`} className="hover-product"></Link>
-                              <div className="chart">
-                                <Link to={'#'}>
-                                  <i className="fa fa-shopping-cart" aria-hidden="true"></i>
-                                </Link>
-                              </div>
-                              <div className="link-detail">
-                                <Link to={`/productDetail/${value._id}`} className="btn btn-cate">Xem chi tiết</Link>
-                              </div>
-                            </div>
-                            <div className="info-product">
-                              <h4>
-                                <Link to={`/productDetail/${value._id}`}>{value.name}</Link>
-                              </h4>
-                              <div className="star">
-                                <div className="group-star">
-                                  <Rating {...this.props} iconSize={20} factor={'10%'} rating = {value.votes} allowEdit = {false} showStarText = {false}/>
+                {
+                  this.props.findProduct.stockModels.length ?
+                  <div>
+                    <div className="row">
+                      {
+                        __.map(this.props.findProduct.stockModels, (value,idx) => {
+                          return(
+                            <div key={idx} className="col-sm-4 col-xs-12 col-md-3">
+                              <div className="item-product">
+                                <div className="box-item">
+                                  <img src={value.images [0] ? value.images[0].file : 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/sp1_zpssqbqw0b3.png'} alt=""/>
+                                  <Link to={`/chi-tiet-san-pham/${value._id}`} className="hover-product"></Link>
+                                  <div className="chart">
+                                    <Link to={'#'}>
+                                      <i className="fa fa-shopping-cart" aria-hidden="true"></i>
+                                    </Link>
+                                  </div>
+                                  <div className="link-detail">
+                                    <Link to={`/chi-tiet-san-pham/${value._id}`} className="btn btn-cate">Xem chi tiết</Link>
+                                  </div>
+                                </div>
+                                <div className="info-product">
+                                  <h4>
+                                    <Link to={`/chi-tiet-san-pham/${value._id}`}>{value.name}</Link>
+                                  </h4>
+                                  <div className="star">
+                                    <div className="group-star">
+                                      <Rating {...this.props} iconSize={20} factor={'10%'} rating = {value.votes} allowEdit = {false} showStarText = {false}/>
+                                    </div>
+                                  </div>
+                                  <p>{accounting.format(value.price)}
+                                    đ</p>
                                 </div>
                               </div>
-                              <p>{accounting.format(value.price)}
-                                đ</p>
                             </div>
-                          </div>
-                        </div>
-                      )
-                    })
-                  }
-                </div>
-                <p className="text-center">
-                  <Link onClick={() => {
-                    this.props.findProduct.loadMoreEntries();
-                  }} className="btn-more">Xem thêm</Link>
-                </p>
+                          )
+                        })
+                      }
+                    </div>
+                    <p className="text-center">
+                      <Link onClick={() => {
+                        this.props.findProduct.loadMoreEntries();
+                      }} className="btn-more">Xem thêm</Link>
+                    </p>
+                  </div>
+                  :
+                  <div className="column">
+        						<p className="text-center">Xin lỗi, không tìm thấy sản phẩm bạn yêu cầu, vui lòng liên hệ với shop để được hỗ trợ.</p>
+        						<p className="text-center">Bạn có thể theo dõi thông tin của shop trên facebook
+        								<span style={{padding: '0 10px'}}>
+        									<a href="https://www.facebook.com/rubiknt/" target="blank">
+        										<i className="fa fa-facebook" aria-hidden="true" style={{fontSize: 20, color: '#f94949'}}></i>
+        									</a>
+        							</span>
+        							hoặc tại kênh youtube
+        							 <span style={{padding: '0 10px'}}>
+        								 <a href="https://www.youtube.com/channel/UCdrq9JuGSPd0aCJH-tAOXZQ" target="blank">
+        										<i className="fa fa-youtube-play" aria-hidden="true" style={{fontSize: 20, color: '#f94949'}}></i>
+        									</a>
+        							</span>
+        						</p>
+        					</div>
+                }
+
               </div>
             </div>
           </div>
@@ -145,7 +167,7 @@ const SEARCH_STOCKMODEL = gql`
 `;
 const AutocompleteStockModel = graphql(SEARCH_STOCKMODEL, {
     withRef: true,
-    options: ({accountingId,searchValue}) => ({ variables: {keyCode: searchValue},   fetchPolicy: 'network-only' }),
+    options: ({searchValue}) => ({ variables: {keyCode: searchValue},   fetchPolicy: 'network-only' }),
     props: ({ ownProps, data: { loading, getAllStockModelSearch, refetch } }) => ({
         options: getAllStockModelSearch ? __.map(__.cloneDeep(getAllStockModelSearch), (stockModel) => {
           stockModel.stringValueParse = stockModel.code + stockModel.name + stockModel.categories + stockModel.stockType.name;

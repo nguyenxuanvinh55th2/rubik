@@ -47,9 +47,7 @@ class Checkout extends React.Component {
 		let { info, emailError, nameError, mobileError, addressError } = this.state;
     if (getInVoice) {
       return (
-
         <div>
-          {/* <Header/> */}
           <div className="checkout">
             <div className="container">
               <h3>THANH TOÁN</h3>
@@ -190,7 +188,6 @@ class Checkout extends React.Component {
               </p>
             </div>
           </div>
-          {/* <Footer/> */}
         </div>
       )
     } else {

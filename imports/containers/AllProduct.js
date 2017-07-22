@@ -21,8 +21,38 @@ const POSTS = gql `
 export default compose (
   graphql(POSTS, {
     options: (ownProps) => {
-      let query ={
-        active: true
+      let query = {};
+      if(ownProps.params.stockTypeId){
+        query ={
+          active: true,
+          'stockType._id': ownProps.params.stockTypeId
+        }
+      }
+      else if (ownProps.params.name) {
+        query ={
+          active: true,
+          categories: ownProps.params.name
+        }
+      }
+      else if (ownProps.params.keyCode) {
+        query = {
+          $and: [
+            {
+              $or: [
+                {code: {$regex: ownProps.params.keyCode, $options: 'iu'}},
+                {name: {$regex: ownProps.params.keyCode, $options: 'iu'}},
+                {origin: {$regex: ownProps.params.keyCode, $options: 'iu'}},
+                {'stockType.name': {$regex: ownProps.params.keyCode, $options: 'iu'}},
+                {categories: {$regex: ownProps.params.keyCode, $options: 'iu'}}
+              ]
+            },{ active: true }
+          ]
+        }
+      }
+      else {
+        query ={
+          active: true
+        }
       }
       return {
         variables: {

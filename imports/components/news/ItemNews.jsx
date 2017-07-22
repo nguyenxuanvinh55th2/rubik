@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router'
-
+import moment from 'moment';
 export default class SingleNews extends React.Component {
 	constructor(props) {
 		super(props);
@@ -18,11 +18,10 @@ export default class SingleNews extends React.Component {
 						<p>{this.props.value.description}</p>
 					</div>
 					<div className="meta">
-						<p>Viết bởi <Link to={linkDat}><span className="author">Lao ba dao</span></Link>, Đăng ngày <span className="date">dff</span></p>
+						<p>Viết bởi <Link to={linkDat}><span className="author">Lão Bá Đạo</span></Link>, Đăng ngày <span className="date">{moment(this.props.value.createdAt).format('HH:mm DD/MM/YYYY')}</span></p>
 					</div>
 				</div>
 			</div>
-
 		)
 	}
 }
