@@ -11,3 +11,9 @@ export function addNotificationMute(detail){
         detail
     }
 }
+export function changeHeader(index){
+    return {
+        type: 'CHANGE_HEADER',
+        index
+    }
+}
