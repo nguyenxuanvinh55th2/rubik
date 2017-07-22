@@ -14,9 +14,9 @@ class InvoiceDetail extends React.Component {
     let { item } = this.props;
     console.log("message", item);
     return (
-      <tr style={{borderBottom: '1px solid #8f8f8d'}}>
-          <td style={{textAlign: 'left'}}>
-              <img width="105"
+      <tr>
+          <td style={{textAlign: 'center', padding: 5}}>
+              <img width="75"
                   src={item.stockModel.images && item.stockModel.images[0] ? item.stockModel.images[0].file : 'https://i1117.photobucket.com/albums/k593/ngocsang1501/st4Sp6Aw_zpsdaqtubup.jpg'} />
           </td>
           <td style={{textAlign: 'center'}}>{item.stockModel.name}</td>
