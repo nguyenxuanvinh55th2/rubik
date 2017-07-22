@@ -34,6 +34,21 @@ export default compose (
           categories: ownProps.params.name
         }
       }
+      else if (ownProps.params.keyCode) {
+        query = {
+          $and: [
+            {
+              $or: [
+                {code: {$regex: ownProps.params.keyCode, $options: 'iu'}},
+                {name: {$regex: ownProps.params.keyCode, $options: 'iu'}},
+                {origin: {$regex: ownProps.params.keyCode, $options: 'iu'}},
+                {'stockType.name': {$regex: ownProps.params.keyCode, $options: 'iu'}},
+                {categories: {$regex: ownProps.params.keyCode, $options: 'iu'}}
+              ]
+            },{ active: true }
+          ]
+        }
+      }
       else {
         query ={
           active: true

@@ -78,7 +78,7 @@ class Home extends React.Component {
             }
             </div>
             <p className="text-center">
-              <Link to={'#'} className="btn-more">Xem thêm</Link>
+              <Link to={'/san-pham'} className="btn-more">Xem thêm</Link>
             </p>
           </div>
         </div>
@@ -93,7 +93,7 @@ class Home extends React.Component {
             }
             </div>
             <p className="text-center">
-              <Link to={'#'} className="btn-more">Xem thêm</Link>
+              <Link to={'/san-pham'} className="btn-more">Xem thêm</Link>
             </p>
           </div>
         </div>

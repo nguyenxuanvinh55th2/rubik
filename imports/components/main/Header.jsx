@@ -19,8 +19,8 @@ export default class Header extends React.Component {
     menuMobile();
     removeMenu();
   }
-  onKeyPress(event) {
-    if((event.keyCode == 13 || event.charCode == 13) && !this.state.keyCode){
+  onKeyPressHandle(event) {
+    if((event.keyCode == 13 || event.charCode == 13) && this.state.keyCode){
       browserHistory.push(`/san-pham/${this.state.keyCode}`)
     }
   }
@@ -35,7 +35,7 @@ export default class Header extends React.Component {
                   <div className="form-group">
                     <input type="text" className="form-control" value={this.state.keyCode} onChange={({target}) =>{
                       this.setState({keyCode: target.value})
-                    }} placeholder="Tìm kiếm" onKeyPress={(event) => this.onKeyPress(event)}/>
+                    }} placeholder="Tìm kiếm" onKeyPress={this.onKeyPressHandle.bind(this)}/>
                     <Link className="icon-search">
                       <i className="fa fa-search" aria-hidden="true"></i>
                     </Link>

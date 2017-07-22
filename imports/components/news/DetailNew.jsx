@@ -17,14 +17,36 @@ class DetailNew extends React.Component {
   }
 	render() {
 		let linkDat = 'https://www.facebook.com/badathb?hc_ref=ARTZmrU2-LeqNyyLYFlUDFcz3EV8QSvZVjOMcl9xneT6OCcQedn6rCxNZ-0765zS4lI&fref=nf';
-    if(!this.props.data.post){
-      return (
-				<div className="item-slider">
-					<div className="loading">
-							<i className="fa fa-spinner fa-spin" style={{fontSize: 20}}></i>
+    if(!this.props.data.post || this.props.data.loading){
+			if(this.props.data.loading){
+				return (
+					<div className="item-slider">
+						<div className="loading">
+								<i className="fa fa-spinner fa-spin" style={{fontSize: 20}}></i>
+						</div>
 					</div>
-				</div>
-      )
+	      )
+			}
+			else {
+				return (
+					<div className="column">
+						<p className="text-center">Xin lỗi, không tìm thấy sản phẩm bạn yêu cầu, vui lòng liên hệ với shop để được hỗ trợ.</p>
+						<p className="text-center">Bạn có thể theo dõi thông tin của shop trên facebook
+								<span style={{padding: '0 10px'}}>
+									<a href="https://www.facebook.com/rubiknt/" target="blank">
+										<i className="fa fa-facebook" aria-hidden="true" style={{fontSize: 20, color: '#f94949'}}></i>
+									</a>
+							</span>
+							hoặc tại kênh youtube
+							 <span style={{padding: '0 10px'}}>
+								 <a href="https://www.youtube.com/channel/UCdrq9JuGSPd0aCJH-tAOXZQ" target="blank">
+										<i className="fa fa-youtube-play" aria-hidden="true" style={{fontSize: 20, color: '#f94949'}}></i>
+									</a>
+							</span>
+						</p>
+					</div>
+				)
+			}
     }else {
       return (
         <div id="news">
