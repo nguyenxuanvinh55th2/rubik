@@ -93,7 +93,7 @@ class Home extends React.Component {
             <div className="two-space"></div>
             <div className="row">
               {< Product {...this.props} stockModels = {
-                this.props.data.stockModels
+                this.props.data.getTopStockModel
               } />
             }
             </div>
@@ -111,6 +111,18 @@ class Home extends React.Component {
 const STOCK_MODEL_QUERY = gql `
     query stockModels($limit: Int){
       stockModels(limit: $limit) {
+          _id
+          name
+					images {
+						_id
+						file
+					}
+          price isPromotion saleOff
+          votes {
+            stars
+          }
+      }
+      getTopStockModel(limit: $limit) {
           _id
           name
 					images {

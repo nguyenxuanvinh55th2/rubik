@@ -1,5 +1,25 @@
 import { Classifies } from '../../../../collections/classifies'
 
+const getSaleCountOfStockModel = (stockModelIds) => {
+  let invoiceDetails = InvoiceDetails.find({'stockModel._id': {$in: stockModelIds}}).map(item => {
+    return {
+      stockModelId: item.stockModel._id,
+      quantity: item.quantity
+    }
+  });
+  invoiceDetails = __.groupBy(invoiceDetails, item => item.stockModelId);
+  __.forEach(stockModelIds, item => {
+    let count = 0;
+    if(invoiceDetails[item]) {
+      __.forEach(invoiceDetails[item], elm => count += elm.quantity);
+      invoiceDetails[item] = count;
+    } else {
+      invoiceDetails[item] = 0;
+    }
+  });
+  return invoiceDetails;
+}
+
 const rootQuery = {
   categories: (_, {}) => {
     return Classifies.find({isCategory: true, active: true}).fetch();
@@ -72,8 +92,22 @@ const rootQuery = {
     }
   },
   getTopStockModel: (_, {limit}) => {
-    let invoice = [];
-    return []
+    let stockModelsWithCount = [];
+    let stockModels = StockModels.find({}).fetch();
+    let invoiceWithCount = getSaleCountOfStockModel(stockModels.map(item => item._id));
+    console.log("invoiceWithCount ", invoiceWithCount);
+    let stock;
+    __.forEach(stockModels, item => {
+      stock = {
+        _id: item._id,
+        stockModel: item,
+        quantity: invoiceWithCount[item._id]
+      }
+      stockModelsWithCount.push(stock);
+    })
+    stockModelsWithCount = stockModelsWithCount.sort((a, b) => b.quantity - a.quantity).slice(0, limit);
+    console.log("stockModels ", stockModelsWithCount);
+    return stockModelsWithCount.map(item => item.stockModel);
   }
 }
 export default rootQuery;
