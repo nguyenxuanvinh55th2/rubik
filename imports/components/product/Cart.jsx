@@ -15,6 +15,7 @@ import Rating from './Rating.jsx';
 class Cart extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {quantity: null};
   }
 
   removeInvoiceDetail(_id) {
@@ -77,7 +78,14 @@ class Cart extends React.Component {
                         {__.map(getInVoice.invoiceDetails, (item, idx) => (
                           <tr key={idx}>
                             <td>{item.stockModel.name}</td>
-                            <td>{item.quantity}</td>
+                            <td style={{display: 'flex', flexDirection: 'row',justifyContent: 'center'}}>
+                              <input value={this.state.quantity ? this.state.quantity : item.quantity} style={{width: 75}} type="number" className="form-control" onChange={({target}) => {
+                                  this.setState({quantity: parseInt(target.value)});
+                                }}
+                                onBlur={() => {
+                                  let token = localStorage.getItem('docId');
+                                  this.updateInvoiceDetail(token, item._id, this.state.quantity);
+                                }}/></td>
                             <td>{accounting.format(item.stockModel.price - item.stockModel.saleOff) + ' đ'}</td>
                           </tr>
                         ))
