@@ -113,7 +113,7 @@ const rootMutation = {
     info = JSON.parse(info);
     let invoice = Invoices.findOne({_id: token, status: 0});
     let invoiceDetail = InvoiceDetails.findOne({'invoice._id': token, 'stockModel._id': info.stockModel._id});
-    let amount = info.quantity * (invoiceDetail ? invoiceDetail.stockModel.price : info.stockModel.price);
+    let amount = info.quantity * (invoiceDetail ? invoiceDetail.stockModel.price : info.stockModel.price) - info.quantity * (invoiceDetail ? invoiceDetail.stockModel.saleOff : info.stockModel.saleOff);
     let docAmount = invoice.amount + amount;
     let total = docAmount * invoice.discount / 100;
     if(invoiceDetail) {
@@ -129,6 +129,22 @@ const rootMutation = {
       total
     }});
     return
+  },
+  updateInvoiceDetail(_, {token, _id, number}) {
+    let invoice = Invoices.findOne({_id: token, status: 0});
+    let invoiceDetail = InvoiceDetails.findOne({'_id': _id});
+    let amount = number * invoiceDetail.stockModel.price - number * invoiceDetail.stockModel.saleOff;
+    let docAmount = invoice.amount + invoiceDetail.amount + amount;
+    let total = docAmount * invoice.discount / 100;
+    InvoiceDetails.update({_id}, {$inc: {
+      quantity: number,
+      amount: amount
+    }});
+    Invoices.update({_id: token}, {$set: {
+      amount: docAmount,
+      total
+    }});
+    return;
   },
   insertStockType: (_,{ userId, info }) => {
     let user = Meteor.users.findOne({_id: userId});

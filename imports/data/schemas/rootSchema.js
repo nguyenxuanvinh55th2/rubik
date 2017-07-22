@@ -121,6 +121,7 @@ const rootSchema = `
       insertFiles(userId: String, info: String): String
       insertInvoice(token: String!, info: String): String
       insertInvoiceDetail(token: String!, info: String): String
+      updateInvoiceDetail(token: String!, _id: String!, number: Int): String
       removeStockType(userId: String!, _id: String!): String
       insertStockType(userId: String!, info: String!): String
       removeInvoiceDetail(_id: String!): String

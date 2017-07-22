@@ -6,7 +6,7 @@ const rootQuery = {
   },
   stockModels: (_, {limit}) => {
     if(limit) {
-      return StockModels.find({active: true}, {limit}, {sort: {createdAt: -1}}).fetch();
+      return StockModels.find({active: true}, {sort: {createdAt: -1}}).fetch().slice(0, limit);
     } else {
         return StockModels.find({active: true}, {sort: {createdAt: -1}}).fetch();
     }
@@ -31,7 +31,7 @@ const rootQuery = {
   },
   posts: (_,{limit}) => {
     if(limit){
-      return Posts.find({active: true},{limit}, {'stockType._id': {$ne: '0'}}, {sort: {createdAt: -1}}).fetch();
+      return Posts.find({active: true}, {'stockType._id': {$ne: '0'}}, {sort: {createdAt: -1}}).fetch().slice(0, limit);
     }
     else {
       return Posts.find({active: true}, {'stockType._id': {$ne: '0'}}, {sort: {createdAt: -1}}).fetch();
