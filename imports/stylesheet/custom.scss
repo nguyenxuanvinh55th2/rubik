@@ -6,6 +6,10 @@ a{
 	color: #898989;
 	cursor: pointer;
 }
+a:focus{
+	color: none!important;
+	text-decoration: none;
+}
 img{
 	max-width: 100%;
 }

@@ -58,7 +58,7 @@ class DetailNew extends React.Component {
               </div>
               <div className="contents col-md-9">
                 <div id="description"></div>
-								<p>Viết bởi <Link to={linkDat}><span className="author">Lão Bá Đạo</span></Link>, Đăng ngày <span className="date">{moment(this.props.value.createdAt).format('HH:mm DD/MM/YYYY')}</span></p>
+								<p>Viết bởi <Link to={linkDat}><span className="author">Lão Bá Đạo</span></Link>, Đăng ngày <span className="date">{moment(this.props.data.post.createdAt).format('HH:mm DD/MM/YYYY')}</span></p>
               </div>
             </div>
           </div>

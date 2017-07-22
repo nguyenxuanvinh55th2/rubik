@@ -445,7 +445,7 @@ class StockModelForm extends React.Component {
                       }
                     }} onChange={({target}) => {
                       this.setState((prevState) => {
-                        prevState.data.averagePrice = target.value;
+                        prevState.data.averagePrice = target.rawValue;
                         return prevState;
                       });
                     }}/>
@@ -463,7 +463,7 @@ class StockModelForm extends React.Component {
                       }
                     }} onChange={({target}) => {
                       this.setState((prevState) => {
-                        prevState.data.price = target.value;
+                        prevState.data.price = target.rawValue;
                         return prevState;
                       });
                     }}/>
@@ -496,7 +496,7 @@ class StockModelForm extends React.Component {
                       }
                     }} disabled={!data.isPromotion} onChange={({target}) => {
                       this.setState((prevState) => {
-                        prevState.data.saleOff = target.value;
+                        prevState.data.saleOff = target.rawValue;
                         return prevState;
                       });
                     }}/>

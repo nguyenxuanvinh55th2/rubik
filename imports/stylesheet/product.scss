@@ -78,6 +78,10 @@
 		}
 	}
 }
+.rate-cu{
+	color: #898989;
+	text-decoration: line-through;
+}
 .info-product{
 	text-align: center;
 	overflow: hidden;
@@ -215,7 +219,7 @@
 			text-decoration: none;
 			color: #ed1e24;
 		}
-		a:after{
+		span:after{
 			    content: "\f055";
 			        font: normal normal normal 14px/1 FontAwesome;
 			        position: absolute;
@@ -223,10 +227,10 @@
 			        top: 0;
 
 		}
-		a[aria-expanded="true"]{
+		span[aria-expanded="true"]{
 			color: #ed1e24;
 		}
-		a[aria-expanded="true"]:after{
+		span[aria-expanded="true"]:after{
 			  content: "\f056";
 			        font: normal normal normal 14px/1 FontAwesome;
 			        position: absolute;
@@ -236,6 +240,9 @@
 	}
 	p{
 		padding-left: 10px;
+		&:hover{
+			color: #ed1e24;
+		}
 	}
 }
 .sec-tab {
@@ -429,5 +436,8 @@
 	.search-custormer {
 		flex-direction: column;
 		margin-bottom: 15px;
+	}
+	.product-iphone.col-sm-4{
+		width: 100%;
 	}
 }

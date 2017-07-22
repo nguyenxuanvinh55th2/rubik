@@ -228,12 +228,16 @@ class DetailProduct extends React.Component {
                         return (
                           <div key={idx}>
                             <h4>
-                              <a role="button" data-toggle="collapse" href={`#${stockType._id}`} aria-expanded="false" aria-controls="collapsePlus8" data-parent="#accordion" onClick={() => {console.log('dd');}}>{stockType.name}</a>
+                    					<a onClick={() => browserHistory.push(`/san-pham/loai-hang/${stockType._id}`)}>{stockType.name}
+                              </a>
+                              <span  role="button" data-toggle="collapse" href={`#${stockType._id}`} aria-expanded="false" aria-controls="collapsePlus8" data-parent="#accordion"></span>
                             </h4>
                             <div className="more collapse" id={stockType._id}>
                               {
                                 __.map(stockType.categories, (category, index) => {
-                                  return <p style={{cursor: 'pointer'}} key={index} ref={category._id}>{category.name}</p>
+                                  return <p onClick={() => {
+                                    browserHistory.push(`/san-pham/chung-loai/${category.name}`)
+                                  }} style={{cursor: 'pointer'}} key={index} ref={category._id}>{category.name}</p>
                                 })
                               }
                             </div>

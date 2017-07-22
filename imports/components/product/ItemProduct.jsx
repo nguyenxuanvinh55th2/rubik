@@ -90,8 +90,19 @@ class ItemProduct extends React.Component {
                 <Rating {...this.props} iconSize={20} factor={'10%'} rating = {this.props.value.votes} allowEdit = {false} showStarText = {false}/>
               </div>
             </div>
-            <p>{accounting.format(this.props.value.price)}
-              đ</p>
+            {
+              this.props.value.isPromotion ?
+              <p>
+                <span className="rate-cu">{accounting.formatNumber(this.props.value.price)}đ</span> <span>{accounting.formatNumber(this.props.value.price - this.props.value.saleOff)}đ</span>
+              </p>
+              :
+              <p>
+                {
+                  accounting.formatNumber(this.props.value.price)
+                }
+                đ
+              </p>
+            }
           </div>
         </div>
       </div>

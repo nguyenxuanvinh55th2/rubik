@@ -41,7 +41,7 @@ export default class AllPoduct extends React.Component {
               </div>
               <div className="contents col-md-9">
                 <div className="row search-custormer">
-                  <div className="col-sm-12 col-md-8 col-lg-8">
+                  <div className="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1">
                     <AutocompleteStockModel
                       ref={ref=>this.comboboxStock=ref}
                       valueKey="stringValueParse"
@@ -85,7 +85,8 @@ export default class AllPoduct extends React.Component {
                       {
                         __.map(this.props.findProduct.stockModels, (value,idx) => {
                           return(
-                            <div key={idx} className="col-sm-4 col-xs-12 col-md-3">
+
+                            <div key={idx} className="product-iphone col-sm-4 col-xs-6 col-md-3">
                               <div className="item-product">
                                 <div className="box-item">
                                   <img src={value.images [0] ? value.images[0].file : 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/sp1_zpssqbqw0b3.png'} alt=""/>
