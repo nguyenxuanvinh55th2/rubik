@@ -48,7 +48,7 @@ class Cart extends React.Component {
 	                          </div>
 	                          <div className="col-sm-9">
 	                            <h4>{item.stockModel.name}</h4>
-	                            <h4>Danh mục: {item.stockModel.categories.toString()}</h4>
+	                            <h4>Danh mục: {item.stockModel.categories ? item.stockModel.categories.toString() : ''}</h4>
 	                            <h4>{'Giá: ' + accounting.format(item.stockModel.price - item.stockModel.saleOff) + 'đ'}</h4>
 	                            <div className="group-star">
                                 <Rating {...this.props} iconSize={20} factor={'10%'} rating = {item.votes} allowEdit = {false} showStarText = {false}/>

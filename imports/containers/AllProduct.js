@@ -5,6 +5,16 @@ import AllProduct from '../components/product/AllProduct.jsx';
 
 const ITEMS_PER_PAGE = 10;
 
+const INSERT_INVOICE = gql `
+    mutation insertInvoice($token: String!, $info: String){
+        insertInvoice(token: $token, info: $info)
+}`
+
+const INSERT_INVOICE_DETAIL = gql `
+    mutation insertInvoiceDetail($token: String!, $info: String){
+        insertInvoiceDetail(token: $token, info: $info)
+}`
+
 const POSTS = gql `
     query findProduct($query: String, $offset: Int, $limit: Int) {
       findProduct(query: $query, offset: $offset, limit: $limit){
@@ -84,5 +94,25 @@ export default compose (
        }
      },
     }),
+  }),
+  graphql(INSERT_INVOICE, {
+    props: ({mutate}) => ({
+      insertInvoice: (token, info) => mutate({
+        variables: {
+          token,
+          info
+        }
+      })
     })
+  }),
+  graphql(INSERT_INVOICE_DETAIL, {
+    props: ({mutate}) => ({
+      insertInvoiceDetail: (token, info) => mutate({
+        variables: {
+          token,
+          info
+        }
+      })
+    })
+  })
 )(AllProduct);

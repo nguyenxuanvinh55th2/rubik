@@ -8,7 +8,8 @@ const defaultState = {
   users: {},
   notification: {
     fetchData: false,
-    level: '', message: ''
+    level: '', message: '',
+    header: 'home'
   },
 }
 const store = createStore(

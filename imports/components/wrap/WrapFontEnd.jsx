@@ -12,9 +12,9 @@ export default class WrapFontEnd extends React.Component {
     delete childProps.children;
     return (
       <div>
-        <Header/>
+        <Header {...this.props}/>
           {React.cloneElement(this.props.children, childProps)}
-          <Footer/>
+          <Footer {...this.props}/>
           <div className="pin-top">
             <Link>
               <i className="fa fa-long-arrow-up" aria-hidden="true"></i>

@@ -7,6 +7,7 @@ import ItemProduct from './ItemProduct.jsx';
 import __ from 'lodash';
 import {Link, browserHistory} from 'react-router';
 import accounting from 'accounting';
+import moment from 'moment';
 import Rating from './Rating.jsx';
 
 import Select from 'react-select';
@@ -18,8 +19,63 @@ export default class AllPoduct extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      searchText: ''
+      searchText: '',
     }
+  }
+  componentWillMount(){
+		if(this.props.changeHeader){
+			this.props.changeHeader('product');
+		}
+	}
+  codeBill(number) {
+    var randomChar = '',
+      string = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+    for (var i = 0; i < number; i++) {
+      randomChar += string.substr(Math.floor(Math.random() * string.length), 1);
+    }
+    return randomChar;
+  }
+
+  addToCart(linkTo, stockModel) {
+    let token = localStorage.getItem('invoiceId');
+    let stockModelById = __.cloneDeep(stockModel);
+    if (!token || token === '') {
+      token = 'DH' +
+        '-' + this.codeBill(4);
+      localStorage.setItem('invoiceId', token);
+    }
+    let invoice = {
+      _id: token,
+      code: token,
+      status: 0,
+      customer: {},
+      amount: 0,
+      discount: 100,
+      total: 0,
+      createdAt: moment().valueOf(),
+      shipFee: 0
+    }
+    let imageId = stockModelById.images.map(item => item._id);
+    delete stockModelById['images'];
+    stockModelById['images'] = imageId;
+    let detail = {
+      stockModel: stockModelById,
+      quantity: 1,
+      amount: 1 * stockModelById.price,
+      invoice: {
+        _id: token,
+        code: token
+      },
+      createdAt: moment().valueOf()
+    }
+    invoice = JSON.stringify(invoice);
+    detail = JSON.stringify(detail);
+    this.props.insertInvoice(token, invoice).then(() => {
+      this.props.insertInvoiceDetail(token, detail).then(() => {
+        browserHistory.push(linkTo);
+        this.props.addNotificationMute({fetchData: true, message: 'Sản phẩm ' + stockModelById.name + ' đã được thêm vào giỏ hàng của bạn', level:'success'});
+      });
+    })
   }
   render(){
     if(!this.props.findProduct.stockModels){
@@ -85,15 +141,14 @@ export default class AllPoduct extends React.Component {
                       {
                         __.map(this.props.findProduct.stockModels, (value,idx) => {
                           return(
-
                             <div key={idx} className="product-iphone col-sm-4 col-xs-6 col-md-3">
                               <div className="item-product">
                                 <div className="box-item">
                                   <img src={value.images [0] ? value.images[0].file : 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/sp1_zpssqbqw0b3.png'} alt=""/>
                                   <Link to={`/chi-tiet-san-pham/${value._id}`} className="hover-product"></Link>
                                   <div className="chart">
-                                    <Link to={'#'}>
-                                      <i className="fa fa-shopping-cart" aria-hidden="true"></i>
+                                    <Link >
+                                      <i  onClick={this.addToCart.bind(this, '/gio-hang', value)} className="fa fa-shopping-cart" aria-hidden="true"></i>
                                     </Link>
                                   </div>
                                   <div className="link-detail">

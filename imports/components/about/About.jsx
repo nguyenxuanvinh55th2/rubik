@@ -8,6 +8,11 @@ class About extends React.Component {
   constructor(props) {
     super(props)
   }
+  componentWillMount(){
+		if(this.props.changeHeader){
+			this.props.changeHeader('about');
+		}
+	}
   render(){
     let defaultString = `<p>Chào các bạn đến với Shop Rubik Nha Trang website chính thức của Youtuber Lão Bá Đạo.
                         Bên mình cung cấp nhiều loại rubik khác nhau từ speed cube đến biến thể chính hãng với giá tốt.

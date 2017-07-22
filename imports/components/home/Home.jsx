@@ -16,6 +16,11 @@ class Home extends React.Component {
   componentDidMount() {
     showProduct();
   }
+  componentWillMount(){
+		if(this.props.changeHeader){
+			this.props.changeHeader('home');
+		}
+	}
   render() {
     return (
       <div>

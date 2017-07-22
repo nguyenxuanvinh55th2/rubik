@@ -10,6 +10,11 @@ export default class News extends React.Component {
 	constructor(props) {
 		super(props);
 	}
+	componentWillMount(){
+		if(this.props.changeHeader){
+			this.props.changeHeader(this.props.params._id ? 'news': 'tutorial');
+		}
+	}
 	render() {
 		if(!this.props.getPostTypeLimit.data){
 			return(

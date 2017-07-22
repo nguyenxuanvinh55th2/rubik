@@ -13,7 +13,7 @@ function mapStateToProps(state){
   return {
     users: state.users,
     notification: state.notification,
-    header: 0
+    header: state.header
   }
 }
 

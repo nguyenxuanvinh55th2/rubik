@@ -65,19 +65,19 @@ export default class Header extends React.Component {
                 <div className="col-sm-9 col-xs-8 text-right">
                   <nav className=" hidden-xs">
                     <ul>
-                      <li className="active">
+                      <li className={this.props.header && this.props.header == 'home' ? 'active' : ''}>
                         <Link to={'/'}>TRANG CHỦ</Link>
                       </li>
-                      <li>
+                      <li className={this.props.header && this.props.header == 'about' ? 'active' : ''}>
                         <Link to={'/gioi-thieu'}>GIỚI THIỆU</Link>
                       </li>
-                      <li>
+                      <li className={this.props.header && this.props.header == 'product' ? 'active' : ''}>
                         <Link to={'/san-pham'}>SẢN PHẨM</Link>
                       </li>
-                      <li>
+                      <li className={this.props.header && this.props.header == 'news' ? 'active' : ''}>
                         <Link to={`/tin-tuc/1`}>TIN TỨC</Link>
                       </li>
-                      <li>
+                      <li className={this.props.header && this.props.header == 'tutorial' ? 'active' : ''}>
                         <Link to={'/huong-dan-choi/2'}>HƯỚNG DẪN CHƠI</Link>
                       </li>
                       <li>

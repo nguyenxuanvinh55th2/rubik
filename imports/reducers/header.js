@@ -1,4 +1,4 @@
-function header(state = [], action) {
+function header(state = 'home', action) {
     switch (action.type) {
         case 'CHANGE_HEADER':
             return action.index;
