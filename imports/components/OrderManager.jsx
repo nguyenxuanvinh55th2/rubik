@@ -406,6 +406,7 @@ class OrderDevoice extends React.Component {
                                   <th style={{width: 110, textAlign: 'center'}}>Hình ảnh</th>
                                   <th style={{width: 110, textAlign: 'center'}}>Sản phẩm</th>
                                   <th style={{width: 145, textAlign: 'center'}}>Giá</th>
+                                  <th style={{width: 145, textAlign: 'center'}}>Số lượng tồn</th>
                                   <th style={{width: 100, textAlign: 'center'}}>Số lượng</th>
                                   <th style={{width: 145, textAlign: 'center'}}>Tổng tiền</th>
                               </thead>
@@ -475,6 +476,7 @@ const INVOICE_QUERY = gql `
 						}
 						quantity
 						amount
+            countInStore
 					}
         }
 }`

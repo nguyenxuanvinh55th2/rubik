@@ -131,12 +131,13 @@ const rootMutation = {
     return
   },
   updateInvoiceDetail(_, {token, _id, number}) {
+    console.log("number ", number);
     let invoice = Invoices.findOne({_id: token, status: 0});
     let invoiceDetail = InvoiceDetails.findOne({'_id': _id});
     let amount = number * invoiceDetail.stockModel.price - number * invoiceDetail.stockModel.saleOff;
-    let docAmount = invoice.amount + invoiceDetail.amount + amount;
+    let docAmount = invoice.amount - invoiceDetail.amount + amount;
     let total = docAmount * invoice.discount / 100;
-    InvoiceDetails.update({_id}, {$inc: {
+    InvoiceDetails.update({_id}, {$set: {
       quantity: number,
       amount: amount
     }});

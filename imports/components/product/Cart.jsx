@@ -83,8 +83,10 @@ class Cart extends React.Component {
                                   this.setState({quantity: parseInt(target.value)});
                                 }}
                                 onBlur={() => {
-                                  let token = localStorage.getItem('docId');
-                                  this.updateInvoiceDetail(token, item._id, this.state.quantity);
+                                  let token = localStorage.getItem('invoiceId');
+                                  this.props.updateInvoiceDetail(token, item._id, this.state.quantity).then(() => {
+                                    this.props.data.refetch();
+                                  });
                                 }}/></td>
                             <td>{accounting.format(item.stockModel.price - item.stockModel.saleOff) + ' đ'}</td>
                           </tr>
@@ -186,7 +188,7 @@ const REMOVE_INVOICE_DETAIL = gql `
 
 const UPDATE_INVOICE_DETAIL = gql `
     mutation updateInvoiceDetail($token: String!, $_id: String!, $number: Int){
-        removeInvoiceDetail(token: $token, _id: $_id, number: $number)
+        updateInvoiceDetail(token: $token, _id: $_id, number: $number)
 }`
 
 export default compose(graphql(INVOICE_QUERY, {
@@ -202,9 +204,12 @@ export default compose(graphql(INVOICE_QUERY, {
   props: ({mutate}) => ({
     removeInvoiceDetail: (_id) => mutate({variables: {
         _id
-      }}),
+    }}),
+  })
+}), graphql(UPDATE_INVOICE_DETAIL, {
+  props: ({mutate}) => ({
     updateInvoiceDetail: (token, _id, number) => mutate({variables: {
         token, _id, number
       }})
   })
-}),)(Cart);
+}))(Cart);
