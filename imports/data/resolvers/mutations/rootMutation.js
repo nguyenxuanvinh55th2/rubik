@@ -2,11 +2,10 @@ import { Classifies } from '../../../../collections/classifies';
 import { Email } from 'meteor/email';
 
 function sendMail_Notification(notification){
-  console.log("notification ", notification);
   let content = '<div>' + notification + '</div>';
   Email.send({
       from: 'noreply.lokatech@gmail.com',
-      bcc: 'sanghuynh@gmail.com',
+      bcc: 'sanghuynhnt95@gmail.com',
       subject: 'Thông báo đặt hàng',
       html: content
   }, (err) => {
@@ -131,7 +130,6 @@ const rootMutation = {
     return
   },
   updateInvoiceDetail(_, {token, _id, number}) {
-    console.log("number ", number);
     let invoice = Invoices.findOne({_id: token, status: 0});
     let invoiceDetail = InvoiceDetails.findOne({'_id': _id});
     let amount = number * invoiceDetail.stockModel.price - number * invoiceDetail.stockModel.saleOff;
@@ -181,11 +179,24 @@ const rootMutation = {
   },
   orderDevoice: (_, {token, info}) => {
     info = JSON.parse(info);
-    sendMail_Notification(info.name + ' Đã đặt hàng trên website của bạn');
+    //sendMail_Notification(info.name + ' Đã đặt hàng trên website của bạn');
     return Invoices.update({_id: token}, {$set: {
       customer: info,
       status: 1
-    }});
+    }}, (err) => {
+      console.log("order devoice");
+      if(err) {
+      } else {
+          notifacation = {
+            title: info.name + ' đã đặt hàng trên website của bạn',
+            isReaded: false,
+            link: '/orderDevoice',
+            type: 'order',
+            createdAt: moment().valueOf()
+          }
+          Notifications.insert(notifacation);
+      }
+    });
   },
   ratingStockModel: (_, {token, _id, info}) => {
     info = JSON.parse(info);
