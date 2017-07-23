@@ -80,6 +80,7 @@ const rootSchema = `
       invoice: Invoice
       createdAt: Float
       votes: [Vote]
+      color: String
     }
     type Post {
       _id: String
@@ -115,6 +116,7 @@ const rootSchema = `
       findProduct(query: String, offset: Int, limit: Int): [StockModel]
       getAllStockModelSearch(keyCode: String): [StockModel]
       getTopStockModel(limit: Int) : [StockModel]
+      invoicesByDate(dateStart: Float, dateEnd: Float): [Invoice]
     }
     type Mutation {
       removeCategories(userId: String!, _id: String!): String

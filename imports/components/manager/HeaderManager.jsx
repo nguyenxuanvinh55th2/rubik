@@ -60,7 +60,8 @@ export default class HeaderManager extends React.Component {
                 <a className="dropdown-toggle" data-toggle="dropdown">Kho cửa hàng
                 <span className="caret"></span></a>
                 <ul className="dropdown-menu">
-                  <li><a onClick={() => browserHistory.push('/orderDevoice')}>Quản lý đơn hàng</a></li>
+                  <li><a onClick={() => browserHistory.push('/orderDevoice')}>Đặt hàng</a></li>
+                  <li><a onClick={() => browserHistory.push('/invoiceManage')}>Quản lý đơn hàng</a></li>
                 </ul>
               </li>
               <li><a onClick={() => browserHistory.push('/post')}>Bài đăng</a></li>

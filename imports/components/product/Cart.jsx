@@ -50,6 +50,9 @@ class Cart extends React.Component {
 	                            <h4>{item.stockModel.name}</h4>
 	                            <h4>Danh mục: {item.stockModel.categories ? item.stockModel.categories.toString() : ''}</h4>
 	                            <h4>{'Giá: ' + accounting.format(item.stockModel.price - item.stockModel.saleOff) + 'đ'}</h4>
+	                            <h4 style={{display: 'flex', flexDirection: 'row',justifyContent: 'flex-start'}}>{'Màu: '}&nbsp;
+                                <div style={{width: 15, height: 15, backgroundColor: item.color, borderRadius: '100%'}}></div>
+                              </h4>
 	                            <div className="group-star">
                                 <Rating {...this.props} iconSize={20} factor={'10%'} rating = {item.votes} allowEdit = {false} showStarText = {false}/>
 	                            </div>
@@ -158,6 +161,7 @@ const INVOICE_QUERY = gql `
 					shipFee
 					invoiceDetails {
 						_id
+            color
 						stockModel {
 							_id categories
 							code

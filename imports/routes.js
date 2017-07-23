@@ -27,6 +27,7 @@ import DetailNew from './components/news/DetailNew.jsx';
 import EditAbout from './components/theme/EditAbout.jsx';
 import News from './containers/News';
 import AllProduct from './containers/AllProduct.js';
+import InvoiceManagement from './components/invoiceManagement/InvoiveManagement.jsx';
 
 function requireAuth(nextState, replace){
   if (!Meteor.userId()) {
@@ -62,6 +63,7 @@ export const renderRoutes = () => (
         <Route path="/stockModelForm/:_id" component={StockModelForm}/>
         <Route path="/stockType" component={StockType}/>
         <Route path="/orderDevoice" component={OrderDevoice}/>
+        <Route path="/invoiceManage" component={InvoiceManagement}/>
         <Route path="/post" component={Post}/>
         <Route path="/postForm" component={PostForm}/>
         <Route path="/postForm/:_id" component={PostForm}/>
