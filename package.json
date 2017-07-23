@@ -33,6 +33,7 @@
     "react-addons-pure-render-mixin": "^15.6.0",
     "react-apollo": "^1.4.3",
     "react-color": "^2.13.1",
+    "react-date-range": "^0.9.4",
     "react-dom": "^15.5.4",
     "react-dropzone": "^3.13.3",
     "react-grid-layout": "^0.14.6",

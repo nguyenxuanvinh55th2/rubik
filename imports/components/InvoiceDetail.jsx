@@ -21,6 +21,7 @@ class InvoiceDetail extends React.Component {
           </td>
           <td style={{textAlign: 'center'}}>{item.stockModel.name}</td>
           <td style={{textAlign: 'center'}}>{accounting.format(item.stockModel.price) + ' VNĐ'}</td>
+          <td style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}><div style={{width: 15, height: 15, backgroundColor: item.color}}></div></td>
           <td style={{textAlign: 'center'}}>
             { item.countInStore }
           </td>

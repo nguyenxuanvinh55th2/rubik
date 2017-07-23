@@ -8,6 +8,7 @@ import moment from 'moment';
 import ReactPaginate from 'react-paginate';
 
 import {Link, browserHistory} from 'react-router';
+import {SketchPicker, CirclePicker} from 'react-color';
 import SliderDetails from '../home/SliderDetail.jsx'
 import Header from '../main/Header.jsx'
 import Footer from '../main/Footer.jsx'
@@ -78,7 +79,8 @@ class DetailProduct extends React.Component {
       rate: null,
       comment: '',
       name: '',
-      email: ''
+      email: '',
+      choseColor: null
     };
     this.itemPerPage = 2;
   }
@@ -152,6 +154,12 @@ class DetailProduct extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.data.stockModelById && !this.state.choseColor && nextProps.data.stockModelById.colors[0]) {
+      this.setState({choseColor: nextProps.data.stockModelById.colors[0]})
+    }
+  }
+
   codeBill(number) {
     var randomChar = '',
       string = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
@@ -186,6 +194,7 @@ class DetailProduct extends React.Component {
       stockModel: stockModelById,
       quantity: this.state.number,
       amount: this.state.number * stockModelById.price - this.state.number * stockModelById.saleOff,
+      color: this.state.choseColor,
       invoice: {
         _id: token,
         code: token
@@ -282,9 +291,15 @@ class DetailProduct extends React.Component {
                         <h4 className="trangthai">{stockModelById.quantity > 0
                             ? 'Còn hàng'
                             : 'Hết hàng'}</h4>
-                        <h4 className="dmuc">{'Danh mục: ' + (stockModelById.categories
+                        <h4 className="dmuc" >{'Danh mục: ' + (stockModelById.categories
                             ? stockModelById.categories.toString()
                             : '')}</h4>
+                        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
+                          <h4 className="dmuc">{'Màu sắc: '}</h4>
+                          <CirclePicker width={252} colors={stockModelById.colors} circleSize={20} onChange={(color) => {
+                            this.setState({choseColor: color.hex});
+                          }}/>
+                        </div>
                         <h4 className="dmuc" style={{
                           display: 'flex',
                           flexDirection: 'row',
@@ -410,6 +425,7 @@ const STOCK_MODEL_QUERY = gql `
             _id
 						code
             name
+            colors
 						quantity
 						saleOff
             categories

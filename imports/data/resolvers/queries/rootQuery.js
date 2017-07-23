@@ -49,6 +49,16 @@ const rootQuery = {
   invoices: (_, {_id}) => {
     return Invoices.find({status: {$nin: [100, 0, 101]}}, {sort: {createdAt: -1}}).fetch();
   },
+  invoicesByDate: (_, {dateStart, dateEnd}) => {
+    return Invoices.find(
+      {
+        $and: [
+          {createdAt: {$gte: dateStart}},
+          {createdAt: {$lte: dateEnd}}
+        ]
+      },
+    ).fetch();
+  },
   posts: (_,{limit}) => {
     if(limit){
       return Posts.find({active: true}, {'stockType._id': {$ne: '0'}}, {sort: {createdAt: -1}}).fetch().slice(0, limit);
