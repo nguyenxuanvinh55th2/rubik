@@ -299,9 +299,11 @@ class DetailProduct extends React.Component {
                             : '')}</h4>
                         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
                           <h4 className="dmuc">{'Màu sắc: '}</h4>
-                          <CirclePicker width={252} colors={stockModelById.colors} circleSize={20} onChange={(color) => {
-                            this.setState({choseColor: color.hex});
-                          }}/>
+                          <span style={{paddingTop: 17, paddingLeft: 10}}>
+                            <CirclePicker width={252} colors={stockModelById.colors} circleSize={20} onChange={(color) => {
+                              this.setState({choseColor: color.hex});
+                            }}/>
+                          </span>
                         </div>
                         <h4 className="dmuc" style={{
                           display: 'flex',
