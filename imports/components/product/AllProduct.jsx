@@ -14,7 +14,7 @@ import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import match from 'autosuggest-highlight/match';
 import parse from 'autosuggest-highlight/parse';
-
+import LeftProduct from './LeftProduct.jsx';
 export default class AllPoduct extends React.Component {
   constructor(props) {
     super(props)
@@ -80,7 +80,7 @@ export default class AllPoduct extends React.Component {
   render(){
     if(!this.props.findProduct.stockModels){
       return(
-        <div className="item-slider">
+        <div className="content">
           <div className="loading">
               <i className="fa fa-spinner fa-spin" style={{fontSize: 20}}></i>
           </div>
@@ -89,11 +89,11 @@ export default class AllPoduct extends React.Component {
     }
     else {
       return (
-        <div id="news">
+        <div className="content" id="news">
           <div className="main-content container">
             <div className="row">
               <div className="sidebar col-md-3">
-                <LeftNews {...this.props} />
+                <LeftProduct {...this.props} />
               </div>
               <div className="contents col-md-9">
                 <div className="row search-custormer">
@@ -141,7 +141,7 @@ export default class AllPoduct extends React.Component {
                       {
                         __.map(this.props.findProduct.stockModels, (value,idx) => {
                           return(
-                            <div key={idx} className="product-iphone col-sm-4 col-xs-6 col-md-3">
+                            <div key={idx} className="product-iphone col-sm-4 col-xs-6">
                               <div className="item-product">
                                 <div className="box-item">
                                   <img src={value.images [0] ? value.images[0].file : 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/sp1_zpssqbqw0b3.png'} alt=""/>

@@ -28,7 +28,7 @@ class Cart extends React.Component {
     let {getInVoice} = this.props.data;
     if (getInVoice && getInVoice.invoiceDetails && getInVoice.invoiceDetails.length > 0) {
       return (
-        <div>
+        <div className="content">
           <div className="sec-cart">
             <div className="container">
               <h3 className="text-center">GIỎ HÀNG CỦA BẠN</h3>
@@ -123,7 +123,7 @@ class Cart extends React.Component {
           )
         } else {
             return (
-              <div className="column">
+              <div className="column item-slider">
                 <p className="text-center">Xin lỗi, bạn chưa thêm hàng vào giỏ, vui lòng chọn sản phẩm để thêm vào giỏ hàng<span style={{color: '#f94949'}}><Link to="/san-pham"> Sản phẩm</Link></span></p>
                 <p className="text-center">Bạn có thể theo dõi thông tin của shop trên facebook
                     <span style={{padding: '0 10px'}}>

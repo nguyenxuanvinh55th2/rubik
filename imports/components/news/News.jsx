@@ -12,13 +12,13 @@ export default class News extends React.Component {
 	}
 	componentWillMount(){
 		if(this.props.changeHeader){
-			this.props.changeHeader(this.props.params._id ? 'news': 'tutorial');
+			this.props.changeHeader(this.props.params._id == '1' ? 'news': 'tutorial');
 		}
 	}
 	render() {
 		if(!this.props.getPostTypeLimit.data){
 			return(
-				<div className="item-slider">
+				<div className="content">
 					<div className="loading">
 							<i className="fa fa-spinner fa-spin" style={{fontSize: 20}}></i>
 					</div>
@@ -27,7 +27,7 @@ export default class News extends React.Component {
 		}
 		else {
 			return (
-				<div>
+				<div className="content">
 				<div id="news">
 						<h2 className="text-center">{this.props.params._id == '1' ? 'Tin tức' : 'Hướng dẫn chơi'}</h2>
 					<div className="main-content container">

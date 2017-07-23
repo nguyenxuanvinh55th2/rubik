@@ -9,7 +9,7 @@ class Sliders extends React.Component {
     super(props);
   }
   render() {
-    let defaultImage = 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/img-slider_zpsdjbfpcuh.jpg';
+    let defaultImage = '/imgs/event.jpg';
     if(!this.props.data.slider){
         return(
           <div className="item-slider">

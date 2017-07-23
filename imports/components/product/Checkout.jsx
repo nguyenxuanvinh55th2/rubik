@@ -178,6 +178,10 @@ class Checkout extends React.Component {
                     <p>Thành tiền
                       <span>(Tổng số tiền thanh toán)</span>
                     </p>
+                    <p>
+                      Ship hàng nội thành thành phố 10k/5km
+                    </p>
+                    <p>Ship COD ngoại tỉnh 45k-50k (nhận hàng và trả tiền)</p>
                     <p className="text-right rate">{accounting.format(getInVoice.total) + ' đ'}</p>
 
                   </div>
