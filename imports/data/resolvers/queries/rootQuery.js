@@ -116,6 +116,9 @@ const rootQuery = {
     })
     stockModelsWithCount = stockModelsWithCount.sort((a, b) => b.quantity - a.quantity).slice(0, limit);
     return stockModelsWithCount.map(item => item.stockModel);
+  },
+  notifications: (_) => {
+    return Notifications.find({isReaded: false}).fetch();
   }
 }
 export default rootQuery;

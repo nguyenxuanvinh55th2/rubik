@@ -100,6 +100,14 @@ const rootSchema = `
       image: File
       link: String
     }
+    type Notification {
+      _id: String
+      title: String
+      isReaded: String
+      link: String
+      type: String
+      createdAt: Float
+    }
     type Query {
       categories: [Classify]
       stockModels(limit: Int): [StockModel]
@@ -117,6 +125,7 @@ const rootSchema = `
       getAllStockModelSearch(keyCode: String): [StockModel]
       getTopStockModel(limit: Int) : [StockModel]
       invoicesByDate(dateStart: Float, dateEnd: Float): [Invoice]
+      notifications: [Notification]
     }
     type Mutation {
       removeCategories(userId: String!, _id: String!): String
