@@ -28,12 +28,12 @@ class Cart extends React.Component {
     let {getInVoice} = this.props.data;
     if (getInVoice && getInVoice.invoiceDetails && getInVoice.invoiceDetails.length > 0) {
       return (
-        <div>
+        <div className="content">
           <div className="sec-cart">
             <div className="container">
               <h3 className="text-center">GIỎ HÀNG CỦA BẠN</h3>
               <div className="row">
-                <div className="col-sm-8">
+                <div className="col-xs-12 col-sm-6">
                   <div className="left-cart">
                     {
 											__.map(getInVoice.invoiceDetails, (item, idx) => (
@@ -53,9 +53,6 @@ class Cart extends React.Component {
 	                            <h4 style={{display: 'flex', flexDirection: 'row',justifyContent: 'flex-start'}}>{'Màu: '}&nbsp;
                                 <div style={{width: 15, height: 15, backgroundColor: item.color, borderRadius: '100%'}}></div>
                               </h4>
-	                            <div className="group-star">
-                                <Rating {...this.props} iconSize={20} factor={'10%'} rating = {item.votes} allowEdit = {false} showStarText = {false}/>
-	                            </div>
 	                            <span className="close">
 	                              <i className="fa fa-times" aria-hidden="true" onClick={this.removeInvoiceDetail.bind(this, item._id)}></i>
 	                            </span>
@@ -66,7 +63,7 @@ class Cart extends React.Component {
 										}
                   </div>
                 </div>
-                <div className="col-sm-4">
+                <div className="col-xs-12 col-sm-6">
                   <div className="right-cart">
                     <h4>Thông tin đơn hàng</h4>
                     <table>
@@ -126,7 +123,7 @@ class Cart extends React.Component {
           )
         } else {
             return (
-              <div className="column">
+              <div className="column item-slider">
                 <p className="text-center">Xin lỗi, bạn chưa thêm hàng vào giỏ, vui lòng chọn sản phẩm để thêm vào giỏ hàng<span style={{color: '#f94949'}}><Link to="/san-pham"> Sản phẩm</Link></span></p>
                 <p className="text-center">Bạn có thể theo dõi thông tin của shop trên facebook
                     <span style={{padding: '0 10px'}}>

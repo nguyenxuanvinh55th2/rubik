@@ -4,13 +4,9 @@ import {Link} from 'react-router';
 import __ from 'lodash';
 import {graphql, compose} from 'react-apollo';
 import gql from 'graphql-tag';
-import { heightEqua } from '../../javascript/convertHeight.js'
 class SliderNew extends React.Component {
   constructor(props) {
     super(props);
-  }
-  componentDidMount(){
-    heightEqua.init();
   }
   render() {
     if(!this.props.data.posts){
@@ -65,7 +61,7 @@ class SliderNew extends React.Component {
                             <div className="col-sm-7">
                               <h3>{post.title}</h3>
                               <p>
-                                {post.content}
+                                {post.description}
                               </p>
                               <p className="text-right">
                                 <Link  to={`/chi-tiet/${post._id}`}>Đọc tiếp</Link>

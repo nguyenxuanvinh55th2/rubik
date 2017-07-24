@@ -4,7 +4,7 @@ import __ from 'lodash';
 
 import CustomDatePicker from './CustomDatePicker.jsx';
 import InvoiceGrid from './InvoiceGrid.jsx';
-
+import { browserHistory } from 'react-router';
 class InvoiceManagement extends React.Component  {
   constructor(props) {
     super(props);
@@ -19,7 +19,6 @@ class InvoiceManagement extends React.Component  {
   }
 
   bpmChangeRange(value){
-    console.log("value ", value);
     this.setState({bpm: {
       startDate: value.startDate, endDate: value.endDate
     }})
@@ -36,7 +35,7 @@ class InvoiceManagement extends React.Component  {
               <a onClick={() => browserHistory.push('/dashboard')}>Dashboard</a>
             </li>
             <li>
-              <a onClick={() => browserHistory.push('/category')}>Quản lý đơn hàng</a>
+              <a onClick={() => browserHistory.push('/invoiceManage')}>Quản lý đơn hàng</a>
             </li>
           </ol>
           <CustomDatePicker bpm={this.state.bpm} bpmChangeRange={this.bpmChangeRange.bind(this)} handleChange={() => {}}/>

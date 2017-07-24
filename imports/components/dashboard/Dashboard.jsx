@@ -1,70 +1,163 @@
 import React from 'react';
-import { graphql, compose } from 'react-apollo';
+import {AgGridReact} from 'ag-grid-react';
+import {Meteor} from 'meteor/meteor';
+import __ from 'lodash';
+import Dialog from 'material-ui/Dialog';
+import {browserHistory} from 'react-router';
+import {graphql, compose} from 'react-apollo';
 import gql from 'graphql-tag';
-import Dropzone from 'react-dropzone';
-import { Meteor } from 'meteor/meteor';
+import moment from 'moment';
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
+    this.data = [];
     this.state = {
-      file: {}
+      height: window.innerHeight,
     }
-  }
-  onDropAccepted(files) {
-    let that = this;
-    if(files.length){
-      let file = files[0];
-      if(file.size <= 1024*1000*2){
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function (e) {
-            if(e.target.result){
-              that.setState({file: {
-                file: e.target.result,
-                fileName: file.name,
-                type: file.type
-              }})
-            }
-        };
-        reader.onerror = function (error) {
-          console.log('Error: ', error);
-        };
+    this.gridOptions = {
+      floatingFilter: true,
+      onFilterChanged: () => {
+        let data = [],
+          models = this.gridOptions.api.getModel().rowsToDisplay;
+        __.forEach(models, (model) => {
+          data.push(model.data);
+        });
+        this.gridOptions.api.setFloatingBottomRowData(this.renderFooterData(data));
+        this.saveFilter = this.gridOptions.api.getFilterModel();
       }
-      else {
-        alert('File nhỏ hơn 10MB!');
-      }
-    }
+    };
   }
-  inserFile(){
-    let info = {
-      files: [this.state.file]
-    }
-    if(this.props.insertFiles){
-      this.props.insertFiles(Meteor.userId(), JSON.stringify(info)).then((data) => {
-        console.log(data);
-      })
+  renderFooterData(data) {
+    return [
+      {
+        gridType: 'footer',
+        title: 'Total: ' + data.length
+      }
+    ];
+  }
+  componentDidUpdate() {
+    if (this.gridOptions.api) {
+      this.gridOptions.api.showLoadingOverlay();
+      this.gridOptions.api.setRowData(this.props.data.notifications);
+      this.gridOptions.api.setFloatingBottomRowData(this.renderFooterData(this.props.data.notifications));
+      this.gridOptions.api.hideOverlay();
     }
   }
   render(){
-    return (
-      <div>
-        {/* <Dropzone onDrop={this.onDropAccepted.bind(this)} multiple={true} style={{height: 140, border: '1px solid gray', borderRadius: 10, padding: '13px 7px', width: 350}} minSize={0} maxSize={1024*10*1000}>
-          <div style={{textAlign: 'center'}}>Click or Drap here to upload file</div>
-        </Dropzone>
-        <button onClick={() => this.inserFile()}>ok</button> */}
-      </div>
-    )
+    let {data} = this.props;
+    if (Meteor.userId()) {
+      if (!data.notifications) {
+        return (
+          <div className="loading">
+            <i className="fa fa-spinner fa-spin" style={{
+              fontSize: 50
+            }}></i>
+          </div>
+        )
+      } else {
+        let columnDefs = [
+         {
+            headerName: "Tiêu đề",
+            field: "title",
+            width: 320,
+            cellStyle: function(params) {
+              if (params.node.data.gridType == 'footer') {
+                return {fontWeight: 'bold'};
+              } else {
+                return null;
+              }
+            },
+            filterParams: {
+              filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+            },
+            filter: 'text',
+            suppressMenu: true
+          }, {
+            headerName: "Loại thông báo",
+            field: "type",
+            width: 320,
+            cellStyle: function(params) {
+              if (params.node.data.gridType == 'footer') {
+                return {fontWeight: 'bold'};
+              } else {
+                return null;
+              }
+            },
+            filterParams: {
+              filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+            },
+            filter: 'text',
+            suppressMenu: true
+          },
+          {
+            headerName: "Thời gian",
+            field: "createdAt",
+            width: 100,
+            cellStyle: function(params) {
+              if (params.node.data.gridType == 'footer') {
+                return {fontWeight: 'bold'};
+              } else {
+                return null;
+              }
+            },
+            onCellClicked: (params) => {
+              this.setState({invoice: params.data});
+            },
+            filterParams: {
+              filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+            },
+            filter: 'text',
+            suppressMenu: true,
+            cellRenderer: (params)=> {
+              if (params.node.data.gridType !== 'footer') {
+                return moment(params.value).format('DD/MM/YYYY');
+              } else {
+                  return '';
+              }
+            }
+          }
+        ];
+        return (
+          <div>
+            <ol className="breadcrumb" style={{
+              marginBottom: 0
+            }}>
+              <li>
+                <a onClick={() => browserHistory.push('/dashboard')}>Dashboard</a>
+              </li>
+              <li>
+                <a onClick={() => browserHistory.push('/orderDevoice')}>Đơn hàng</a>
+              </li>
+            </ol>
+            <div style={{
+              height: this.state.height - 167
+            }} className="ag-fresh">
+              <AgGridReact gridOptions={this.gridOptions} columnDefs={columnDefs} rowData={this.data} enableColResize="true" enableSorting="true" enableFilter="true"/>
+            </div>
+          </div>
+        )
+      }
+    } else {
+      return <div style={{
+        textAlign: 'center'
+      }}>{'Vui lòng đăng nhập'}</div>;
+    }
   }
 }
-const INSERT_MEMBER_REPLY = gql`
- mutation insertFiles($userId: String,$info:String){
-   insertFiles(userId: $userId,info:$info)
- }
-`;
-export default compose(
-graphql(INSERT_MEMBER_REPLY,{
-     props:({mutate})=>({
-     insertFiles : (userId,info) =>mutate({variables:{userId, info}})
-   })
- })
-)(Dashboard);
+const NOTICATION = gql `
+    query notifications{
+      notifications {
+       _id
+       title
+       isReaded
+       link
+       type
+       createdAt
+      }
+}`
+
+export default compose(graphql(NOTICATION, {
+  options: () => ({
+    fetchPolicy: 'network-only'
+  })
+}),)(Dashboard);

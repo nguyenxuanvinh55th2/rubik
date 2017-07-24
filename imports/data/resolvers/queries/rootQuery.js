@@ -105,7 +105,6 @@ const rootQuery = {
     let stockModelsWithCount = [];
     let stockModels = StockModels.find({}).fetch();
     let invoiceWithCount = getSaleCountOfStockModel(stockModels.map(item => item._id));
-    console.log("invoiceWithCount ", invoiceWithCount);
     let stock;
     __.forEach(stockModels, item => {
       stock = {
@@ -116,11 +115,13 @@ const rootQuery = {
       stockModelsWithCount.push(stock);
     })
     stockModelsWithCount = stockModelsWithCount.sort((a, b) => b.quantity - a.quantity).slice(0, limit);
-    console.log("stockModels ", stockModelsWithCount);
     return stockModelsWithCount.map(item => item.stockModel);
   },
   users: (_, {}) => {
     return Meteor.users.find({}).fetch();
+  },
+  notifications: (_) => {
+    return Notifications.find({isReaded: false}).fetch();
   }
 }
 export default rootQuery;

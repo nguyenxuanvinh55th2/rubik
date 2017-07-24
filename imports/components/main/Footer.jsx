@@ -4,13 +4,14 @@ import {PinTop} from '../../javascript/header.js'
 export default class Footer extends React.Component {
   constructor(props) {
     super(props);
-
+    this.state = {
+      email: ''
+    }
   }
   componentDidMount() {
     PinTop();
   }
   render() {
-    let image = 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/LASTEST-01_zpsymk9eoks.png';
     return (
       <div>
         <div id="footer">
@@ -41,8 +42,23 @@ export default class Footer extends React.Component {
                 <div className="col-sm-5">
                   <h3>Đăng kí email để nhận thông tin mới nhất</h3>
                   <div className="form-group">
-                    <input type="text" className="form-control"/>
-                    <Link to={'#'} className="btn btn-danger">ĐĂNG KÍ</Link>
+                    <input type="text" value={this.state.email} className="form-control" onChange={({target}) => {
+                      this.setState({email: target.value})
+                    }}/>
+                    <Link className="btn btn-danger" onClick={() => {
+                      let mailReg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,3}))$/;
+                      if(this.state.email){
+                        if(!mailReg.test(this.state.email)) {
+                          this.props.addNotificationMute({fetchData: true, message: 'Sai định dạng mail', level: 'warning'});
+                        }
+                        else {
+                          this.props.addNotificationMute({fetchData: true, message: 'Cảm ơn bản đã ủng hộ shop, shop sẽ liên hệ lại với bạn, chào bạn.', level: 'success'});
+                        }
+                      }
+                      else {
+                        this.props.addNotificationMute({fetchData: true, message: 'Vui lòng nhập địa chỉ mail', level: 'warning'});
+                      }
+                    }}>ĐĂNG KÍ</Link>
                   </div>
                   <ul className="text-center">
                     <li>

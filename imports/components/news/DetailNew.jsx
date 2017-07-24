@@ -20,7 +20,7 @@ class DetailNew extends React.Component {
     if(!this.props.data.post || this.props.data.loading){
 			if(this.props.data.loading){
 				return (
-					<div className="item-slider">
+					<div className="content">
 						<div className="loading">
 								<i className="fa fa-spinner fa-spin" style={{fontSize: 20}}></i>
 						</div>
@@ -29,7 +29,7 @@ class DetailNew extends React.Component {
 			}
 			else {
 				return (
-					<div className="column">
+					<div className="column content">
 						<p className="text-center">Xin lỗi, không tìm thấy sản phẩm bạn yêu cầu, vui lòng liên hệ với shop để được hỗ trợ.</p>
 						<p className="text-center">Bạn có thể theo dõi thông tin của shop trên facebook
 								<span style={{padding: '0 10px'}}>
@@ -49,7 +49,7 @@ class DetailNew extends React.Component {
 			}
     }else {
       return (
-        <div id="news">
+        <div className="content" id="news">
             <h2 className="text-center">{this.props.data.post.title}</h2>
           <div className="main-content container">
             <div className="row">

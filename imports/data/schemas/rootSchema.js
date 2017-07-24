@@ -116,6 +116,15 @@ const rootSchema = `
       image: String
       dateOfBirth: Float
       gender: Boolean
+=======
+    type Notification {
+      _id: String
+      title: String
+      isReaded: String
+      link: String
+      type: String
+      createdAt: Float
+>>>>>>> c9f768b9a7fcd80a65c67032816529ecbf84c9cb
     }
     type Query {
       categories: [Classify]
@@ -135,6 +144,7 @@ const rootSchema = `
       getTopStockModel(limit: Int) : [StockModel]
       invoicesByDate(dateStart: Float, dateEnd: Float): [Invoice]
       users: [User]
+      notifications: [Notification]
     }
     type Mutation {
       removeCategories(userId: String!, _id: String!): String
@@ -148,7 +158,7 @@ const rootSchema = `
       insertStockType(userId: String!, info: String!): String
       removeInvoiceDetail(_id: String!): String
       orderDevoice(token: String!, info: String): String
-      ratingStockModel(token: String!, _id: String, info: String): String
+      ratingStockModel(token: String, _id: String, info: String): String
       updateStockModel(userId: String ,_id: String, info: String): String
       cancelInvoice(userId: String, _id: String): String
       verifyInvoice(userId: String, _id: String): String

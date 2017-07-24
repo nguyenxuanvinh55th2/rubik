@@ -25,7 +25,7 @@ export default class HeaderManager extends React.Component {
             <p style={{cusor: 'pointer'}} onClick={() => browserHistory.push('/')}>RUBIK NHA TRANG</p>
           </div>
           <ul className="text-right">
-            <li><a href=""><i className="fa fa-bell-o" aria-hidden="true"></i></a></li>
+            {/* <li><a href=""><i className="fa fa-bell-o" aria-hidden="true"></i></a></li> */}
             <li>
           <div className="dropdown">
               <a className="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i className="fa fa-user-o" aria-hidden="true"></i> Admin<span className="caret"> </span>
