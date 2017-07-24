@@ -140,17 +140,21 @@ export default class AllPoduct extends React.Component {
                     <div className="row">
                       {
                         __.map(this.props.findProduct.stockModels, (value,idx) => {
+                          console.log(value);
                           return(
                             <div key={idx} className="product-iphone col-sm-4 col-xs-6">
                               <div className="item-product">
                                 <div className="box-item">
                                   <img src={value.images [0] ? value.images[0].file : 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/sp1_zpssqbqw0b3.png'} alt=""/>
                                   <Link to={`/chi-tiet-san-pham/${value._id}`} className="hover-product"></Link>
-                                  <div className="chart">
-                                    <Link >
-                                      <i  onClick={this.addToCart.bind(this, '/gio-hang', value)} className="fa fa-shopping-cart" aria-hidden="true"></i>
-                                    </Link>
-                                  </div>
+                                  {
+                                    value.quantity && value.quantity > 0 &&
+                                    <div className="chart">
+                                      <Link>
+                                        <i  onClick={this.addToCart.bind(this, '/gio-hang', value)} className="fa fa-shopping-cart" aria-hidden="true"></i>
+                                      </Link>
+                                    </div>
+                                  }
                                   <div className="link-detail">
                                     <Link to={`/chi-tiet-san-pham/${value._id}`} className="btn btn-cate">Xem chi tiết</Link>
                                   </div>
@@ -221,7 +225,7 @@ export default class AllPoduct extends React.Component {
 const SEARCH_STOCKMODEL = gql`
     query getAllStockModelSearch($keyCode:String) {
       getAllStockModelSearch(keyCode: $keyCode){
-        _id name code categories
+        _id name code categories quantity isPromotion saleOff
         stockType {
           _id name
         }
