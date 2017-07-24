@@ -130,7 +130,7 @@ const rootSchema = `
       insertStockType(userId: String!, info: String!): String
       removeInvoiceDetail(_id: String!): String
       orderDevoice(token: String!, info: String): String
-      ratingStockModel(token: String!, _id: String, info: String): String
+      ratingStockModel(token: String, _id: String, info: String): String
       updateStockModel(userId: String ,_id: String, info: String): String
       cancelInvoice(userId: String, _id: String): String
       verifyInvoice(userId: String, _id: String): String

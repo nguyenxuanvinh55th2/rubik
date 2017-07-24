@@ -82,7 +82,7 @@ class DetailProduct extends React.Component {
       email: '',
       choseColor: null
     };
-    this.itemPerPage = 2;
+    this.itemPerPage = 5;
   }
 
   componentDidMount() {
@@ -353,7 +353,6 @@ class DetailProduct extends React.Component {
                           <Rating key="rating" {...this.props} iconSize={30} factor={'100%'} rating={stockModelById.votes} allowEdit={true} showStarText={true} ratingHandle={this.ratingHandle.bind(this)}/>
                           <h4>Bình luận</h4>
                           <div className="col-sm-12" style={{
-                            marginLeft: 50,
                             paddingLeft: 0
                           }}>
                             <div className="col-sm-10" style={{
@@ -463,7 +462,7 @@ const INSERT_INVOICE = gql `
 }`
 
 const RATING_STOCK_MODEL = gql `
-    mutation ratingStockModel($token: String!, $_id: String, $info: String){
+    mutation ratingStockModel($token: String, $_id: String, $info: String){
         ratingStockModel(token: $token, _id: $_id, info: $info)
 }`
 

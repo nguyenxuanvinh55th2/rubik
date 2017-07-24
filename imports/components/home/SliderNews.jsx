@@ -4,13 +4,9 @@ import {Link} from 'react-router';
 import __ from 'lodash';
 import {graphql, compose} from 'react-apollo';
 import gql from 'graphql-tag';
-import { heightEqua } from '../../javascript/convertHeight.js'
 class SliderNew extends React.Component {
   constructor(props) {
     super(props);
-  }
-  componentDidMount(){
-    heightEqua.init();
   }
   render() {
     if(!this.props.data.posts){
