@@ -39,6 +39,50 @@ const rootMutation = {
     }
     return;
   },
+  saveUser: (_, {token, info}) => {
+      var hashedToken = Accounts._hashLoginToken(token);
+      var user = Meteor.users.find({'services.resume.loginTokens': {$elemMatch: {hashedToken: hashedToken}}}).fetch()[0];
+      if(user) {
+          info = JSON.parse(info);
+          if(!info._id) {
+            let userByName = Meteor.users.findOne({username: info.username});
+            if(userByName) {
+              return 'userNameExist';
+            }
+            let userByMail = Meteor.users.findOne({'emails': {$elemMatch: {address: info.email}}});
+            if(userByMail) {
+              return 'emailExist';
+            }
+          }
+          let profile = {
+              firstName: info.firstName,
+              lastName: info.lastName
+          };
+          if(profile.firstName && profile.lastName) {
+              profile.fullName = info.lastName + ' ' + info.firstName;
+          } else if(profile.firstName) {
+              profile.fullName = profile.firstName;
+          } else {
+              profile.fullName = profile.lastName;
+          }
+          if(info._id){
+              return Meteor.users.update({_id:info._id}, {$set:{"profile":profile}});
+          } else {
+              return Accounts.createUser({username: info.username, email: info.email, password: info.password, profile});
+          }
+      }
+  },
+  removeUser: (_, {token, id}) => {
+      var hashedToken = Accounts._hashLoginToken(token);
+      var user = Meteor.users.find({'services.resume.loginTokens': {$elemMatch: {hashedToken: hashedToken}}}).fetch()[0];
+      if(user) {
+          if(id === '0' || id === '1'){
+              throw 'Not allow!';
+          } else {
+              return Meteor.users.remove(id);
+          }
+      }
+  },
   insertFiles: (_, { userId, info }) => {
     info = JSON.parse(info);
     let docData = info.files;
@@ -179,12 +223,11 @@ const rootMutation = {
   },
   orderDevoice: (_, {token, info}) => {
     info = JSON.parse(info);
-    //sendMail_Notification(info.name + ' Đã đặt hàng trên website của bạn');
+    sendMail_Notification(info.name + ' Đã đặt hàng trên website của bạn');
     return Invoices.update({_id: token}, {$set: {
       customer: info,
       status: 1
     }}, (err) => {
-      console.log("order devoice");
       if(err) {
       } else {
           notifacation = {

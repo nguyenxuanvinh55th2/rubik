@@ -100,6 +100,23 @@ const rootSchema = `
       image: File
       link: String
     }
+    type Email {
+      address: String
+      verified: Boolean
+    }
+    type User {
+      _id: String
+      emails: [Email]
+      username: String
+      fullName: String
+      firstName: String
+      lastName: String
+      email: String
+      token: String
+      image: String
+      dateOfBirth: Float
+      gender: Boolean
+    }
     type Query {
       categories: [Classify]
       stockModels(limit: Int): [StockModel]
@@ -117,6 +134,7 @@ const rootSchema = `
       getAllStockModelSearch(keyCode: String): [StockModel]
       getTopStockModel(limit: Int) : [StockModel]
       invoicesByDate(dateStart: Float, dateEnd: Float): [Invoice]
+      users: [User]
     }
     type Mutation {
       removeCategories(userId: String!, _id: String!): String
@@ -137,6 +155,8 @@ const rootSchema = `
       completeInvoice(userId: String, _id: String): String
       insertPost(userId: String, info: String): String
       updatePost(userId: String, _id: String, info: String): String
+      saveUser(token: String!, info: String): String
+      removeUser(token: String!, id: String): String
     }
 `
 export default rootSchema;

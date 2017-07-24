@@ -73,6 +73,7 @@ export default class HeaderManager extends React.Component {
                   <li><a href="#">Slider</a></li>
                 </ul>
               </li>
+              <li><a onClick={() => browserHistory.push('/user')}>Người dùng</a></li>
             </ul>
           </div>
         </nav>
