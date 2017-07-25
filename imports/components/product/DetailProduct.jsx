@@ -191,7 +191,6 @@ class DetailProduct extends React.Component {
       status: 0,
       customer: {},
       amount: 0,
-      discount: 100,
       total: 0,
       createdAt: moment().valueOf(),
       shipFee: 0

@@ -50,7 +50,6 @@ export default class AllPoduct extends React.Component {
       status: 0,
       customer: {},
       amount: 0,
-      discount: 100,
       total: 0,
       createdAt: moment().valueOf(),
       shipFee: 0
@@ -61,7 +60,7 @@ export default class AllPoduct extends React.Component {
     let detail = {
       stockModel: stockModelById,
       quantity: 1,
-      amount: 1 * stockModelById.price,
+      amount: stockModelById.price - stockModelById.saleOff,
       invoice: {
         _id: token,
         code: token
@@ -224,7 +223,7 @@ export default class AllPoduct extends React.Component {
 const SEARCH_STOCKMODEL = gql`
     query getAllStockModelSearch($keyCode:String) {
       getAllStockModelSearch(keyCode: $keyCode){
-        _id name code categories quantity isPromotion saleOff
+        _id name code categories quantity isPromotion saleOff colors
         stockType {
           _id name
         }

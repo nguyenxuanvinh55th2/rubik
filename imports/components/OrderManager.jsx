@@ -32,16 +32,6 @@ class OrderDevoice extends React.Component {
         this.removeRows = [];
         this.error = false;
 
-        this.gridOptionFooter = {
-            onGridReady: (params) => {
-                this.gridOptionFooter.api.setRowData(this.renderFooterData());
-            },
-            rowData: null,
-            rowClass: 'bold-row',
-            headerHeight: 0,
-            slaveGrids: []
-        };
-
         this.gridOptions = {
             isFullWidthCell: (rowNode) => {
                 return rowNode.level == 1;
@@ -65,26 +55,21 @@ class OrderDevoice extends React.Component {
             },
             onFilterChanged: () => {
                 if (this.gridOptionFooter && this.gridOptionFooter.api) {
-                    this.gridOptionFooter.api.setRowData(this.renderFooterData());
+                    this.gridOptions.api.setFloatingBottomRowData(this.renderFooterData(this.props.data.invoices));
                 }
             },
             icons: {
                 groupExpanded: '<span style="width: 25px;height: 25px; text-align: center;margin-left: 8px;"><i style="font-weight: bolder;" class="fa fa-angle-down"></i></span>',
                 groupContracted: '<span style="width: 25px;height: 25px; text-align: center;margin-left: 8px;"><i style="font-weight: bolder;" class="fa fa-angle-right"></i></span>',
             },
-            fullWidthCellRendererFramework: InvoiceDetail,
             enableFilter: true,
-            slaveGrids: [],
             floatingFilter: true,
             getRowStyle: (params) => {
               if (params.data.status === 99) {
-                return {'background-color': 'yellow'};
+                return {'color': 'red'};
               }
             },
         };
-
-        this.gridOptions.slaveGrids.push(this.gridOptionFooter);
-        this.gridOptionFooter.slaveGrids.push(this.gridOptions);
     }
 
     handleResize(e) {
@@ -105,7 +90,7 @@ class OrderDevoice extends React.Component {
       return [
         {
           gridType: 'footer',
-          name: 'Total: ' + (data ? data.length : 0)
+          code: 'Total: ' + (data ? data.length : 0)
         }
       ];
     }
@@ -371,11 +356,9 @@ class OrderDevoice extends React.Component {
                       this.state.invoice &&
                       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
                         <div style={{width: '100%', textAlign: 'left'}}>
-                          <h4>{'Mã hóa đơn: ' + this.state.invoice.code}</h4>
-                          <h5>{'Ngày đặt: ' + moment(this.state.invoice.createdAt).format('HH:mm DD/MM/YYYY')}</h5>
-                          <h5>{'Tên khách hàng: ' + this.state.invoice.customer.name}</h5>
-                          <h5>{'Email: ' +  this.state.invoice.customer.email}</h5>
-                          <h5>{'Điện thoại: ' + this.state.invoice.customer.mobile}</h5>
+                          <h4>{'Mã hóa đơn: ' + this.state.invoice.code + (this.state.invoice.status === 99 ? ' (Đã duyệt)' : '')}</h4>&nbsp;
+                          <h5>Tên khách hàng:&nbsp;<span style={{fontWeight: 'bold'}}>{this.state.invoice.customer.name}</span>&nbsp;Điện thoại:&nbsp;<span style={{fontWeight: 'bold'}}>{this.state.invoice.customer.mobile}</span></h5>
+                          <h5>Ngày đặt:&nbsp;<span style={{fontWeight: 'bold'}}>{moment(this.state.invoice.createdAt).format('HH:mm DD/MM/YYYY')}</span>&nbsp;Email:&nbsp;<span style={{fontWeight: 'bold'}}>{this.state.invoice.customer.email}</span></h5>
                         </div>
                         <button className="btn btn-danger" disabled={this.state.invoice.status === 99} style={{borderWidth: 0, width: 100, height: 30}} onClick={() => {
                             console.log("message cancel");
@@ -434,8 +417,8 @@ class OrderDevoice extends React.Component {
                                   <th style={{width: 110, textAlign: 'center'}}>Sản phẩm</th>
                                   <th style={{width: 145, textAlign: 'center'}}>Giá</th>
                                   <th style={{width: 145, textAlign: 'center'}}>Màu sắc</th>
-                                  <th style={{width: 145, textAlign: 'center'}}>Số lượng tồn</th>
-                                  <th style={{width: 100, textAlign: 'center'}}>Số lượng</th>
+                                  <th style={{width: 145, textAlign: 'center'}}>Sl tồn</th>
+                                  <th style={{width: 100, textAlign: 'center'}}>Sl đặt</th>
                                   <th style={{width: 145, textAlign: 'center'}}>Tổng tiền</th>
                               </thead>
                               <tbody>
@@ -450,8 +433,8 @@ class OrderDevoice extends React.Component {
                               <td></td>
                               <td></td>
                               <td></td>
-                              <td style={{textAlign: 'center', fontWeight: 'bold', width: 100, textAlign: 'center'}}>Tổng tiền:&nbsp;</td>
-                              <td style={{textAlign: 'center', width: 145, textAlign: 'center'}}>{accounting.format(this.state.invoice.amount) + 'đ'}</td>
+                              <td style={{textAlign: 'center', fontWeight: 'bold', width: 300, textAlign: 'center'}}>{'Tổng tiền (chưa bao gồm phí ship Code)'}:&nbsp;</td>
+                              <td style={{textAlign: 'center', fontWeight: 'bold', width: 100, textAlign: 'center'}}>{accounting.format(this.state.invoice.amount) + 'đ'}</td>
                             </tfoot>
                         </table>
                       </div>
@@ -476,7 +459,6 @@ const INVOICE_QUERY = gql `
 					code
 					status
 					amount
-					discount
 					total
 					createdAt
 					shipFee

@@ -158,7 +158,7 @@ const rootMutation = {
     let invoiceDetail = InvoiceDetails.findOne({'invoice._id': token, 'stockModel._id': info.stockModel._id});
     let amount = info.quantity * (invoiceDetail ? invoiceDetail.stockModel.price : info.stockModel.price) - info.quantity * (invoiceDetail ? invoiceDetail.stockModel.saleOff : info.stockModel.saleOff);
     let docAmount = invoice.amount + amount;
-    let total = docAmount * invoice.discount / 100;
+    let total = docAmount;
     if(invoiceDetail) {
       InvoiceDetails.update({_id: invoiceDetail._id}, {$inc: {
         quantity: info.quantity,
@@ -178,7 +178,7 @@ const rootMutation = {
     let invoiceDetail = InvoiceDetails.findOne({'_id': _id});
     let amount = number * invoiceDetail.stockModel.price - number * invoiceDetail.stockModel.saleOff;
     let docAmount = invoice.amount - invoiceDetail.amount + amount;
-    let total = docAmount * invoice.discount / 100;
+    let total = docAmount;
     InvoiceDetails.update({_id}, {$set: {
       quantity: number,
       amount: amount
@@ -213,7 +213,7 @@ const rootMutation = {
     let invoiceDetail = InvoiceDetails.findOne({_id});
     let invoice = Invoices.findOne({_id: invoiceDetail.invoice._id});
     let docAmount = invoice.amount - invoiceDetail.amount;
-    let total = docAmount * invoice.discount / 100;
+    let total = docAmount;
     InvoiceDetails.remove(_id);
     Invoices.update({_id: invoice._id}, {$set: {
       amount: docAmount,

@@ -275,7 +275,6 @@ const INVOICE_QUERY = gql `
 					code
 					status
 					amount
-					discount
 					total
 					createdAt
 					shipFee
