@@ -79,7 +79,7 @@ class Cart extends React.Component {
                           <tr key={idx}>
                             <td>{item.stockModel.name}</td>
                             <td style={{display: 'flex', flexDirection: 'row',justifyContent: 'center'}}>
-                              <input value={this.state.quantity ? this.state.quantity : item.quantity} style={{width: 75}} type="number" className="form-control" onChange={({target}) => {
+                              <input value={this.state.quantity ? this.state.quantity : item.quantity} style={{width: 75}} type="number" min="1" max="10" className="form-control" onChange={({target}) => {
                                   this.setState({quantity: parseInt(target.value)});
                                 }}
                                 onBlur={() => {

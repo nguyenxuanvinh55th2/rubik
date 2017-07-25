@@ -333,7 +333,7 @@ class DetailProduct extends React.Component {
                             textAlign: 'center'
                           }} value={this.state.number} onChange={({target}) => this.setState({
                             number: parseInt(target.value)
-                          })} type="number" min="1" className="form-control"/>
+                          })} type="number" min="1" max="10" className="form-control"/>
                         </h4>
                         <p>
                           <a className="btn-more btn-red" href="#" onClick={this.addToCart.bind(this, '/thanh-toan')}>MUA HÀNG</a>
@@ -402,7 +402,7 @@ class DetailProduct extends React.Component {
                               }
                             </div>
                             <div className="col-sm-10" style={{
-                              textAlign: 'center',
+                              paddingLeft: 0
                             }}>
                               {stockModelById.votes.length > 5
                                 ? <ReactPaginate previousLabel={"Trước"} nextLabel={"sau"} breakLabel={<a> ...</a>} breakClassName={"break-me"} pageCount={pageCount} marginPagesDisplayed={2} pageRangeDisplayed={5} onPageChange={this.handlePageClick.bind(this)} containerClassName={"pagination"} subContainerClassName={"pages pagination"} activeClassName={"active"}/>
