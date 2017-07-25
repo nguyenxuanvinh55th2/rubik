@@ -5,11 +5,7 @@ import gql from 'graphql-tag';
 import __ from 'lodash';
 import accounting from 'accounting'
 import moment from 'moment'
-
-import FlatButton from 'material-ui/FlatButton';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
-
+import { browserHistory } from 'react-router';
 import InvoiceDetail from './InvoiceDetail.jsx';
 
 class ChoseButton extends React.Component {

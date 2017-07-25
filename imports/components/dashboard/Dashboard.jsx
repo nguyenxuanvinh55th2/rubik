@@ -130,7 +130,7 @@ class Dashboard extends React.Component {
               </li>
             </ol>
             <div style={{
-              height: this.state.height - 167
+              height: this.state.height - 125
             }} className="ag-fresh">
               <AgGridReact gridOptions={this.gridOptions} columnDefs={columnDefs} rowData={this.data} enableColResize="true" enableSorting="true" enableFilter="true"/>
             </div>

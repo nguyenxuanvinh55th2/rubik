@@ -60,6 +60,7 @@ export default class AllPoduct extends React.Component {
     let detail = {
       stockModel: stockModelById,
       quantity: 1,
+      color: stockModelById.colors[0] ? stockModelById.colors[0] : '',
       amount: stockModelById.price - stockModelById.saleOff,
       invoice: {
         _id: token,
