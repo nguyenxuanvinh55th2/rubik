@@ -37,7 +37,7 @@ const rootSchema = `
       code: String
       name: String
       active: Boolean
-      weight: String
+      weight: Float
       colors: [String]
       categories: [String]
       isLimited: Boolean
@@ -166,6 +166,7 @@ const rootSchema = `
       updatePost(userId: String, _id: String, info: String): String
       saveUser(token: String!, info: String): String
       removeUser(token: String!, id: String): String
+      changePassword(userId: String, password: String, oldPassword: String): String
     }
 `
 export default rootSchema;

@@ -81,8 +81,22 @@ export default class Header extends React.Component {
                         <Link to={'/huong-dan-choi/2'}>HƯỚNG DẪN CHƠI</Link>
                       </li>
                       <li>
-                        <Link to={'/gio-hang'}>
+                        <Link to={'/gio-hang'} style={{position: 'relative'}}>
                           <i className="fa fa-cart-arrow-down" aria-hidden="true"></i>
+                          {/* <span style={{
+                            position: 'absolute',
+                            top: -19,
+                            right: -12,
+                            fontSize: 12,
+                            height: 15,
+                            width: 15,
+                            color: '#fff',
+                            textAlign: 'center',
+                            background: 'red',
+                            borderRadius: '50%'
+                          }}>
+                            15
+                          </span> */}
                         </Link>
                       </li>
                     </ul>

@@ -5,17 +5,40 @@ import __ from 'lodash';
 import store from '../../store.js';
 import Dialog from 'material-ui/Dialog';
 import { Accounts } from 'meteor/accounts-base';
-export default class HeaderManager extends React.Component {
+import { graphql, compose } from 'react-apollo';
+import gql from 'graphql-tag';
+import CryptoJS from "crypto-js";
+class HeaderManager extends React.Component {
   constructor(props){
     super(props)
     this.state = {
       open: false,
+      oldPassword: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      error: ''
     }
   }
   handleSave(){
-
+    if(this.state.password !== this.state.confirmPassword){
+      this.setState({
+        error: 'Mật khẩu mới và xác nhận mật khẩu không đúng '
+      })
+    }
+    else {
+      let encryptedPass = CryptoJS.AES.encrypt(this.state.password, "def4ult");
+      let encryptedOldPass = CryptoJS.AES.encrypt(this.state.oldPassword, "def4ult");
+      this.props.changePassword({
+          userId: Meteor.userId(),
+          password: encryptedPass.toString(),
+          oldPassword: encryptedOldPass.toString()
+      }).then(res=>{
+        browserHistory.push('/login');
+      })
+      .catch(err=>{
+          this.setState({error: err.message.split('error: ')[1]});
+      });
+    }
   }
   render(){
     return(
@@ -88,24 +111,36 @@ export default class HeaderManager extends React.Component {
                       <h4 className="modal-title">Đổi mật khẩu</h4>
                   </div>
                   <div className="modal-body" style={{height: window.innerHeight - 250, overflowY: 'auto', overflowX: 'hidden'}}>
+                    {this.state.error?
+                        <div className="alert alert-danger">
+                            <span className="pficon pficon-error-circle-o"></span>
+                            <strong>{this.state.error}</strong>
+                        </div>
+                    :null}
                     <form className="form-horizontal">
                       <div className="form-group">
-                        <label className="control-label col-sm-3">Mật khẩu</label>
-                        <div className="col-sm-9">
-                          <input type="password" value={this.state.password} onClick={({target}) => this.setState({password: target.value})} />
+                        <label className="control-label col-sm-4">Mật khẩu cũ</label>
+                        <div className="col-sm-8">
+                          <input type="password" className="form-control" value={this.state.oldPassword} onChange={({target}) => this.setState({oldPassword: target.value})} />
                         </div>
                       </div>
                       <div className="form-group">
-                        <label className="control-label col-sm-3">Mật khẩu</label>
-                        <div className="col-sm-9">
-                          <input type="password" value={this.state.confirmPassword} onClick={({target}) => this.setState({confirmPassword: target.value})} />
+                        <label className="control-label col-sm-4">Mật khẩu mới</label>
+                        <div className="col-sm-8">
+                          <input type="password" className="form-control" value={this.state.password} onChange={({target}) => this.setState({password: target.value})} />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label className="control-label col-sm-4">Xác nhận MK mới</label>
+                        <div className="col-sm-8">
+                          <input type="password" className="form-control" value={this.state.confirmPassword} onChange={({target}) => this.setState({confirmPassword: target.value})} />
                         </div>
                       </div>
                     </form>
                   </div>
                   <div className="modal-footer" style={{margin: 0}}>
                       <button type="button" className="btn btn-default" onClick={() => this.setState({open: false})}>Thoát</button>
-                      <button type="button" className="btn btn-primary" disabled={!this.state.password || !this.state.confirmPassword || this.state.password != this.state.confirmPassword} onClick={() => this.handleSave()}>Lưu</button>
+                      <button type="button" className="btn btn-primary" disabled={!this.state.password || !this.state.confirmPassword || !this.state.oldPassword} onClick={() => this.handleSave()}>Lưu</button>
                   </div>
               </div>
           </div>
@@ -114,3 +149,16 @@ export default class HeaderManager extends React.Component {
     )
   }
 }
+
+const CHANGE_PASSWORD = gql`
+  mutation changePassword($userId: String, $oldPassword: String, $password: String) {
+    changePassword(userId: $userId, oldPassword: $oldPassword, password: $password)
+  }
+`;
+export default compose(graphql(CHANGE_PASSWORD, {
+    props: ({mutate}) => ({
+        changePassword: ({userId, oldPassword, password}) => mutate({
+            variables: {userId, oldPassword, password}
+        })
+    })
+}))(HeaderManager);

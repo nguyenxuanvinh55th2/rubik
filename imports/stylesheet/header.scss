@@ -253,5 +253,16 @@
 			color:#ed1e24;
 		}
 	}
-
+	.count-product{
+		position: absolute;
+    top: -19px;
+    right: -12px;
+    font-size: 12px;
+    height: 15px;
+    width: 15px;
+    color: #fff;
+    text-align: center;
+    background: red;
+    border-radius: 50%;
+	}
 }

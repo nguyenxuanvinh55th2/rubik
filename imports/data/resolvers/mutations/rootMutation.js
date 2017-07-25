@@ -1,6 +1,6 @@
 import { Classifies } from '../../../../collections/classifies';
 import { Email } from 'meteor/email';
-
+import CryptoJS from "crypto-js";
 function sendMail_Notification(notification){
   let content = '<div>' + notification + '</div>';
   Email.send({
@@ -419,6 +419,23 @@ const rootMutation = {
       }
     }
     return future.wait();
+  },
+  changePassword: (_, {userId, password, oldPassword}) => {
+    let user = Meteor.users.findOne({_id: userId});
+    if(user){
+        var decryptedOld = CryptoJS.AES.decrypt(oldPassword, "def4ult");
+        var plaintextOld = decryptedOld.toString(CryptoJS.enc.Utf8);
+        var result = Accounts._checkPassword(user, plaintextOld);
+        if(result.error){
+            throw "Wrong old password!";
+        } else {
+            var decrypted = CryptoJS.AES.decrypt(password, "def4ult");
+            var plaintext = decrypted.toString(CryptoJS.enc.Utf8);
+            return Accounts.setPassword(user._id, plaintext, {logout:false});
+        }
+    } else {
+        throw "user logged out!";
+    }
   }
 }
 export default rootMutation

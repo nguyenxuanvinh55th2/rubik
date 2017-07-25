@@ -105,6 +105,7 @@ class StockModelForm extends React.Component {
     data.categories = __.map(data.categories, (category) => category.name);
     data.averagePrice = parseInt(data.averagePrice);
     data.price = parseInt(data.price);
+    data.weight = parseFloat(data.weight);
     data.quantity = parseInt(data.quantity);
     data.saleOff = parseInt(data.saleOff);
     let info = {
@@ -228,7 +229,7 @@ class StockModelForm extends React.Component {
               marginTop: 5
             }}>
               {!this.props.params._id && <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit || !data.code || !data.stockType._id} onClick={() => this.handleSave(true)}>Lưu và khởi tạo</button>
-}
+            }
               <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit || !data.code || !data.stockType._id} style={{
                 marginLeft: 10
               }} onClick={() => {
@@ -274,8 +275,8 @@ class StockModelForm extends React.Component {
                     }}/>
                   </div>
                   <div className="form-group">
-                    <label>Cân nặng</label>
-                    <input type="text" className="form-control" value={data.weight} onChange={({target}) => {
+                    <label>Cân nặng(gram)</label>
+                    <input type="number" className="form-control" value={data.weight} onChange={({target}) => {
                       this.setState((prevState) => {
                         prevState.data.weight = target.value;
                         return prevState;
