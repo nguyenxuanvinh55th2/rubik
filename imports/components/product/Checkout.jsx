@@ -46,13 +46,15 @@ class Checkout extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     let { data } = nextProps;
-    if(!data.getInVoice) {
+    if(!data.getInVoice && !data.loading) {
       browserHistory.push('/');
     } else {
-        if(!data.getInVoice.invoiceDetails || data.getInVoice.invoiceDetails && data.getInVoice.invoiceDetails.length === 0) {
-          browserHistory.push('/');
+        if(data.getInVoice) {
+          if(!data.getInVoice.invoiceDetails || data.getInVoice.invoiceDetails && data.getInVoice.invoiceDetails.length === 0) {
+            browserHistory.push('/');
+          }
         }
-    }
+    }``
   }
 
   render() {
