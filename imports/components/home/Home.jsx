@@ -112,7 +112,7 @@ const STOCK_MODEL_QUERY = gql `
     query stockModels($limit: Int){
       stockModels(limit: $limit) {
           _id
-          name
+          name quantity
 					images {
 						_id
 						file
@@ -124,7 +124,7 @@ const STOCK_MODEL_QUERY = gql `
       }
       getTopStockModel(limit: $limit) {
           _id
-          name
+          name quantity
 					images {
 						_id
 						file

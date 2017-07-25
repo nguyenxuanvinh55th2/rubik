@@ -91,28 +91,37 @@ class DetailProduct extends React.Component {
 
   commentHandle() {
     let {data} = this.props;
+    let mailReg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,3}))$/;
     let token = localStorage.getItem('Meteor.loginToken');
     if (this.state.rate && this.state.rate > 0 && this.state.comment !== '' && this.state.email !== '') {
-      let votes = JSON.stringify({stars: this.state.rate, comment: this.state.comment, name: this.state.name, email: this.state.email});
-      this.props.ratingStockModel(token, data.stockModelById._id, votes).then(() => {
-        this.props.data.refetch();
-        this.props.addNotificationMute({fetchData: true, message: 'Đánh giá thành công', level: 'success'});
-        this.setState({updatePage: true});
-        this.setState({rate: 0, comment: '', name: '', email: ''});
-      }).catch((error) => {});
+      if(!mailReg.test(this.state.email)) {
+        this.props.addNotificationMute({fetchData: true, message: 'Sai định dạng mail', level: 'warning'});
+      }
+      else {
+        let votes = JSON.stringify({stars: this.state.rate, comment: this.state.comment, name: this.state.name, email: this.state.email, createdAt: moment().valueOf()});
+        this.props.ratingStockModel(token, data.stockModelById._id, votes).then(() => {
+          this.props.data.refetch();
+          this.props.addNotificationMute({fetchData: true, message: 'Đánh giá thành công', level: 'success'});
+          this.setState({rate: null, comment: '', name: '', email: '', updatePage: true});
+        }).catch((error) => {console.log(error)});
+      }
     } else {
-      this.props.addNotificationMute({fetchData: true, message: 'Bạn cần điền đủ các thông tin', level: 'warning'});
+      this.props.addNotificationMute({fetchData: true, message: 'Bạn cần điền đủ các thông tin, vui lòng kiểm tra số lượng sao đánh giá, họ và tên, địa chỉ mail và mô tả.', level: 'warning'});
     }
   }
 
   componentWillUpdate(nextProps, nexState) {
     if (nextProps.data.stockModelById) {
       let {votes} = nextProps.data.stockModelById;
+      votes = __.sortBy(votes, (o) => -o.createdAt)
       let {updatePage} = this.state;
       if (nextProps.data.stockModelById.votes && updatePage) {
         let page = [];
         for (let i = 0; i < this.itemPerPage; i++) {
           if (votes[i]) {
+            if(!votes[i].createdAt){
+              votes[i].createdAt = moment().valueOf();
+            }
             page.push(votes[i]);
           }
         }
@@ -351,7 +360,34 @@ class DetailProduct extends React.Component {
                       <div role="tabpanel" className="tab-pane" id="danhgia">
                         <div className="binhluan">
                           <Rating key="rating" {...this.props} iconSize={30} factor={'100%'} rating={stockModelById.votes} allowEdit={true} showStarText={true} ratingHandle={this.ratingHandle.bind(this)}/>
-                          <h4>Bình luận</h4>
+                          <div className="row">
+                            <div className="col-xs-12 col-md-6" style={{marginTop: 10}}>
+                              <input type="text" className="form-control" placeholder="Nhập tên" value={this.state.name} onChange={({target}) => {
+                                this.setState({name: target.value});
+                              }}/>
+                            </div>
+                            <div className="col-xs-12 col-md-6" style={{marginTop: 10}}>
+                              <input type="text" className="form-control" placeholder="Nhập địa chỉ email" value={this.state.email} onChange={({target}) => {
+                                this.setState({email: target.value});
+                              }}/>
+                            </div>
+                            <div className="col-xs-12 col-md-6" style={{marginTop: 10}}>
+                              <textarea rows="2" className="form-control" placeholder="Nhập bình luận" value={this.state.comment} onChange={({target}) => {
+                                this.setState({comment: target.value});
+                              }}></textarea >
+                            </div>
+                            <div className="col-xs-12 col-md-6" style={{marginTop: 10}}>
+                              <div className="one-space"></div>
+                              <a className="btn-more" aria-controls="nhanxet" role="tab" data-toggle="tab" onClick={this.commentHandle.bind(this)}>Đánh giá</a>
+                            </div>
+                            <div className="form-group" style={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              justifyContent: 'flex-end'
+                            }}>
+                            </div>
+                          </div>
+                          <h4>Tất cả đánh giá</h4>
                           <div className="col-sm-12" style={{
                             paddingLeft: 0
                           }}>
@@ -366,41 +402,14 @@ class DetailProduct extends React.Component {
                               }
                             </div>
                             <div className="col-sm-10" style={{
-                              textAlign: 'center'
+                              textAlign: 'center',
                             }}>
-                              {pageCount > 0
-                                ? <ReactPaginate previousLabel={"previous"} nextLabel={"next"} breakLabel={< a href = "" > ...</a>} breakClassName={"break-me"} pageCount={pageCount} marginPagesDisplayed={2} pageRangeDisplayed={5} onPageChange={this.handlePageClick.bind(this)} containerClassName={"pagination"} subContainerClassName={"pages pagination"} activeClassName={"active"}/>
+                              {stockModelById.votes.length > 5
+                                ? <ReactPaginate previousLabel={"Trước"} nextLabel={"sau"} breakLabel={<a> ...</a>} breakClassName={"break-me"} pageCount={pageCount} marginPagesDisplayed={2} pageRangeDisplayed={5} onPageChange={this.handlePageClick.bind(this)} containerClassName={"pagination"} subContainerClassName={"pages pagination"} activeClassName={"active"}/>
                                 : null
                               }
                             </div>
                           </div>
-                        </div>
-                        <div className="form-group">
-                          <input type="text" className="form-control" placeholder="Nhập tên" style={{
-                            width: '50%'
-                          }} value={this.state.name} onChange={({target}) => {
-                            this.setState({name: target.value});
-                          }}/>
-                        </div>
-                        <div className="form-group">
-                          <input type="text" className="form-control" placeholder="Nhập địa chỉ email" style={{
-                            width: '50%'
-                          }} value={this.state.email} onChange={({target}) => {
-                            this.setState({email: target.value});
-                          }}/>
-                        </div>
-                        <div className="form-group">
-                          <textarea rows="4" className="form-control" placeholder="Nhập bình luận" value={this.state.comment} onChange={({target}) => {
-                            this.setState({comment: target.value});
-                          }}></textarea >
-                        </div>
-                        <div className="form-group" style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          justifyContent: 'flex-end'
-                        }}>
-                          <div className="one-space"></div>
-                          <a className="btn-more" href="#nhanxet" aria-controls="nhanxet" role="tab" data-toggle="tab" onClick={this.commentHandle.bind(this)}>Nhận xét</a>
                         </div>
                       </div>
                     </div>
@@ -443,6 +452,7 @@ const STOCK_MODEL_QUERY = gql `
               name
               email
               comment
+              createdAt
             }
             price
 						description

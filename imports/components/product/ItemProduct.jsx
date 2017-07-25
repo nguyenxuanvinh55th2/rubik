@@ -72,11 +72,14 @@ class ItemProduct extends React.Component {
           <div className="box-item">
             <img src={this.props.value.image} alt=""/>
             <Link to={'/chi-tiet-san-pham/' + this.props.value._id} className="hover-product"></Link>
-            <div className="chart">
-              <Link>
-                <i className="fa fa-shopping-cart" aria-hidden="true" onClick={this.addToCart.bind(this, '/gio-hang')}></i>
-              </Link>
-            </div>
+            {
+              this.props.value.quantity && this.props.value.quantity > 0 &&
+              <div className="chart">
+                <Link>
+                  <i className="fa fa-shopping-cart" aria-hidden="true" onClick={this.addToCart.bind(this, '/gio-hang')}></i>
+                </Link>
+              </div>
+            }
             <div className="link-detail">
               <Link to={'/chi-tiet-san-pham/' + this.props.value._id} className="btn btn-cate">Xem chi tiết</Link>
             </div>
