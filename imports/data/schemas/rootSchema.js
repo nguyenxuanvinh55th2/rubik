@@ -104,6 +104,14 @@ const rootSchema = `
       address: String
       verified: Boolean
     }
+    type Notification {
+      _id: String
+      title: String
+      isReaded: String
+      link: String
+      type: String
+      createdAt: Float
+    }
     type User {
       _id: String
       emails: [Email]
@@ -116,15 +124,6 @@ const rootSchema = `
       image: String
       dateOfBirth: Float
       gender: Boolean
-=======
-    type Notification {
-      _id: String
-      title: String
-      isReaded: String
-      link: String
-      type: String
-      createdAt: Float
->>>>>>> c9f768b9a7fcd80a65c67032816529ecbf84c9cb
     }
     type Query {
       categories: [Classify]
