@@ -223,7 +223,6 @@ const rootMutation = {
   },
   orderDevoice: (_, {token, info}) => {
     info = JSON.parse(info);
-    sendMail_Notification(info.name + ' Đã đặt hàng trên website của bạn');
     return Invoices.update({_id: token}, {$set: {
       customer: info,
       status: 1
@@ -238,6 +237,7 @@ const rootMutation = {
             createdAt: moment().valueOf()
           }
           Notifications.insert(notifacation);
+          sendMail_Notification(info.name + ' Đã đặt hàng trên website của bạn');
       }
     });
   },

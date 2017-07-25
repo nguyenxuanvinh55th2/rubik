@@ -446,6 +446,7 @@ const STOCK_MODEL_QUERY = gql `
 							_id
 							file
 						}
+            weight
             votes {
               stars
               name

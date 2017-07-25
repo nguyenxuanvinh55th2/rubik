@@ -224,7 +224,7 @@ export default class AllPoduct extends React.Component {
 const SEARCH_STOCKMODEL = gql`
     query getAllStockModelSearch($keyCode:String) {
       getAllStockModelSearch(keyCode: $keyCode){
-        _id name code categories quantity isPromotion saleOff colors
+        _id name code categories quantity isPromotion saleOff colors weight
         stockType {
           _id name
         }
