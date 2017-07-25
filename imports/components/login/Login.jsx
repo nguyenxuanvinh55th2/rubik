@@ -24,7 +24,7 @@ export default class Login extends React.Component {
     return(
       <div className="container" style={{width: 320, padding: 20}}>
         <Link to={'/'}>
-          <img src="http://i1266.photobucket.com/albums/jj538/dinhvnquang/LASTEST-01_zpsymk9eoks.png" alt="" />
+          <img src="/imgs/logo.png" alt="" />
         </Link>
         <form style={{marginTop: 20, padding: '26px 24px 46px'}}>
           <div className="form-group">

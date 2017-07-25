@@ -30,23 +30,23 @@ class Home extends React.Component {
             <div className="row">
               <div className="col-sm-4">
                 <div className="item bg" style={{
-                  backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/image-cate_zpsl60oehs8.jpg')"
+                  backgroundImage: "url('/imgs/spinner.jpg')"
                 }}>
                   <p>
                     <Link to={'/san-pham/loai-hang/100'} className="btn btn-cate">Spinner</Link>
                   </p>
                 </div>
                 <div className="item bg" style={{
-                  backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/img2-cate_zpsj29lzkqx.jpg')"
+                  backgroundImage: "url('/imgs/rubik.jpg')"
                 }}>
                   <p>
-                    <Link to={'/san-pham/loai-hang/99'} className="btn btn-cate">rubik</Link>
+                    <Link to={'/san-pham/loai-hang/99'} className="btn btn-cate">Rubik</Link>
                   </p>
                 </div>
               </div>
               <div className="col-sm-4">
                 <div className="item-center bg" style={{
-                  backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/img3-cate_zpsogr7lgka.jpg')"
+                  backgroundImage: "url('/imgs/tutorial.jpg')"
                 }}>
                   <p>
                     <Link to={'/huong-dan-choi/2'} className="btn btn-cate">Hướng dẫn chơi</Link>
@@ -55,17 +55,17 @@ class Home extends React.Component {
               </div>
               <div className="col-sm-4">
                 <div className="item bg" style={{
-                  backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/image-cate_zpsl60oehs8.jpg')"
+                  backgroundImage: "url('/imgs/spinner.jpg')"
                 }}>
                   <p>
                     <Link to={'/san-pham'} className="btn btn-cate">Sản phẩm mới</Link>
                   </p>
                 </div>
                 <div className="item bg" style={{
-                  backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/img2-cate_zpsj29lzkqx.jpg')"
+                  backgroundImage: "url('/imgs/rubik.jpg')"
                 }}>
                   <p>
-                    <Link to={'/san-pham/loai-hang/101'} className="btn btn-cate">phụ kiện</Link>
+                    <Link to={'/san-pham/loai-hang/101'} className="btn btn-cate">Phụ kiện</Link>
                   </p>
                 </div>
               </div>

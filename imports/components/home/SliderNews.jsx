@@ -48,14 +48,14 @@ class SliderNew extends React.Component {
                   __.map(this.props.data.posts,(post, idx) => {
                     return (
                       <div key={idx} className="item-slider-new bg" style={{
-                        backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/slider-news_zps8vnwov5h.jpg')"
+                        backgroundImage: "url('/imgs/news.jpg')"
                       }}>
                         <div className="container">
                           <h2 className="text-center">TIN TỨC NỔI BẬT</h2>
                           <div className="row">
                             <div className="col-sm-5">
                               <div className="image">
-                                <img src={post.image.file ? post.image.file : 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/img-slidernew_zps7gtzduez.jpg'} alt=""/>
+                                <img src={post.image.file ? post.image.file : '/imgs/news.jpg'} alt=""/>
                               </div>
                             </div>
                             <div className="col-sm-7">
@@ -76,7 +76,7 @@ class SliderNew extends React.Component {
             </Slider>
             :
             <div className="item-slider-new bg" style={{
-                backgroundImage: "url('http://i1266.photobucket.com/albums/jj538/dinhvnquang/slider-news_zps8vnwov5h.jpg')"
+                backgroundImage: "url('/imgs/news.jpg')"
               }}>
             </div>
           }

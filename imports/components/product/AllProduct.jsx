@@ -106,7 +106,7 @@ export default class AllPoduct extends React.Component {
                       searchValue={this.state.searchValue || ''}
                       placeholder="Nhập mã hàng, tên hàng, chủng loại....."
                       optionRenderer={(item) => {
-                        let image = item.images [0] ? item.images[0].file : 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/sp1_zpssqbqw0b3.png';
+                        let image = item.images [0] ? item.images[0].file : '/imgs/logo.png';
                         return (
                           <div className="row" style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', margin: '0px 15px'}}>
                             <div>
@@ -140,12 +140,11 @@ export default class AllPoduct extends React.Component {
                     <div className="row">
                       {
                         __.map(this.props.findProduct.stockModels, (value,idx) => {
-                          console.log(value);
                           return(
                             <div key={idx} className="product-iphone col-sm-4 col-xs-6">
                               <div className="item-product">
                                 <div className="box-item">
-                                  <img src={value.images [0] ? value.images[0].file : 'http://i1266.photobucket.com/albums/jj538/dinhvnquang/sp1_zpssqbqw0b3.png'} alt=""/>
+                                  <img src={value.images [0] ? value.images[0].file : '/imgs/logo.png'} alt=""/>
                                   <Link to={`/chi-tiet-san-pham/${value._id}`} className="hover-product"></Link>
                                   {
                                     value.quantity && value.quantity > 0 &&
