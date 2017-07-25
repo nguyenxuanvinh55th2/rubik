@@ -3,7 +3,8 @@ import gql from 'graphql-tag';
 
 import AllProduct from '../components/product/AllProduct.jsx';
 
-const ITEMS_PER_PAGE = 10;
+// const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = window.innerWidth < 768 ? 8 : 9;
 
 const INSERT_INVOICE = gql `
     mutation insertInvoice($token: String!, $info: String){

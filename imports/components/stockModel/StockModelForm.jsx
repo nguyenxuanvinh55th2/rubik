@@ -153,7 +153,8 @@ class StockModelForm extends React.Component {
                   description: '',
                   categories: []
                 }
-              })
+              });
+              document.getElementById('editor').firstChild.innerHTML = ''
             } else {
               browserHistory.push('/StockModels');
             }
@@ -230,7 +231,7 @@ class StockModelForm extends React.Component {
             }}>
               {!this.props.params._id && <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit || !data.code || !data.stockType._id} onClick={() => this.handleSave(true)}>Lưu và khởi tạo</button>
             }
-              <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit || !data.code || !data.stockType._id} style={{
+              <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit || !data.code || !data.stockType._id || !data.price} style={{
                 marginLeft: 10
               }} onClick={() => {
                 this.handleSave()
