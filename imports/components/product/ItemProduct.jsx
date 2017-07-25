@@ -37,7 +37,6 @@ class ItemProduct extends React.Component {
       status: 0,
       customer: {},
       amount: 0,
-      discount: 100,
       total: 0,
       createdAt: moment().valueOf(),
       shipFee: 0
@@ -48,7 +47,8 @@ class ItemProduct extends React.Component {
     let detail = {
       stockModel: stockModelById,
       quantity: 1,
-      amount: 1 * stockModelById.price,
+      color: stockModelById.colors[0] && stockModelById.colors[0],
+      amount: stockModelById.price - stockModelById.saleOff,
       invoice: {
         _id: token,
         code: token

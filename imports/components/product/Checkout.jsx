@@ -31,7 +31,7 @@ class Checkout extends React.Component {
 	orderDevoice() {
 		let token = localStorage.getItem('invoiceId') ? localStorage.getItem('invoiceId') : '';
 		let { info, emailError, nameError, mobileError, addressError } = this.state;
-		if(!emailError && !nameError && !mobileError && !addressError && !this.allowClick) {
+		if(!emailError && !nameError && !mobileError && !addressError && !this.allowClick && info.email !== '' && info.mobile !== '' && info.name !== '' && info.address !== '') {
 			info = JSON.stringify(info);
 			this.props.orderDevoice(token, info).then(() => {
         this.props.addNotificationMute({fetchData: true, message: 'Đặt hàng thành công', level:'success'});
@@ -39,8 +39,21 @@ class Checkout extends React.Component {
 				localStorage.removeItem('invoiceId');
         this.allowClick = true;
 			})
-		}
+		} else {
+        this.props.addNotificationMute({fetchData: true, message: 'Bạn cần điền đủ các thông tin', level:'error'});
+    }
 	}
+
+  componentWillReceiveProps(nextProps) {
+    let { data } = nextProps;
+    if(!data.getInVoice) {
+      browserHistory.push('/');
+    } else {
+        if(!data.getInVoice.invoiceDetails || data.getInVoice.invoiceDetails && data.getInVoice.invoiceDetails.length === 0) {
+          browserHistory.push('/');
+        }
+    }
+  }
 
   render() {
     let {getInVoice} = this.props.data;
@@ -52,7 +65,7 @@ class Checkout extends React.Component {
             <div className="container">
               <h3>THANH TOÁN</h3>
               <div className="row  row-40">
-                <div className="col-sm-7">
+                <div className="col-sm-6">
                   <div className="info-custom">
                     <div className="row">
                       <div className="col-sm-3">
@@ -151,13 +164,14 @@ class Checkout extends React.Component {
                     </div>
                   </div>
                 </div>
-                <div className="col-sm-5">
+                <div className="col-sm-6">
                   <div className="right-cart">
                     <h4>Thông tin đơn hàng</h4>
                     <table>
                       <thead>
                         <tr>
                           <th>Sản phẩm</th>
+                          <th>Màu sắc</th>
                           <th>Số lượng</th>
                           <th>Giá</th>
                         </tr>
@@ -167,8 +181,9 @@ class Checkout extends React.Component {
 													__.map(getInVoice.invoiceDetails, (item, idx) => (
 	                          <tr key={idx}>
 	                            <td>{item.stockModel.name}</td>
+                              <td><div style={{height: 15, width: 15, borderRadius: '100%', backgroundColor: item.color, display: 'block', margin: '0px auto'}}></div></td>
 	                            <td>{item.quantity}</td>
-	                            <td>{accounting.format(item.stockModel.price)}</td>
+                              <td><span className="rate-cu">{accounting.formatNumber(item.stockModel.price)}đ</span>&nbsp;<span>{accounting.formatNumber(item.stockModel.price - item.stockModel.saleOff)}đ</span></td>
 	                          </tr>
                         	))
 												}
@@ -213,12 +228,12 @@ const INVOICE_QUERY = gql `
 					code
 					status
 					amount
-					discount
 					total
 					createdAt
 					shipFee
 					invoiceDetails {
 						_id
+            color
 						stockModel {
 							_id
 							code

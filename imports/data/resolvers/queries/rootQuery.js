@@ -118,7 +118,7 @@ const rootQuery = {
     return stockModelsWithCount.map(item => item.stockModel);
   },
   users: (_, {}) => {
-    return Meteor.users.find({}).fetch();
+    return Meteor.users.find({_id: {$ne: "0"}}).fetch();
   },
   notifications: (_) => {
     return Notifications.find({isReaded: false}).fetch();

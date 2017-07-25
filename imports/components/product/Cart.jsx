@@ -26,6 +26,7 @@ class Cart extends React.Component {
 
   render() {
     let {getInVoice} = this.props.data;
+    console.log("message ", this.state);
     if (getInVoice && getInVoice.invoiceDetails && getInVoice.invoiceDetails.length > 0) {
       return (
         <div className="content">
@@ -49,7 +50,7 @@ class Cart extends React.Component {
 	                          <div className="col-sm-9">
 	                            <h4>{item.stockModel.name}</h4>
 	                            <h4>Danh mục: {item.stockModel.categories ? item.stockModel.categories.toString() : ''}</h4>
-	                            <h4>{'Giá: ' + accounting.format(item.stockModel.price - item.stockModel.saleOff) + 'đ'}</h4>
+	                            <h4>Giá:&nbsp;<span className="rate-cu">{accounting.formatNumber(item.stockModel.price)}đ</span>&nbsp;<span>{accounting.formatNumber(item.stockModel.price - item.stockModel.saleOff)}đ</span></h4>
 	                            <h4 style={{display: 'flex', flexDirection: 'row',justifyContent: 'flex-start'}}>{'Màu: '}&nbsp;
                                 <div style={{width: 15, height: 15, backgroundColor: item.color, borderRadius: '100%'}}></div>
                               </h4>
@@ -70,6 +71,7 @@ class Cart extends React.Component {
                       <thead>
                         <tr>
                           <th>Sản phẩm</th>
+                          <th>Màu sắc</th>
                           <th>Số lượng</th>
                           <th>Giá</th>
                         </tr>
@@ -78,17 +80,26 @@ class Cart extends React.Component {
                         {__.map(getInVoice.invoiceDetails, (item, idx) => (
                           <tr key={idx}>
                             <td>{item.stockModel.name}</td>
+                            <td><div style={{height: 15, width: 15, borderRadius: '100%', backgroundColor: item.color, display: 'block', margin: '0px auto'}}></div></td>
                             <td style={{display: 'flex', flexDirection: 'row',justifyContent: 'center'}}>
-                              <input value={this.state.quantity ? this.state.quantity : item.quantity} style={{width: 75}} type="number" min="1" max="10" className="form-control" onChange={({target}) => {
+                              <input max="10" min="1" value={(this.state.quantity && this.state.currentProduct === item._id) ? this.state.quantity : item.quantity} style={{width: 75}} type="number" min="1" max="10" className="form-control" onChange={({target}) => {
+                                  if(target.value === '') {
+                                    target.value = '1';
+                                  }
                                   this.setState({quantity: parseInt(target.value)});
+                                }}
+                                onFocus={() => {
+                                  this.setState({currentProduct: item._id})
                                 }}
                                 onBlur={() => {
                                   let token = localStorage.getItem('invoiceId');
                                   this.props.updateInvoiceDetail(token, item._id, this.state.quantity).then(() => {
-                                    this.props.data.refetch();
+                                    this.setState({currentProduct: null, quantity: null}, () => {
+                                      this.props.data.refetch();
+                                    })
                                   });
                                 }}/></td>
-                            <td>{accounting.format(item.stockModel.price - item.stockModel.saleOff) + ' đ'}</td>
+                            <td><span className="rate-cu">{accounting.formatNumber(item.stockModel.price)}đ</span>&nbsp;<span>{accounting.formatNumber(item.stockModel.price - item.stockModel.saleOff)}đ</span></td>
                           </tr>
                         ))
                       }
@@ -152,7 +163,6 @@ const INVOICE_QUERY = gql `
 					code
 					status
 					amount
-					discount
 					total
 					createdAt
 					shipFee

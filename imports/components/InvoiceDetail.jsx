@@ -16,7 +16,7 @@ class InvoiceDetail extends React.Component {
     return (
       <tr style={{backgroundColor: item.quantity > item.countInStore && '#f0ad4e', border: item.quantity > item.countInStore ? '#eea236' : 'none', color: item.quantity > item.countInStore ? 'white' : '#898989'}}>
           <td style={{textAlign: 'center', padding: 5}}>
-              <img width="75"
+              <img style={{with: 60, height: 60}}
                   src={item.stockModel.images && item.stockModel.images[0] ? item.stockModel.images[0].file : '/imgs/logo.png'} />
           </td>
           <td style={{textAlign: 'center'}}>{item.stockModel.name}</td>
