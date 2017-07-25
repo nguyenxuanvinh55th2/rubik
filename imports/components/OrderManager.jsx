@@ -321,6 +321,13 @@ class OrderDevoice extends React.Component {
               // this.gridOptions.fullWidthCellRendererParams = {
               //   t: this.props.t
               // }
+              let weight = 0;
+              console.log("this.state.invoice ", this.state.invoice);
+              if(this.state.invoice) {
+                this.state.invoice.invoiceDetails.map(item => {
+                  weight += (item.stockModel.weight ? item.stockModel.weight : 0) * item.quantity;
+                });
+              }
               return (
                 <div>
                   <ol className="breadcrumb" style={{
@@ -429,12 +436,21 @@ class OrderDevoice extends React.Component {
                           </table>
                         </div>
                         <table style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
+                          <tfoot>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style={{textAlign: 'right', fontWeight: 'bold', width: 300}}>{'Tổng khối lượng'}:&nbsp;</td>
+                            <td style={{textAlign: 'right', fontWeight: 'bold', width: 100}}>{weight + 'g'}</td>
+                          </tfoot>
+                        </table>
+                        <table style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
                             <tfoot>
                               <td></td>
                               <td></td>
                               <td></td>
-                              <td style={{textAlign: 'center', fontWeight: 'bold', width: 300, textAlign: 'center'}}>{'Tổng tiền (chưa bao gồm phí ship Code)'}:&nbsp;</td>
-                              <td style={{textAlign: 'center', fontWeight: 'bold', width: 100, textAlign: 'center'}}>{accounting.format(this.state.invoice.amount) + 'đ'}</td>
+                              <td style={{textAlign: 'right', fontWeight: 'bold', width: 300}}>{'Tổng tiền (chưa bao gồm phí ship Code)'}:&nbsp;</td>
+                              <td style={{textAlign: 'right', fontWeight: 'bold', width: 100}}>{accounting.format(this.state.invoice.amount) + 'đ'}</td>
                             </tfoot>
                         </table>
                       </div>
@@ -484,6 +500,7 @@ const INVOICE_QUERY = gql `
 							}
 	            price
 							description
+              weight
 						}
 						quantity
 						amount

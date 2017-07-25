@@ -15,13 +15,20 @@ import Rating from './Rating.jsx';
 class Cart extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {quantity: null};
+    this.state = {quantity: null, invoiceDetails: []};
   }
 
   removeInvoiceDetail(_id) {
     this.props.removeInvoiceDetail(_id).then(() => {
       this.props.data.refetch();
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.data.getInVoice && nextProps.data.getInVoice.invoiceDetails && nextProps.data.getInVoice.invoiceDetails.length) {
+      console.log("message");
+      this.setState({invoiceDetails: __.cloneDeep(nextProps.data.getInVoice.invoiceDetails)})
+    }
   }
 
   render() {
@@ -77,27 +84,30 @@ class Cart extends React.Component {
                         </tr>
                       </thead>
                       <tbody>
-                        {__.map(getInVoice.invoiceDetails, (item, idx) => (
+                        {__.map(this.state.invoiceDetails, (item, idx) => (
                           <tr key={idx}>
                             <td>{item.stockModel.name}</td>
                             <td><div style={{height: 15, width: 15, borderRadius: '100%', backgroundColor: item.color, display: 'block', margin: '0px auto'}}></div></td>
                             <td style={{display: 'flex', flexDirection: 'row',justifyContent: 'center'}}>
-                              <input max="10" min="1" value={(this.state.quantity && this.state.currentProduct === item._id) ? this.state.quantity : item.quantity} style={{width: 75}} type="number" min="1" max="10" className="form-control" onChange={({target}) => {
-                                  if(target.value === '') {
-                                    target.value = '1';
+                              <input max="10" min="1" value={item.quantity} style={{width: 75}} type="number" min="1" max="10" className="form-control" onChange={({target}) => {
+                                  if(target.value && target.value !== '') {
+                                    if(target.value <= 0 || target.value > 10) {
+                                      target.value = item.quantity
+                                    } else {
+                                        console.log("something");
+                                        let invoiceDetails = this.state.invoiceDetails;
+                                        invoiceDetails[idx].quantity = parseInt(target.value);
+                                        this.setState({invoiceDetails});
+                                    }
                                   }
-                                  this.setState({quantity: parseInt(target.value)});
-                                }}
-                                onFocus={() => {
-                                  this.setState({currentProduct: item._id})
                                 }}
                                 onBlur={() => {
                                   let token = localStorage.getItem('invoiceId');
-                                  this.props.updateInvoiceDetail(token, item._id, this.state.quantity).then(() => {
-                                    this.setState({currentProduct: null, quantity: null}, () => {
+                                  if(item.quantity && item.quantity > 0 && item.quantity <= 10) {
+                                    this.props.updateInvoiceDetail(token, item._id, item.quantity).then(() => {
                                       this.props.data.refetch();
-                                    })
-                                  });
+                                    });
+                                  }
                                 }}/></td>
                             <td><span className="rate-cu">{accounting.formatNumber(item.stockModel.price)}đ</span>&nbsp;<span>{accounting.formatNumber(item.stockModel.price - item.stockModel.saleOff)}đ</span></td>
                           </tr>

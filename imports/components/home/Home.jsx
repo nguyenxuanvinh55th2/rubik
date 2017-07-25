@@ -117,7 +117,7 @@ const STOCK_MODEL_QUERY = gql `
 						_id
 						file
 					}
-          price isPromotion saleOff
+          price isPromotion saleOff weight
           votes {
             stars
           }

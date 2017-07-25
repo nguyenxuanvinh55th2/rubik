@@ -299,6 +299,7 @@ const INVOICE_QUERY = gql `
 							}
 	            price
 							description
+              weight
 						}
 						quantity
 						amount
