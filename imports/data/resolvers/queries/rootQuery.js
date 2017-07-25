@@ -117,6 +117,9 @@ const rootQuery = {
     stockModelsWithCount = stockModelsWithCount.sort((a, b) => b.quantity - a.quantity).slice(0, limit);
     return stockModelsWithCount.map(item => item.stockModel);
   },
+  users: (_, {}) => {
+    return Meteor.users.find({}).fetch();
+  },
   notifications: (_) => {
     return Notifications.find({isReaded: false}).fetch();
   }

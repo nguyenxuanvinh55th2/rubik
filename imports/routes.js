@@ -28,6 +28,7 @@ import EditAbout from './components/theme/EditAbout.jsx';
 import News from './containers/News';
 import AllProduct from './containers/AllProduct.js';
 import InvoiceManagement from './components/invoiceManagement/InvoiveManagement.jsx';
+import User from './components/user/User.jsx';
 
 function requireAuth(nextState, replace){
   if (!Meteor.userId()) {
@@ -68,6 +69,7 @@ export const renderRoutes = () => (
         <Route path="/postForm" component={PostForm}/>
         <Route path="/postForm/:_id" component={PostForm}/>
         <Route path="/editAbout" component={EditAbout}/>
+        <Route path="/user" component={User}/>
       </Route>
       <Route path="*" component={Home} />
     </Route>

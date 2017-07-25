@@ -66,6 +66,16 @@ const NonScalars = {
     categories: ({_id}) => {
       return Classifies.find({isCategory: true, active: true, "stockType._id": _id}).fetch()
     }
+  },
+  User: {
+    emails: ({emails}) => emails,
+    fullName: ({profile}) => profile.fullName,
+    firstName: ({profile}) => profile.firstName,
+    lastName: ({profile}) => profile.lastName,
+    email: ({emails}) => emails ? emails[0].address : '',
+    gender: ({profile}) => profile.gender,
+    dateOfBirth: ({profile}) => profile.dateOfBirth,
+    image: ({profile}) => profile.image? Files.findOne({_id: profile.image}).link():''
   }
 }
 export default NonScalars;
