@@ -185,7 +185,14 @@ class Checkout extends React.Component {
 	                            <td>{item.stockModel.name}</td>
                               <td><div style={{height: 15, width: 15, borderRadius: '100%', backgroundColor: item.color, display: 'block', margin: '0px auto'}}></div></td>
 	                            <td>{item.quantity}</td>
-                              <td><span className="rate-cu">{accounting.formatNumber(item.stockModel.price)}đ</span>&nbsp;<span>{accounting.formatNumber(item.stockModel.price - item.stockModel.saleOff)}đ</span></td>
+                              <td>
+                                {
+                                  item.stockModel.isPromotion ?
+                                  <div><span className="rate-cu">{accounting.formatNumber(item.stockModel.price)}đ</span>&nbsp;<span>{accounting.formatNumber(item.stockModel.price - item.stockModel.saleOff)}đ</span></div>
+                                  :
+                                  <span>{accounting.formatNumber(item.stockModel.price)}đ</span>
+                                }
+                              </td>
 	                          </tr>
                         	))
 												}

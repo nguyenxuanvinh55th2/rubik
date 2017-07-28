@@ -12,7 +12,6 @@ class InvoiceDetail extends React.Component {
 
   render() {
     let { item } = this.props;
-    console.log("message", item);
     return (
       <tr style={{backgroundColor: item.quantity > item.countInStore && '#f0ad4e', border: item.quantity > item.countInStore ? '#eea236' : 'none', color: item.quantity > item.countInStore ? 'white' : '#898989'}}>
           <td style={{textAlign: 'center', padding: 5}}>

@@ -51,6 +51,7 @@ const rootSchema = `
       description: String
       stockType: StockType
       votes: [Vote]
+      origin: String
     }
     type Vote {
       stars: Int
@@ -167,6 +168,7 @@ const rootSchema = `
       saveUser(token: String!, info: String): String
       removeUser(token: String!, id: String): String
       changePassword(userId: String, password: String, oldPassword: String): String
+      updateSlider(userId: String,_id: String, info: String): String
     }
 `
 export default rootSchema;

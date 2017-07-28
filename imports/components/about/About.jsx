@@ -20,7 +20,7 @@ class About extends React.Component {
                         Chúc các bạn mua sắm vui vẻ.</p>`;
     if(!this.props.data.getAllPostByType){
       return (
-        <div className="item-slider">
+        <div className="content">
           <div className="loading">
               <i className="fa fa-spinner fa-spin" style={{fontSize: 20}}></i>
           </div>
@@ -29,7 +29,7 @@ class About extends React.Component {
     }
     else {
       return (
-        <div>
+        <div className="content">
         <div id="news">
                 <h2 className="text-center">Giới thiệu</h2>
           <div className="main-content container">

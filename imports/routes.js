@@ -29,6 +29,7 @@ import News from './containers/News';
 import AllProduct from './containers/AllProduct.js';
 import InvoiceManagement from './components/invoiceManagement/InvoiveManagement.jsx';
 import User from './components/user/User.jsx';
+import SliderForm from './components/theme/SliderForm.jsx';
 
 function requireAuth(nextState, replace){
   if (!Meteor.userId()) {
@@ -70,6 +71,7 @@ export const renderRoutes = () => (
         <Route path="/postForm/:_id" component={PostForm}/>
         <Route path="/editAbout" component={EditAbout}/>
         <Route path="/user" component={User}/>
+        <Route path="/slider" component={SliderForm}/>
       </Route>
       <Route path="*" component={Home} />
     </Route>

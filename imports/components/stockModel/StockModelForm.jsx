@@ -323,7 +323,7 @@ class StockModelForm extends React.Component {
                     </div>
                   </div>
                   <div className="form-group">
-                    <label>Xuất xứ</label>
+                    <label>Hãng sản xuất</label>
                     <input type="text" className="form-control" value={data.origin} onChange={({target}) => {
                       this.setState((prevState) => {
                         prevState.data.origin = target.value;

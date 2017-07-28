@@ -1,12 +1,14 @@
 import { Classifies } from '../../../../collections/classifies';
 import { Email } from 'meteor/email';
 import CryptoJS from "crypto-js";
+import accounting from 'accounting'
 function sendMail_Notification(notification){
   let content = '<div>' + notification + '</div>';
   Email.send({
       from: 'noreply.lokatech@gmail.com',
-      bcc: 'sanghuynhnt95@gmail.com',
-      subject: 'Thông báo đặt hàng',
+      // bcc: 'nguyenxuanvinh55th2@gmail.com',
+      bcc: 'rubiknhatrang@gmail.com',
+      subject: 'RUBIK NHA TRANG',
       html: content
   }, (err) => {
       if (err) {
@@ -237,7 +239,37 @@ const rootMutation = {
             createdAt: moment().valueOf()
           }
           Notifications.insert(notifacation);
-          sendMail_Notification(info.name + ' Đã đặt hàng trên website của bạn');
+          let detail = InvoiceDetails.find({
+            'invoice._id': token
+          }).fetch();
+          if(detail){
+            let content = '';
+            content += '</br><h1 style="text-align: center">Đặt hàng rubik nha trang</h1>' +
+                '<h2 style="text-align: center; font-weight: normal;">' + moment().format("DD/MM/YYYY HH:mm") + '</h2>' +
+                '<table style="width: 100%;">' +
+                '<tr><td>Tên khách hàng:</td><td style="font-weight: 600;">' + info.name + '</td><td>Địa chỉ mail</td><td style="font-weight: 600;">' + info.email + '</td></tr>' +
+                '<tr><td>Số điện thoại:</td><td style="font-weight: 600;">' + info.mobile + '</td><td>Địa chỉ:</td><td style="font-weight: 600;">' + info.address + '</td></tr>' +
+                '</table></br>';
+            content += '<h2></h2><table style="width: 100%; border-collapse: collapse; border: 1px solid;"><tr>';
+            content += '<th style="border: 1px solid;">Tên sản phẩm</th>';
+            content += '<th style="border: 1px solid;">Màu sắc</th>';
+            content += '<th style="border: 1px solid;">Số lượng</th>';
+            content += '<th style="border: 1px solid;">Thành tiền</th>';
+            content += '</tr>';
+            let total = 0;
+            __.forEach(detail, (stockModel) => {
+              total += stockModel.quantity * stockModel.amount;
+              content += '<tr>';
+              content += '<td style="border: 1px solid;">' + stockModel.stockModel.name + '</td>';
+              content += '<td style="border: 1px solid;">' + stockModel.color + '</td>';
+              content += '<td style="border: 1px solid;">' + stockModel.quantity + '</td>';
+              content += '<td style="border: 1px solid;">' + stockModel.amount + '</td>';
+              content += '</tr>';
+            });
+            content += '</table>';
+            content += '<div style="text-align: right;"><h3>Tổng: ' + accounting.formatNumber(total) + '</h3></div>';
+            sendMail_Notification(content);
+          }
       }
     });
   },
@@ -436,6 +468,9 @@ const rootMutation = {
     } else {
         throw "user logged out!";
     }
+  },
+  updateSlider: (_, {userId, _id, info}) => {
+
   }
 }
 export default rootMutation

@@ -60,7 +60,7 @@ export default class AllPoduct extends React.Component {
     let detail = {
       stockModel: stockModelById,
       quantity: 1,
-      color: stockModelById.colors[0] ? stockModelById.colors[0] : '',
+      color: stockModelById.colors[0] && stockModelById.colors[0],
       amount: stockModelById.price - stockModelById.saleOff,
       invoice: {
         _id: token,
@@ -92,7 +92,7 @@ export default class AllPoduct extends React.Component {
         <div className="content" id="news">
           <div className="main-content container">
             <div className="row">
-              <div className="sidebar col-md-3">
+              <div className="sidebar col-md-3" style={{paddingRight: 50}}>
                 <LeftProduct {...this.props} />
               </div>
               <div className="contents col-md-9">

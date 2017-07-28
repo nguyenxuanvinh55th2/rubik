@@ -298,13 +298,14 @@ class DetailProduct extends React.Component {
                           stockModelById.isPromotion &&
                           <h4 className="gia">Giá trước kia:&nbsp;<span className="rate-cu">{ accounting.format(stockModelById.price) + 'đ'}</span></h4>
                         }
-                        <h4 className="gia">{stockModelById.isPromotion ? 'Giá hiện tại: ' : 'Giá '} {accounting.format(stockModelById.price - stockModelById.saleOff) + 'đ'}</h4>
-                        <h4 className="trangthai">{stockModelById.quantity > 0
-                            ? 'Còn hàng'
-                            : 'Hết hàng'}</h4>
+                        <h4 className="gia">{stockModelById.isPromotion ? 'Giá hiện tại: ' : 'Giá: '} {accounting.format(stockModelById.price - stockModelById.saleOff) + 'đ'}</h4>
                         <h4 className="dmuc" >{'Danh mục: ' + (stockModelById.categories
                             ? stockModelById.categories.toString()
                             : '')}</h4>
+                        <h4 className="dmuc" >{'Hãng sản xuất: ' + stockModelById.origin}</h4>
+                        <h4 className="trangthai">{stockModelById.quantity > 0
+                            ? 'Tình trạng: Còn hàng'
+                            : 'Tình trạng: Hết hàng'}</h4>
                         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
                           <h4 className="dmuc">{'Màu sắc: '}</h4>
                           <span style={{paddingTop: 17, paddingLeft: 10}}>
@@ -441,7 +442,7 @@ const STOCK_MODEL_QUERY = gql `
 						quantity
 						saleOff
             categories
-						isPromotion
+						isPromotion origin
 						images {
 							_id
 							file

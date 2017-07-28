@@ -26,14 +26,12 @@ class Cart extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.data.getInVoice && nextProps.data.getInVoice.invoiceDetails && nextProps.data.getInVoice.invoiceDetails.length) {
-      console.log("message");
       this.setState({invoiceDetails: __.cloneDeep(nextProps.data.getInVoice.invoiceDetails)})
     }
   }
 
   render() {
     let {getInVoice} = this.props.data;
-    console.log("message ", this.state);
     if (getInVoice && getInVoice.invoiceDetails && getInVoice.invoiceDetails.length > 0) {
       return (
         <div className="content">
@@ -56,8 +54,20 @@ class Cart extends React.Component {
 	                          </div>
 	                          <div className="col-sm-9">
 	                            <h4>{item.stockModel.name}</h4>
-	                            <h4>Danh mục: {item.stockModel.categories ? item.stockModel.categories.toString() : ''}</h4>
-	                            <h4>Giá:&nbsp;<span className="rate-cu">{accounting.formatNumber(item.stockModel.price)}đ</span>&nbsp;<span>{accounting.formatNumber(item.stockModel.price - item.stockModel.saleOff)}đ</span></h4>
+	                            {/* <h4>Danh mục: {item.stockModel.categories ? item.stockModel.categories.toString() : ''}</h4> */}
+                              {
+                                item.stockModel.isPromotion ?
+                                <h4>Giá:&nbsp;
+                                  <span className="rate-cu">{accounting.formatNumber(item.stockModel.price)}đ</span>
+                                  &nbsp;
+                                  <span>{accounting.formatNumber(item.stockModel.price - item.stockModel.saleOff)}đ
+                                  </span>
+                                </h4>
+                                :
+                                <h4>Giá:&nbsp;
+                                  <span>{accounting.formatNumber(item.stockModel.price)}đ</span>
+                                </h4>
+                              }
 	                            <h4 style={{display: 'flex', flexDirection: 'row',justifyContent: 'flex-start'}}>{'Màu: '}&nbsp;
                                 <div style={{width: 15, height: 15, backgroundColor: item.color, borderRadius: '100%'}}></div>
                               </h4>
@@ -94,7 +104,6 @@ class Cart extends React.Component {
                                     if(target.value <= 0 || target.value > 10) {
                                       target.value = item.quantity
                                     } else {
-                                        console.log("something");
                                         let invoiceDetails = this.state.invoiceDetails;
                                         invoiceDetails[idx].quantity = parseInt(target.value);
                                         this.setState({invoiceDetails});
@@ -109,7 +118,14 @@ class Cart extends React.Component {
                                     });
                                   }
                                 }}/></td>
-                            <td><span className="rate-cu">{accounting.formatNumber(item.stockModel.price)}đ</span>&nbsp;<span>{accounting.formatNumber(item.stockModel.price - item.stockModel.saleOff)}đ</span></td>
+                            <td>
+                              {
+                                item.stockModel.isPromotion ?
+                                <div><span className="rate-cu">{accounting.formatNumber(item.stockModel.price)}đ</span>&nbsp;<span>{accounting.formatNumber(item.stockModel.price - item.stockModel.saleOff)}đ</span></div>
+                                :
+                                <span>{accounting.formatNumber(item.stockModel.price)}đ</span>
+                              }
+                            </td>
                           </tr>
                         ))
                       }

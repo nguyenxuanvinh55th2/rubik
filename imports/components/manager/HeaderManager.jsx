@@ -93,7 +93,7 @@ class HeaderManager extends React.Component {
                 <span className="caret"></span></a>
                 <ul className="dropdown-menu">
                   <li><a onClick={() => browserHistory.push('/editAbout')}>Chỉnh sửa trang giới thiệu</a></li>
-                  <li><a href="#">Slider</a></li>
+                  <li><a onClick={() => browserHistory.push('/slider')}>Slider</a></li>
                 </ul>
               </li>
               <li><a onClick={() => browserHistory.push('/user')}>Người dùng</a></li>
