@@ -93,20 +93,22 @@ export default class StockType extends React.Component {
        ];
        return (
          <div>
-           <ol className="breadcrumb" style={{marginBottom: 0}}>
-             <li>
-               <a onClick={() => browserHistory.push('/dashboard')}>Dashboard</a>
-             </li>
-             <li>
-               <a onClick={() => browserHistory.push('/stockType')}>Loại hàng</a>
-             </li>
-           </ol>
-           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', padding: 5}}>
-             <button type="button" className="btn btn-primary" onClick={() => {
-               this.setState({open: true})
-             }}>Thêm mới</button>
+           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+             <ol className="breadcrumb" style={{marginBottom: 0}}>
+               <li>
+                 <a onClick={() => browserHistory.push('/dashboard')}>Dashboard</a>
+               </li>
+               <li>
+                 <a onClick={() => browserHistory.push('/stockType')}>Loại hàng</a>
+               </li>
+             </ol>
+             <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', marginTop: 5, marginRight: 10, paddingBottom: 10}}>
+               <button type="button" className="btn btn-primary" onClick={() => {
+                 this.setState({open: true})
+               }}>Thêm mới</button>
+             </div>
            </div>
-           <div style={{height: this.state.height - 167}} className="ag-fresh">
+           <div style={{height: this.state.height - 136}} className="ag-fresh">
                  <AgGridReact
                      gridOptions={this.gridOptions}
                      columnDefs={columnDefs}

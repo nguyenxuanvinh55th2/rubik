@@ -129,6 +129,7 @@ const rootSchema = `
     type Query {
       categories: [Classify]
       stockModels(limit: Int): [StockModel]
+      stockModelHome(limit: Int): [StockModel]
       stockModelById(_id: String!): StockModel
       getInVoice(token: String!): Invoice
       stockTypes(query: String): [StockType]

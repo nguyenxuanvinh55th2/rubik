@@ -31,6 +31,17 @@ const rootQuery = {
         return StockModels.find({active: true}, {sort: {createdAt: -1}}).fetch();
     }
   },
+  stockModelHome: (_, {limit}) => {
+    if(limit) {
+      let stockModels = tockModels.find({active: true}, {sort: {createdAt: -1}}).fetch().slice(0, limit);
+      return __.map(stockModels, (item) => {
+        item.images = item.images  && item.images[0] ? [item.images[0]] : []
+        return item;
+      })
+    } else {
+        return StockModels.find({active: true}, {sort: {createdAt: -1}}).fetch();
+    }
+  },
   stockModelById: (_, {_id}) => {
     return StockModels.findOne({_id, active: true});
   },
@@ -83,7 +94,10 @@ const rootQuery = {
     if(typeof query == 'string') {
       query = JSON.parse(query);
     }
-    return StockModels.find(query, {skip: offset, limit: limit}, {sort: {createdAt: -1}}).fetch();
+    return StockModels.find(query, {skip: offset, limit: limit}, {sort: {createdAt: -1}}).map((item) => {
+      item.images = item.images && item.images[0] ? [item.images[0]] : []
+      return item;
+    })
   },
   getAllStockModelSearch: (_, { keyCode }) => {
     if (keyCode) {
@@ -96,14 +110,20 @@ const rootQuery = {
           {categories: {$regex: keyCode, $options: 'iu'}}
         ]
       }
-      return StockModels.find({$and: [condition, {active: true}]}, {sort: {createdAt: -1}}).fetch();
+      return StockModels.find({$and: [condition, {active: true}]}, {sort: {createdAt: -1}}).map((item) => {
+        item.images = item.images && item.images[0] ? [item.images[0]] : []
+        return item;
+      })
     } else {
       return [];
     }
   },
   getTopStockModel: (_, {limit}) => {
     let stockModelsWithCount = [];
-    let stockModels = StockModels.find({}).fetch();
+    let stockModels = StockModels.find({}).map((item) => {
+      item.images = item.images && item.images[0] ? [item.images[0]] : []
+      return item;
+    })
     let invoiceWithCount = getSaleCountOfStockModel(stockModels.map(item => item._id));
     let stock;
     __.forEach(stockModels, item => {
