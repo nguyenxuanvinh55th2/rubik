@@ -12,18 +12,18 @@ import { Accounts } from 'meteor/accounts-base';
 import {createApolloServer} from 'meteor/apollo';
 import schema from '/imports/data';
 import bodyParser from 'body-parser';
-createApolloServer({
-  schema,
-  graphiql: Meteor.isDevelopment,
-  pretty: true,
-  configServer: express().use(bodyParser.json())
-});
 // createApolloServer({
 //   schema,
 //   graphiql: Meteor.isDevelopment,
 //   pretty: true,
-//   configServer: express().use('*', cors())
+//   configServer: express().use(bodyParser.json())
 // });
+createApolloServer({
+  schema,
+  graphiql: Meteor.isDevelopment,
+  pretty: true,
+  configServer: express().use('*', cors())
+});
 
 Meteor.startup(() => {
   if (Meteor.users.find({}).count() === 0) {
