@@ -88,7 +88,7 @@ const rootQuery = {
     return Posts.find({"stockType._id": stockTypeId}).fetch();
   },
   getPostTypeLimit: (_, {stockTypeId, offset, limit}) => {
-    return Posts.find({"stockType._id": stockTypeId}, {skip: offset, limit: limit}).fetch();
+    return Posts.find({"stockType._id": stockTypeId, active: true}, {skip: offset, limit: limit}).fetch();
   },
   findProduct: (_, {query, offset, limit}) => {
     if(typeof query == 'string') {

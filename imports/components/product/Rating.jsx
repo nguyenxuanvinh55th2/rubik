@@ -229,61 +229,76 @@ class Rating extends React.Component {
     let { starList, starText, rate } = this.state;
     let { iconSize, showStarText, showStatis, ratingHandle, rating, t, factor } = this.props;
     return (
-      <div onMouseLeave={this.onMouseLeave.bind(this)} style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 0}}>
-        <div>
-          <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
-          {
-            stars.map((item, idx) => (
-              <Checkbox
-                key={idx}
-                onMouseOver={this.onMouseOver.bind(this, item)}
-                onMouseOut={this.onMouseOut.bind(this, item)}
-                checked={starList[item.toString()]}
-                onCheck={this.rating.bind(this, item)}
-                checkedIcon={<FontIcon className="material-icons" style={{fontSize: iconSize, color: '#FCB826'}}>star</FontIcon>}
-                uncheckedIcon={<FontIcon ref={item.toString()} className="material-icons" style={{fontSize: iconSize, color: '#D7D7D7'}}>star</FontIcon>}
-                style={{width: iconSize}}
-                iconStyle={{width: iconSize * factor}}
-                inputStyle={{width: "100%"}}
-                labelStyle={{width: "100%"}}
-                disabled={false}
-              />
-            ))
-          }
+      <div>
+        {
+          this.props.isSpec ?
+          <div className="star">
+            <div className="group-star">
+              <i className="fa fa-star" aria-hidden="true" style={{color: rate >=1 ? '#febe44' : '#898989'}}></i>
+              <i className="fa fa-star" aria-hidden="true" style={{color: rate >=2 ? '#febe44' : '#898989'}}></i>
+              <i className="fa fa-star" aria-hidden="true" style={{color: rate >=3 ? '#febe44' : '#898989'}}></i>
+              <i className="fa fa-star" aria-hidden="true" style={{color: rate >=4 ? '#febe44' : '#898989'}}></i>
+              <i className="fa fa-star" aria-hidden="true" style={{color: rate >=5 ? '#febe44' : '#898989'}}></i>
+            </div>
           </div>
-          {
-            showStatis?
-            <div style={{paddingTop: 10}}>
-              <label style={{fontSize: 30, color: 'black'}}> { rate.toString() } </label>
-              <font style={{fontSize: 20, color: '#888888'}}>{' ' + t('shop:productDetail.labelOn') + ' 5'}</font>
-              <br/>
-              <label style={{fontSize: 14, color: '#888888'}}>{(rating ? rating.length : 0).toString() + ' ' + t('shop:productDetail.labelComment')}&emsp;</label>
-            </div> : null
-          }
-        </div>
-        {
-          showStarText ?
-          <div style={{marginLeft: 10, marginTop: Math.round((iconSize - 16)/2), fontSize: 16, color: '#888888'}}>
-            { starText }
-          </div> : null
-        }
-        {
-          showStatis?
-          <div style={{marginLeft: 10}}>
+          :
+          <div onMouseLeave={this.onMouseLeave.bind(this)} style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 0}}>
+            <div>
+              <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
+              {
+                stars.map((item, idx) => (
+                  <Checkbox
+                    key={idx}
+                    onMouseOver={this.onMouseOver.bind(this, item)}
+                    onMouseOut={this.onMouseOut.bind(this, item)}
+                    checked={starList[item.toString()]}
+                    onCheck={this.rating.bind(this, item)}
+                    checkedIcon={<FontIcon className="material-icons" style={{fontSize: iconSize, color: '#FCB826'}}>star</FontIcon>}
+                    uncheckedIcon={<FontIcon ref={item.toString()} className="material-icons" style={{fontSize: iconSize, color: '#D7D7D7'}}>star</FontIcon>}
+                    style={{width: iconSize}}
+                    iconStyle={{width: iconSize * factor}}
+                    inputStyle={{width: "100%"}}
+                    labelStyle={{width: "100%"}}
+                    disabled={false}
+                  />
+                ))
+              }
+              </div>
+              {
+                showStatis?
+                <div style={{paddingTop: 10}}>
+                  <label style={{fontSize: 30, color: 'black'}}> { rate.toString() } </label>
+                  <font style={{fontSize: 20, color: '#888888'}}>{' ' + t('shop:productDetail.labelOn') + ' 5'}</font>
+                  <br/>
+                  <label style={{fontSize: 14, color: '#888888'}}>{(rating ? rating.length : 0).toString() + ' ' + t('shop:productDetail.labelComment')}&emsp;</label>
+                </div> : null
+              }
+            </div>
             {
-               deStars.map((item, idx) => (
-                 <div key={idx} style = {{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
-                   <div style={{marginRight: 5, width: 50, fontSize: 14, color: '#888888'}}>{item + ' ' + t('shop:productDetail.labelStar')}</div>
-                   <div className="progress" style={{width: 200, height: 15, marginTop: 3}}>
-                     <div className="progress-bar" role="progressbar" aria-valuenow={this.getStarPercent(item).toString()}
-                      aria-valuemin="0" aria-valuemax="100" style={{backgroundColor: '#fcb826', width: this.getStarPercent(item).toString() + '%'}}>
-                     </div>
-                   </div>
-                   <div style={{width: 50, fontSize: 14, marginLeft: 10, color: '#888888'}}>{' ' + this.getStarCount(item)}</div>
-                 </div>
-               ))
+              showStarText ?
+              <div style={{marginLeft: 10, marginTop: Math.round((iconSize - 16)/2), fontSize: 16, color: '#888888'}}>
+                { starText }
+              </div> : null
             }
-          </div> : null
+            {
+              showStatis?
+              <div style={{marginLeft: 10}}>
+                {
+                   deStars.map((item, idx) => (
+                     <div key={idx} style = {{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
+                       <div style={{marginRight: 5, width: 50, fontSize: 14, color: '#888888'}}>{item + ' ' + t('shop:productDetail.labelStar')}</div>
+                       <div className="progress" style={{width: 200, height: 15, marginTop: 3}}>
+                         <div className="progress-bar" role="progressbar" aria-valuenow={this.getStarPercent(item).toString()}
+                          aria-valuemin="0" aria-valuemax="100" style={{backgroundColor: '#fcb826', width: this.getStarPercent(item).toString() + '%'}}>
+                         </div>
+                       </div>
+                       <div style={{width: 50, fontSize: 14, marginLeft: 10, color: '#888888'}}>{' ' + this.getStarCount(item)}</div>
+                     </div>
+                   ))
+                }
+              </div> : null
+            }
+          </div>
         }
       </div>
     )

@@ -230,7 +230,7 @@ class StockModelForm extends React.Component {
               justifyContent: 'flex-end',
               marginTop: 5
             }}>
-              {!this.props.params._id && <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit || !data.code || !data.stockType._id} onClick={() => this.handleSave(true)}>Lưu và khởi tạo</button>
+              {!this.props.params._id && <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit || !data.code || !data.stockType._id || !data.price} onClick={() => this.handleSave(true)}>Lưu và khởi tạo</button>
             }
               <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit || !data.code || !data.stockType._id || !data.price} style={{
                 marginLeft: 10

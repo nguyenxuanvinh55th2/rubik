@@ -162,11 +162,7 @@ export default class AllPoduct extends React.Component {
                                   <h4>
                                     <Link to={`/chi-tiet-san-pham/${value._id}`}>{value.name}</Link>
                                   </h4>
-                                  <div className="star">
-                                    <div className="group-star">
-                                      <Rating {...this.props} iconSize={20} factor={'10%'} rating = {value.votes} allowEdit = {false} showStarText = {false}/>
-                                    </div>
-                                  </div>
+                                  <Rating {...this.props} isSpec={true} iconSize={20} factor={'10%'} rating = {value.votes} allowEdit = {false} showStarText = {false}/>
                                   {
                                     value.isPromotion ?
                                     <p>

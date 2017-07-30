@@ -88,11 +88,7 @@ class ItemProduct extends React.Component {
             <h4>
               <Link to={'/chi-tiet-san-pham/' + this.props.value._id}>{this.props.value.name}</Link>
             </h4>
-            <div className="star">
-              <div className="group-star">
-                <Rating {...this.props} iconSize={20} factor={'10%'} rating = {this.props.value.votes} allowEdit = {false} showStarText = {false}/>
-              </div>
-            </div>
+            <Rating {...this.props} isSpec={true} iconSize={20} factor={'10%'} rating = {this.props.value.votes} allowEdit = {false} showStarText = {false}/>
             {
               this.props.value.isPromotion ?
               <p>
