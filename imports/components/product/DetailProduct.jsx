@@ -350,7 +350,7 @@ class DetailProduct extends React.Component {
                       </li>
                     </ul>
 
-                    <div className="tab-content">
+                    <div className="tab-content contents">
                       <div role="tabpanel" className="tab-pane active" id="mota"></div>
                       <div role="tabpanel" className="tab-pane" id="danhgia">
                         <div className="binhluan">
