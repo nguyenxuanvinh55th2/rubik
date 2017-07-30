@@ -68,6 +68,7 @@ class StockModelForm extends React.Component {
         }
       });
       stockModel.categories = categories;
+      console.log(stockModel.images);
       this.setState({data: stockModel});
     }
   }

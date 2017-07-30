@@ -3,14 +3,17 @@ const NonScalars = {
   StockModel :{
     images: ({images}) => {
       if(images && images[0]){
-        return Files.find({_id:{$in: images}}).each().map((img)=>{
-            return {
-              _id: img._id,
-              file: img.link(),
-              fileName: img.name,
-              type: img.type
-            };
+        let datas = [];
+        __.forEach(images, (img) => {
+          let file = Files.findOne({_id: img});
+          if(file){
+            datas.push({
+              _id: file._id, fileName: file.name, type: file.type,
+              file: file.link()
+            });
+          }
         });
+        return datas;
       }
       return []
     },

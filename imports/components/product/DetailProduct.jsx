@@ -226,12 +226,7 @@ class DetailProduct extends React.Component {
     let {stockModelById, stockTypes} = this.props.data;
     let {page, pageCount} = this.state;
     if (stockModelById) {
-      let images = [];
-      __.forEach(stockModelById.images, (item, idx) => {
-        if (idx < 3) {
-          images.push(item.file);
-        }
-      });
+      let images = __.map(stockModelById.images, (img) => img.file)
       return (
         <div>
           <div className="product-detail">
