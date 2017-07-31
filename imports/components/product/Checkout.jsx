@@ -183,7 +183,20 @@ class Checkout extends React.Component {
 													__.map(getInVoice.invoiceDetails, (item, idx) => (
 	                          <tr key={idx}>
 	                            <td>{item.stockModel.name}</td>
-                              <td><div style={{height: 15, width: 15, borderRadius: '100%', backgroundColor: item.color, display: 'block', margin: '0px auto'}}></div></td>
+                              <td>
+                                {
+                                  item.color.isBasicColor ?
+                                  <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
+                                      <img className="img-circle" style={{height: 15, width: 15, backgroundColor: item.color.color}}/>
+                                      <p style={{paddingLeft: 5}}>{item.color.name}</p>
+                                  </div>
+                                  :
+                                  <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
+                                    <img className="img-circle" src={item.color.image && item.color.image.file ? item.color.image.file : ''} style={{height: 15, width: 15}}/>
+                                    <p style={{paddingLeft: 5}}>{item.color.name}</p>
+                                  </div>
+                                }
+                              </td>
 	                            <td>{item.quantity}</td>
                               <td>
                                 {
@@ -242,7 +255,11 @@ const INVOICE_QUERY = gql `
 					shipFee
 					invoiceDetails {
 						_id
-            color
+            color {
+              _id name  color isBasicColor image {
+                _id fileName file
+              }
+            }
 						stockModel {
 							_id
 							code

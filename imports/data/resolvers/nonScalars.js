@@ -51,6 +51,20 @@ const NonScalars = {
       return {}
     }
   },
+  Color: {
+    image: ({image}) => {
+      if(image){
+        let file = Files.findOne({_id: image});
+        if(file){
+          return {
+            _id: file._id, fileName: file.fileName, type: file.type,
+            file: file.link()
+          }
+        }
+      }
+      return {}
+    }
+  },
   DetailSlider: {
     image: ({image}) => {
       if(image){

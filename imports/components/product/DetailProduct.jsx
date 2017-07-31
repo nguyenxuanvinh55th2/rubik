@@ -80,7 +80,7 @@ class DetailProduct extends React.Component {
       comment: '',
       name: '',
       email: '',
-      choseColor: null
+      choseColor: {}
     };
     this.itemPerPage = 5;
   }
@@ -164,7 +164,7 @@ class DetailProduct extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.data.stockModelById && !this.state.choseColor && nextProps.data.stockModelById.colors[0]) {
+    if(nextProps.data.stockModelById && nextProps.data.stockModelById.colors[0]) {
       this.setState({choseColor: nextProps.data.stockModelById.colors[0]})
     }
   }
@@ -304,9 +304,35 @@ class DetailProduct extends React.Component {
                         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
                           <h4 className="dmuc">{'Màu sắc: '}</h4>
                           <span style={{paddingTop: 17, paddingLeft: 10}}>
-                            <CirclePicker width={252} colors={stockModelById.colors} circleSize={20} onChange={(color) => {
-                              this.setState({choseColor: color.hex});
-                            }}/>
+                            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
+                              {
+                                __.map(stockModelById.colors, (color, colorIdx) => {
+                                  if(color._id){
+                                    return (
+                                      <div key={colorIdx} style={{marginLeft: 5, border: `1px solid ${this.state.choseColor._id && color._id == this.state.choseColor._id ? 'red' : 'black'}`, borderRadius: 10, cursor: 'pointer'}} onClick={() => {
+                                        this.setState({choseColor: color})
+                                      }}>
+                                        {
+                                          color.isBasicColor ?
+                                          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
+                                              <img className="img-circle" style={{height: 30, width: 30, backgroundColor: color.color}}/>
+                                              <p style={{paddingTop: 5, paddingLeft: 5}}>{color.name}</p>
+                                          </div>
+                                          :
+                                          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
+                                            <img className="img-circle" src={color.image && color.image.file ? color.image.file : ''} style={{height: 30, width: 30}}/>
+                                            <p style={{paddingTop: 5, paddingLeft: 5}}>{color.name}</p>
+                                          </div>
+                                        }
+                                      </div>
+                                    )
+                                  }
+                                  else {
+                                    return null
+                                  }
+                                })
+                              }
+                            </div>
                           </span>
                         </div>
                         <h4 className="dmuc" style={{
@@ -350,7 +376,7 @@ class DetailProduct extends React.Component {
                       </li>
                     </ul>
 
-                    <div className="tab-content">
+                    <div className="tab-content contents">
                       <div role="tabpanel" className="tab-pane active" id="mota"></div>
                       <div role="tabpanel" className="tab-pane" id="danhgia">
                         <div className="binhluan">
@@ -433,7 +459,12 @@ const STOCK_MODEL_QUERY = gql `
             _id
 						code
             name
-            colors
+            colors {
+            _id  name isBasicColor color
+            image {
+              _id  file  fileName
+            }
+          }
 						quantity
 						saleOff
             categories

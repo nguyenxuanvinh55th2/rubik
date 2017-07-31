@@ -112,7 +112,12 @@ const STOCK_MODEL_QUERY = gql `
     query stockModels($limit: Int){
       stockModels(limit: $limit) {
           _id
-          name quantity colors
+          name quantity
+          colors {
+            _id name  color isBasicColor image {
+              _id fileName file
+            }
+          }
 					images {
 						_id
 						file
@@ -124,7 +129,12 @@ const STOCK_MODEL_QUERY = gql `
       }
       getTopStockModel(limit: $limit) {
           _id
-          name quantity colors
+          name quantity
+          colors {
+            _id name  color isBasicColor image {
+              _id fileName file
+            }
+          }
 					images {
 						_id
 						file

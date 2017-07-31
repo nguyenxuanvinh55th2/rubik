@@ -24,6 +24,9 @@ const rootQuery = {
   categories: (_, {}) => {
     return Classifies.find({isCategory: true, active: true}).fetch();
   },
+  colors: (_, {}) => {
+    return Colors.find({isColor: true, active: true}).fetch();
+  },
   stockModels: (_, {limit}) => {
     if(limit) {
       return StockModels.find({active: true}, {sort: {createdAt: -1}}).fetch().slice(0, limit);

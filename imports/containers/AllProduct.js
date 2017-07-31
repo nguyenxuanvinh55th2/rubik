@@ -19,7 +19,13 @@ const INSERT_INVOICE_DETAIL = gql `
 const POSTS = gql `
     query findProduct($query: String, $offset: Int, $limit: Int) {
       findProduct(query: $query, offset: $offset, limit: $limit){
-        _id    name price isPromotion saleOff quantity colors
+        _id    name price isPromotion saleOff quantity
+        colors {
+        _id  name isBasicColor color
+        image {
+          _id  file  fileName
+        }
+      }
        images {
        _id file
        }

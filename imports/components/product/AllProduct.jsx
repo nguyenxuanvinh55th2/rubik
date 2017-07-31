@@ -147,12 +147,13 @@ export default class AllPoduct extends React.Component {
                                   <img src={value.images [0] ? value.images[0].file : '/imgs/logo.png'} alt=""/>
                                   <Link to={`/chi-tiet-san-pham/${value._id}`} className="hover-product"></Link>
                                   {
-                                    value.quantity && value.quantity > 0 &&
+                                    value.quantity && value.quantity > 0 ?
                                     <div className="chart">
                                       <Link>
                                         <i  onClick={this.addToCart.bind(this, '/gio-hang', value)} className="fa fa-shopping-cart" aria-hidden="true"></i>
                                       </Link>
                                     </div>
+                                    : null
                                   }
                                   <div className="link-detail">
                                     <Link to={`/chi-tiet-san-pham/${value._id}`} className="btn btn-cate">Xem chi tiết</Link>
@@ -220,7 +221,7 @@ export default class AllPoduct extends React.Component {
 const SEARCH_STOCKMODEL = gql`
     query getAllStockModelSearch($keyCode:String) {
       getAllStockModelSearch(keyCode: $keyCode){
-        _id name code categories quantity isPromotion saleOff colors weight
+        _id name code categories
         stockType {
           _id name
         }

@@ -38,7 +38,7 @@ const rootSchema = `
       name: String
       active: Boolean
       weight: Float
-      colors: [String]
+      colors: [ColorStock]
       categories: [String]
       isLimited: Boolean
       isPromotion: Boolean
@@ -52,6 +52,13 @@ const rootSchema = `
       stockType: StockType
       votes: [Vote]
       origin: String
+    }
+    type ColorStock{
+      _id: String
+      name: String
+      isBasicColor: Boolean
+      color: String
+      image: File
     }
     type Vote {
       stars: Int
@@ -81,7 +88,7 @@ const rootSchema = `
       invoice: Invoice
       createdAt: Float
       votes: [Vote]
-      color: String
+      color: ColorStock
     }
     type Post {
       _id: String
@@ -126,8 +133,16 @@ const rootSchema = `
       dateOfBirth: Float
       gender: Boolean
     }
+    type Color {
+      _id: String
+      name: String
+      isBasicColor: Boolean
+      color: String
+      image: File
+    }
     type Query {
       categories: [Classify]
+      colors: [Color]
       stockModels(limit: Int): [StockModel]
       stockModelHome(limit: Int): [StockModel]
       stockModelById(_id: String!): StockModel
@@ -150,6 +165,8 @@ const rootSchema = `
     type Mutation {
       removeCategories(userId: String!, _id: String!): String
       insertCategories(userId: String!, info: String!): String
+      removeColor(userId: String!, _id: String!): String
+      insertColor(userId: String!, info: String!): String
       insertStockModel(userId: String!, info: String!): String
       insertFiles(userId: String, info: String): String
       insertInvoice(token: String!, info: String): String

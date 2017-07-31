@@ -99,7 +99,6 @@ class OrderDevoice extends React.Component {
     }
 
     render() {
-      console.log("message ", this.state.invoice);
       if (Meteor.userId()) {
         let data = __.cloneDeep(this.props.data);
         if (data.loading) {
@@ -304,21 +303,7 @@ class OrderDevoice extends React.Component {
                     }
                   }
               ];
-              // if (!stockManagement.fetchData) {
-              //     setTimeout(()=>{
-              //         stockManagementMutate({
-              //             fetchData: true,
-              //             stocks: data.stockManagement,
-              //             setting: this.state.setting,
-              //             colDefs: columnDefs
-              //         });
-              //     }, 500);
-              // }
-              // this.gridOptions.fullWidthCellRendererParams = {
-              //   t: this.props.t
-              // }
               let weight = 0;
-              console.log("this.state.invoice ", this.state.invoice);
               if(this.state.invoice) {
                 this.state.invoice.invoiceDetails.map(item => {
                   weight += (item.stockModel.weight ? item.stockModel.weight : 0) * item.quantity;
@@ -364,7 +349,6 @@ class OrderDevoice extends React.Component {
                           <h5>Ngày đặt:&nbsp;<span style={{fontWeight: 'bold'}}>{moment(this.state.invoice.createdAt).format('HH:mm DD/MM/YYYY')}</span>&nbsp;Email:&nbsp;<span style={{fontWeight: 'bold'}}>{this.state.invoice.customer.email}</span></h5>
                         </div>
                         <button className="btn btn-danger" disabled={this.state.invoice.status === 99} style={{borderWidth: 0, width: 100, height: 30}} onClick={() => {
-                            console.log("message cancel");
                             this.props.cancelInvoice(Meteor.userId(), this.state.invoice._id).then(({data}) => {
                               if (data) {
                                 this.setState({invoice: null});
@@ -432,15 +416,6 @@ class OrderDevoice extends React.Component {
                           </table>
                         </div>
                         <table style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
-                          <tfoot>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td style={{textAlign: 'right', fontWeight: 'bold', width: 300}}>{'Tổng khối lượng'}:&nbsp;</td>
-                            <td style={{textAlign: 'right', fontWeight: 'bold', width: 100}}>{weight + 'g'}</td>
-                          </tfoot>
-                        </table>
-                        <table style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
                             <tfoot>
                               <td></td>
                               <td></td>
@@ -482,7 +457,11 @@ const INVOICE_QUERY = gql `
           }
           invoiceDetails {
 						_id
-            color
+            color {
+              _id name  color isBasicColor image {
+                _id fileName file
+              }
+            }
 						stockModel {
 							_id
 							code
