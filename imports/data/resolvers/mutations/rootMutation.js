@@ -34,10 +34,61 @@ const rootMutation = {
     }
     return;
   },
+  insertColor: (_,{ userId, info }) => {
+    let user = Meteor.users.findOne({_id: userId});
+    if(user) {
+      info = JSON.parse(info);
+      info.data.createdAt = moment().valueOf();
+      info.data.createdBy = {
+        _id: user._id,
+        username: user.username
+      }
+      return Colors.insert(info.data,(error, result) => {
+        if(error){
+          throw error;
+        }
+        else {
+          console.log(info.data.isBasicColor, info.image);
+          if(!info.data.isBasicColor && info.image){
+            console.log("image");
+
+            let docData = [info.image];
+            let imageData = {};
+            __.forEach(docData, (content, key)=>{
+                if(content.fileName){
+                    imageData[key] = content;
+                    imageData[key].file = content.file.replace(/^data:image\/(png|gif|jpeg);base64,/,'');
+                    content = '';
+                }
+            });
+            __.forEach(imageData, (img, key)=>{
+                buf = new Buffer(img.file, 'base64');
+                Files.write(buf, {fileName: img.fileName, type: img.type, userId: userId}, (err, fileRef)=>{
+                    if (err) {
+                      throw err;
+                    } else {
+                      console.log("ss");
+                      Colors.update({_id: result}, {$set: {image: fileRef._id}});
+                    }
+                }, true);
+            });
+          }
+        }
+      });
+    }
+    return;
+  },
   removeCategories: (_,{ userId, _id }) => {
     let user = Meteor.users.findOne({_id: userId});
     if(user) {
       return Classifies.update({_id}, {$set: {active: false}});
+    }
+    return;
+  },
+  removeColor: (_,{ userId, _id }) => {
+    let user = Meteor.users.findOne({_id: userId});
+    if(user) {
+      return Colors.update({_id}, {$set: {active: false}});
     }
     return;
   },
@@ -103,6 +154,7 @@ const rootMutation = {
               throw err;
             } else {
               console.log(fileRef);
+              return fileRef._id;
             }
         }, true);
     });
@@ -269,7 +321,7 @@ const rootMutation = {
               total += stockModel.quantity * stockModel.amount;
               content += '<tr>';
               content += '<td style="border: 1px solid;">' + stockModel.stockModel.name + '</td>';
-              content += '<td style="border: 1px solid;">' + stockModel.color + '</td>';
+              content += '<td style="border: 1px solid;">' + stockModel.color && stockModel.color.name ? stockModel.color.name : ''  + '</td>';
               content += '<td style="border: 1px solid;">' + stockModel.quantity + '</td>';
               content += '<td style="border: 1px solid;">' + stockModel.amount + '</td>';
               content += '</tr>';

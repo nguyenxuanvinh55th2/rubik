@@ -26,3 +26,10 @@ Meteor.publish('sliders', function () {
         this.ready();
     }
 });
+Meteor.publish('colors', function () {
+    if (this.userId) {
+        return Colors.find({});
+    } else {
+        this.ready();
+    }
+});

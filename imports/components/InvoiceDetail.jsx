@@ -19,8 +19,21 @@ class InvoiceDetail extends React.Component {
                   src={item.stockModel.images && item.stockModel.images[0] ? item.stockModel.images[0].file : '/imgs/logo.png'} />
           </td>
           <td style={{textAlign: 'center'}}>{item.stockModel.name}</td>
-          <td style={{textAlign: 'center'}}>{accounting.format(item.stockModel.price) + ' VNĐ'}</td>
-          <td style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', paddingTop: 30}}><div style={{width: 15, height: 15, backgroundColor: item.color}}></div></td>
+          <td style={{textAlign: 'center'}}>{accounting.format(item.stockModel.price) + ' đ'}</td>
+          <td >
+            {
+              item.color.isBasicColor ?
+              <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
+                  <img className="img-circle" style={{height: 30, width: 30, backgroundColor: item.color.color}}/>
+                  <p style={{paddingTop: 5, paddingLeft: 5}}>{item.color.name}</p>
+              </div>
+              :
+              <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
+                <img className="img-circle" src={item.color.image && item.color.image.file ? item.color.image.file : ''} style={{height: 30, width: 30}}/>
+                <p style={{paddingTop: 5, paddingLeft: 5}}>{item.color.name}</p>
+              </div>
+            }
+          </td>
           <td style={{textAlign: 'center'}}>
             { item.countInStore }
           </td>

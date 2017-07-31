@@ -53,10 +53,62 @@ class Colors extends React.Component {
       displayColorPicker: !this.state.displayColorPicker
     })
   }
+  handleSaveColor(){
+    if(this.state.isBasicColor){
+      if(this.state.name && this.state.color){
+        let info = {
+          data: {
+            name: this.state.name,
+            color: this.state.color,
+            isBasicColor: this.state.isBasicColor,
+            isColor: true,
+            active: true
+          }
+        }
+        if(this.props.insertColor){
+          this.props.insertColor(Meteor.userId(), JSON.stringify(info)).then(({data}) => {
+            if(data){
+              this.props.addNotificationMute({fetchData: true, message: 'Thêm thành công', level: 'success'});
+            }
+          })
+          .catch((error) => {
+            this.props.addNotificationMute({fetchData: true, message: 'Thêm thất bại', level: 'error'});
+          })
+        }
+      }
+    }
+    else {
+      if(this.state.name && this.state.image){
+        let info = {
+          data: {
+            name: this.state.name,
+            color: this.state.color,
+            isBasicColor: this.state.isBasicColor,
+            isColor: true,
+            active: true
+          },
+          image: this.state.image
+        }
+        if(this.props.insertColor){
+          this.props.insertColor(Meteor.userId(), JSON.stringify(info)).then(({data}) => {
+            if(data){
+              this.props.addNotificationMute({fetchData: true, message: 'Thêm thành công', level: 'success'});
+            }
+          })
+          .catch((error) => {
+            this.props.addNotificationMute({fetchData: true, message: 'Thêm thất bại', level: 'error'});
+            this.setState({open: false})
+          })
+        }
+      }
+    }
+    this.setState({open: false})
+    this.props.data.refetch();
+  }
   render(){
     let {data} = this.props;
     if (Meteor.userId()) {
-      if (!data.categories) {
+      if (!data.colors) {
         return (
           <div className="loading">
             <i className="fa fa-spinner fa-spin" style={{
@@ -116,26 +168,53 @@ class Colors extends React.Component {
               <thead>
                 <tr>
                   <th style={{width: 30}}></th>
-                  <th style={{width: 30}}></th>
-                  <th>Tên</th>
+                  {/* <th style={{width: 30}}></th> */}
+                  <th style={{width: 200}}>Tên</th>
                   <th>Màu</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <button type="button" className="btn btn-danger">
-                      Xóa
-                    </button>
-                  </td>
-                  <td>
-                    <button type="button" className="btn btn-primary">
-                      Cập nhật
-                    </button>
-                  </td>
-                  <td>John</td>
-                  <td>Doe</td>
-                </tr>
+                {
+                  __.map(data.colors, (color, idx) => {
+                    return (
+                      <tr key={idx}>
+                        <td>
+                          <button type="button" className="btn btn-danger" onClick={() => {
+                            var deleteImage = confirm("Bạn có muốn màu này?");
+                            if (deleteImage == true) {
+                              if(this.props.removeColor){
+                                this.props.removeColor(Meteor.userId(), color._id).then(({data}) => {
+                                  this.props.addNotificationMute({fetchData: true, message: 'Thành công', level: 'success'});
+                                  this.props.data.refetch();
+                                })
+                                .catch((error) => {
+                                  this.props.addNotificationMute({fetchData: true, message: 'Thất bại', level: 'error'});
+                                  this.props.data.refetch();
+                                })
+                              }
+                            }
+                          }}>
+                            Xóa
+                          </button>
+                        </td>
+                        {/* <td>
+                          <button type="button" className="btn btn-primary">
+                            Cập nhật
+                          </button>
+                        </td> */}
+                        <td>{color.name}</td>
+                        <td>
+                          {
+                            color.isBasicColor ?
+                            <div style={{height: 40, width: 40, backgroundColor: color.color}}></div>
+                            :
+                            <img src={color.image.file ? color.image.file : ''} style={{height: 40, width: 40}}/>
+                          }
+                        </td>
+                      </tr>
+                    )
+                  })
+                }
               </tbody>
             </table>
             <Dialog modal={true} open={this.state.open} bodyStyle={{
@@ -206,6 +285,7 @@ class Colors extends React.Component {
                   </div>
                   <div className="modal-footer">
                     <button type="button" className="btn btn-default" onClick={() => this.setState({open: false})}>Đóng</button>
+                    <button type="button" className="btn btn-primary" onClick={() => this.handleSaveColor()}>Lưu</button>
                   </div>
                 </div>
               </div>
@@ -221,53 +301,56 @@ class Colors extends React.Component {
     }
   }
 }
-const STOCK_CATEGORY_QUERY = gql `
-    query categories($query: String){
-      categories {
-          _id
-          name
-          stockType {
-            _id name
+const STOCK_COLORS = gql `
+    query colors{
+      colors {
+          _id name  color isBasicColor image {
+            _id fileName file
           }
       }
-      stockTypes(query: $query) {
-          _id name
-      }
 }`
 
-const REMOVE_STOCK_CATEGORY = gql `
-    mutation removeCategories($userId: String!, $_id: String!){
-        removeCategories(userId: $userId, _id: $_id)
+const REMOVE_COLOR = gql `
+    mutation removeColor($userId: String!, $_id: String!){
+        removeColor(userId: $userId, _id: $_id)
 }`
 
-const INSERT_STOCK_CATEGORY = gql `
-    mutation insertCategories($userId: String!, $info: String!){
-        insertCategories(userId: $userId, info: $info)
+const INSERT_COLOR = gql `
+    mutation insertColor($userId: String!, $info: String!){
+        insertColor(userId: $userId, info: $info)
+}`
+const INSERT_FILE = gql `
+    mutation insertFiles($userId: String!, $info: String!){
+        insertFiles(userId: $userId, info: $info)
 }`
 
-export default compose(graphql(STOCK_CATEGORY_QUERY, {
-  options: () => ({variables: {
-    query: JSON.stringify(
-    {
-      isColor: true, active : true, _id: {$ne: '0'}
-    }
-  )}, fetchPolicy: 'network-only'})
-}), graphql(REMOVE_STOCK_CATEGORY, {
+export default compose(graphql(STOCK_COLORS, {
+  options: () => ({variables: {}, fetchPolicy: 'network-only'})
+}), graphql(REMOVE_COLOR, {
   props: ({mutate}) => ({
-    removeCategories: (userId, _id) => mutate({
+    removeColor: (userId, _id) => mutate({
       variables: {
         userId,
         _id
       }
     })
   })
-}), graphql(INSERT_STOCK_CATEGORY, {
+}), graphql(INSERT_COLOR, {
   props: ({mutate}) => ({
-    insertCategories: (userId, info) => mutate({
+    insertColor: (userId, info) => mutate({
       variables: {
         userId,
         info
       }
     })
   })
-}),)(Colors);
+}), graphql(INSERT_FILE, {
+  props: ({mutate}) => ({
+    insertFiles: (userId, info) => mutate({
+      variables: {
+        userId,
+        info
+      }
+    })
+  })
+}))(Colors);

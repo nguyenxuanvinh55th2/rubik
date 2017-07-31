@@ -6,6 +6,7 @@ import gql from 'graphql-tag';
 import Dialog from 'material-ui/Dialog';
 import { HanderEditorStockModel, RenderImage, RenderDescription, UpdateQuantity } from './ChildStockModel.jsx';
 import accounting from 'accounting';
+import __ from 'lodash'
 class StockModel extends React.Component {
   constructor(props) {
     super(props);
@@ -38,7 +39,18 @@ class StockModel extends React.Component {
   componentDidUpdate() {
     if (this.gridOptions.api) {
       this.gridOptions.api.showLoadingOverlay();
-      this.gridOptions.api.setRowData(this.props.data.stockModels);
+      // this.gridOptions.api.setRowData(__.map(__.cloneDeep(this.props.data.stockModels), (stock) => {
+      //   stock.colorString = __.map(stock.colors,(color) => {
+      //     return color.name ? color.name : '';
+      //   })
+      //   return stock;
+      // });
+      this.gridOptions.api.setRowData(__.map(__.cloneDeep(this.props.data.stockModels), (stock) => {
+        stock.colorString = __.map(stock.colors,(color) => {
+            return color.name ? color.name : '';
+          })
+        return stock;
+      }));
       this.gridOptions.api.setFloatingBottomRowData(this.renderFooterData(this.props.data.stockModels));
       this.gridOptions.api.hideOverlay();
     }
@@ -177,6 +189,19 @@ class StockModel extends React.Component {
         },
         {
           headerName: "Cân nặng", field: "weight",  width: 100, filter: 'text', suppressMenu: true,
+          filterParams: {
+            filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+          },
+          cellStyle: function(params) {
+            if (params.node.data.gridType == 'footer') {
+              return {fontWeight: 'bold'};
+            } else {
+              return null;
+            }
+          }
+        },
+        {
+          headerName: "Màu sắc", field: "colorString",  width: 100, filter: 'text', suppressMenu: true,
           filterParams: {
             filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
           },
@@ -341,6 +366,9 @@ const STOCK_MODEL_QUERY = gql `
 						_id fileName
 						file
 					}
+          colors {
+            _id name  color
+          }
           categories
           stockType {
             _id name

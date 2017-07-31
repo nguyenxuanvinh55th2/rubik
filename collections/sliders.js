@@ -1,3 +1,4 @@
+import { Mongo } from 'meteor/mongo';
 Sliders = new Mongo.Collection("sliders");
 Sliders.allow({
     insert: function(userId, doc){

@@ -286,42 +286,15 @@ class StockModelForm extends React.Component {
                     }}/>
                   </div>
                   <div className="form-group">
-                    <div style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'flex-start'
-                    }}>
-                      <label>Màu sắc</label>
-                      <div style={styles.swatch} onClick={this.handleClick}>
-                        <div style={styles.color}/>
-                      </div>
-                    </div>
-                    {this.state.displayColorPicker
-                      ? <div style={styles.popover}>
-                          <div style={styles.cover} onClick={this.handleClose}/>
-                          <SketchPicker color={this.state.color} onChange={this.handleChange}/>
-                        </div>
-                      : null}
-                    <div style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'flex-start'
-                    }}>
-                      <CirclePicker width={252} colors={data.colors} circleSize={20} onChange={(color) => {
-                        let remove = confirm(`Loại bỏ màu ${color.hex}`);
-                        if (remove) {
-                          this.setState((prevState) => {
-                            let colors = data.colors;
-                            let idx = __.findIndex(colors, (col) => col == color.hex);
-                            if (idx > -1) {
-                              colors.splice(idx, 1);
-                            }
-                            prevState.data.colors = colors;
-                            return prevState;
-                          });
-                        }
-                      }}/>
-                    </div>
+                    <label>Màu sắc</label>
+                    <Select multi={true} value={data.colors} valueKey="_id" labelKey="name" placeholder="Chọn màu sắc" options={this.props.data.colors} promptTextCreator={(label) => {
+                      return (label : String)
+                    }} onChange={(value) => {
+                      this.setState((prevState) => {
+                        prevState.data.colors = value;
+                        return prevState;
+                      })
+                    }}/>
                   </div>
                   <div className="form-group">
                     <label>Hãng sản xuất</label>
@@ -405,35 +378,52 @@ class StockModelForm extends React.Component {
                   </div>
                   <div className="form-group">
                     <label>Chủng loại</label>
-                    <Creatable multi={true} value={data.categories} valueKey="_id" labelKey="name" placeholder="Chọn chủng loại" options={this.props.data.categories} promptTextCreator={(label) => {
-                      return (label : String)
-                    }} onChange={(value) => {
-                      this.setState((prevState) => {
-                        if (this.state.isCreateNew) {
-                          if (this.props.insertCategories) {
-                            this.props.insertCategories(Meteor.userId(), JSON.stringify({
-                              name: value[value.length - 1].name,
-                              active: true,
-                              isCategory: true
-                            })).then(({data}) => {
-                              this.props.data.refetch();
-                              prevState.isCreateNew = false;
-                              if (data.insertCategories) {
-                                value[value.length - 1]._id = data.insertCategories;
-                              }
-                            }).catch((error) => {
-                              console.log(error);
-                            });
-                          }
-                        }
-                        prevState.data.categories = value;
-                        return prevState;
-                      })
-                    }} shouldKeyDownEventCreateNewOption={(event, label, value) => {
-                      if (event.keyCode == 13) {
-                        this.setState({isCreateNew: true})
-                      }
-                    }}/>
+                  < Creatable multi = {
+  true
+}
+value = {
+  data.categories
+}
+valueKey = "_id" labelKey = "name" placeholder = "Chọn chủng loại" options = {
+  this.props.data.categories
+}
+promptTextCreator = {
+  (label) => {
+    return (label : String)
+  }
+}
+onChange = {
+  (value) => {
+    this.setState((prevState) => {
+      if (this.state.isCreateNew) {
+        if (this.props.insertCategories) {
+          this.props.insertCategories(Meteor.userId(), JSON.stringify({
+            name: value[value.length - 1].name,
+            active: true,
+            isCategory: true
+          })).then(({data}) => {
+            this.props.data.refetch();
+            prevState.isCreateNew = false;
+            if (data.insertCategories) {
+              value[value.length - 1]._id = data.insertCategories;
+            }
+          }).catch((error) => {
+            console.log(error);
+          });
+        }
+      }
+      prevState.data.categories = value;
+      return prevState;
+    })
+  }
+}
+shouldKeyDownEventCreateNewOption = {
+  (event, label, value) => {
+    if (event.keyCode == 13) {
+      this.setState({isCreateNew: true})
+    }
+  }
+} />
                   </div>
                   <div className="form-group">
                     <label>Giá nhập</label>
@@ -547,11 +537,16 @@ class StockModelForm extends React.Component {
 const STOCK_TYPE = gql `
     query stockTypes($_id: String, $query: String){
       stockModel(_id: $_id) {
-        _id code name weight isLimited  isPromotion colors
+        _id code name weight isLimited  isPromotion
         unit averagePrice  price  quantity saleOff description
         images {
           _id fileName
           file
+        }
+        colors {
+          _id name  color isBasicColor image {
+            _id fileName file
+          }
         }
         categories
         stockType {
@@ -563,6 +558,11 @@ const STOCK_TYPE = gql `
       }
       categories {
         _id name
+      }
+      colors {
+          _id name  color isBasicColor image {
+            _id fileName file
+          }
       }
 }`
 const UPDATE_STOCKMODEL = gql `
