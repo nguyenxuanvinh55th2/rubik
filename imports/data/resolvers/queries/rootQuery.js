@@ -120,7 +120,7 @@ const rootQuery = {
   },
   getTopStockModel: (_, {limit}) => {
     let stockModelsWithCount = [];
-    let stockModels = StockModels.find({}).map((item) => {
+    let stockModels = StockModels.find({active: true}).map((item) => {
       item.images = item.images && item.images[0] ? [item.images[0]] : []
       return item;
     })
