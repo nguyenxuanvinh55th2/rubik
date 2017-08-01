@@ -68,20 +68,25 @@ class Cart extends React.Component {
                                   <span>{accounting.formatNumber(item.stockModel.price)}đ</span>
                                 </h4>
                               }
-	                            <h4 style={{display: 'flex', flexDirection: 'row',justifyContent: 'flex-start'}}>{'Màu: '}&nbsp;
-                                {
-                                  item.color.isBasicColor ?
-                                  <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
-                                      <img className="img-circle" style={{height: 15, width: 15, backgroundColor: item.color.color}}/>
+                              {
+                                item.color && item.color._id ?
+                                <h4 style={{display: 'flex', flexDirection: 'row',justifyContent: 'flex-start'}}>{'Màu: '}&nbsp;
+                                  {
+                                    item.color.isBasicColor ?
+                                    <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
+                                        <img className="img-circle" style={{height: 15, width: 15, backgroundColor: item.color.color}}/>
+                                        <p style={{paddingLeft: 5}}>{item.color.name}</p>
+                                    </div>
+                                    :
+                                    <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
+                                      <img className="img-circle" src={item.color.image && item.color.image.file ? item.color.image.file : ''} style={{height: 15, width: 15}}/>
                                       <p style={{paddingLeft: 5}}>{item.color.name}</p>
-                                  </div>
-                                  :
-                                  <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
-                                    <img className="img-circle" src={item.color.image && item.color.image.file ? item.color.image.file : ''} style={{height: 15, width: 15}}/>
-                                    <p style={{paddingLeft: 5}}>{item.color.name}</p>
-                                  </div>
-                                }
-                              </h4>
+                                    </div>
+                                  }
+                                </h4>
+                                :
+                                <h4 style={{display: 'flex', flexDirection: 'row',justifyContent: 'flex-start'}}>{'Màu: '}&nbsp;</h4>
+                              }
 	                            <span className="close">
 	                              <i className="fa fa-times" aria-hidden="true" onClick={this.removeInvoiceDetail.bind(this, item._id)}></i>
 	                            </span>
@@ -108,20 +113,25 @@ class Cart extends React.Component {
                         {__.map(this.state.invoiceDetails, (item, idx) => (
                           <tr key={idx}>
                             <td>{item.stockModel.name}</td>
-                            <td>
-                              {
-                                item.color.isBasicColor ?
-                                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
-                                    <img className="img-circle" style={{height: 15, width: 15, backgroundColor: item.color.color}}/>
+                            {
+                              item.color && item.color._id ?
+                              <td>
+                                {
+                                  item.color.isBasicColor ?
+                                  <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
+                                      <img className="img-circle" style={{height: 15, width: 15, backgroundColor: item.color.color}}/>
+                                      <p style={{paddingLeft: 5}}>{item.color.name}</p>
+                                  </div>
+                                  :
+                                  <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
+                                    <img className="img-circle" src={item.color.image && item.color.image.file ? item.color.image.file : ''} style={{height: 15, width: 15}}/>
                                     <p style={{paddingLeft: 5}}>{item.color.name}</p>
-                                </div>
-                                :
-                                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
-                                  <img className="img-circle" src={item.color.image && item.color.image.file ? item.color.image.file : ''} style={{height: 15, width: 15}}/>
-                                  <p style={{paddingLeft: 5}}>{item.color.name}</p>
-                                </div>
-                              }
-                            </td>
+                                  </div>
+                                }
+                              </td>
+                              :
+                              <td></td>
+                            }
                             <td style={{display: 'flex', flexDirection: 'row',justifyContent: 'center'}}>
                               <input max="10" min="1" value={item.quantity} style={{width: 75}} type="number" min="1" max="10" className="form-control" onChange={({target}) => {
                                   if(target.value && target.value !== '') {

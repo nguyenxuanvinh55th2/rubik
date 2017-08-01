@@ -69,10 +69,15 @@ class Colors extends React.Component {
           this.props.insertColor(Meteor.userId(), JSON.stringify(info)).then(({data}) => {
             if(data){
               this.props.addNotificationMute({fetchData: true, message: 'Thêm thành công', level: 'success'});
+              this.setState({open: false});
+              console.log(this.props.data);
+              this.props.data.refetch();
             }
           })
           .catch((error) => {
             this.props.addNotificationMute({fetchData: true, message: 'Thêm thất bại', level: 'error'});
+            this.setState({open: false});
+            this.props.data.refetch();
           })
         }
       }
@@ -93,17 +98,18 @@ class Colors extends React.Component {
           this.props.insertColor(Meteor.userId(), JSON.stringify(info)).then(({data}) => {
             if(data){
               this.props.addNotificationMute({fetchData: true, message: 'Thêm thành công', level: 'success'});
+              this.setState({open: false});
+              this.props.data.refetch();
             }
           })
           .catch((error) => {
             this.props.addNotificationMute({fetchData: true, message: 'Thêm thất bại', level: 'error'});
-            this.setState({open: false})
+            this.setState({open: false});
+            this.props.data.refetch();
           })
         }
       }
     }
-    this.setState({open: false})
-    this.props.data.refetch();
   }
   render(){
     let {data} = this.props;

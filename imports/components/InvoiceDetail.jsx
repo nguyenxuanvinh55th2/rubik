@@ -20,20 +20,24 @@ class InvoiceDetail extends React.Component {
           </td>
           <td style={{textAlign: 'center'}}>{item.stockModel.name}</td>
           <td style={{textAlign: 'center'}}>{accounting.format(item.stockModel.price) + ' đ'}</td>
-          <td >
-            {
-              item.color.isBasicColor ?
-              <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
-                  <img className="img-circle" style={{height: 30, width: 30, backgroundColor: item.color.color}}/>
+          {
+            item.color && item.color._id ?
+            <td >
+              {
+                item.color.isBasicColor ?
+                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
+                    <img className="img-circle" style={{height: 30, width: 30, backgroundColor: item.color.color}}/>
+                    <p style={{paddingTop: 5, paddingLeft: 5}}>{item.color.name}</p>
+                </div>
+                :
+                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
+                  <img className="img-circle" src={item.color.image && item.color.image.file ? item.color.image.file : ''} style={{height: 30, width: 30}}/>
                   <p style={{paddingTop: 5, paddingLeft: 5}}>{item.color.name}</p>
-              </div>
-              :
-              <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
-                <img className="img-circle" src={item.color.image && item.color.image.file ? item.color.image.file : ''} style={{height: 30, width: 30}}/>
-                <p style={{paddingTop: 5, paddingLeft: 5}}>{item.color.name}</p>
-              </div>
-            }
-          </td>
+                </div>
+              }
+            </td>
+            : <td></td>
+          }
           <td style={{textAlign: 'center'}}>
             { item.countInStore }
           </td>

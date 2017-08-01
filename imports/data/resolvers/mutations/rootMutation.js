@@ -321,7 +321,7 @@ const rootMutation = {
               total += stockModel.quantity * stockModel.amount;
               content += '<tr>';
               content += '<td style="border: 1px solid;">' + stockModel.stockModel.name + '</td>';
-              content += '<td style="border: 1px solid;">' + stockModel.color && stockModel.color.name ? stockModel.color.name : ''  + '</td>';
+              content += '<td style="border: 1px solid;">' + stockModel.color && stockModel.color._id && stockModel.color.name ? stockModel.color.name : ''  + '</td>';
               content += '<td style="border: 1px solid;">' + stockModel.quantity + '</td>';
               content += '<td style="border: 1px solid;">' + stockModel.amount + '</td>';
               content += '</tr>';

@@ -309,7 +309,7 @@ class DetailProduct extends React.Component {
                                 __.map(stockModelById.colors, (color, colorIdx) => {
                                   if(color._id){
                                     return (
-                                      <div key={colorIdx} style={{marginLeft: 5, border: `1px solid ${this.state.choseColor._id && color._id == this.state.choseColor._id ? 'red' : 'black'}`, borderRadius: 10, cursor: 'pointer'}} onClick={() => {
+                                      <div key={colorIdx} style={{marginLeft: 5, border: `1px solid ${this.state.choseColor._id && color._id == this.state.choseColor._id ? 'red' : '#898989'}`, borderRadius: 10, cursor: 'pointer'}} onClick={() => {
                                         this.setState({choseColor: color})
                                       }}>
                                         {

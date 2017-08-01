@@ -180,34 +180,41 @@ class Checkout extends React.Component {
                       </thead>
                       <tbody>
                         {
-													__.map(getInVoice.invoiceDetails, (item, idx) => (
-	                          <tr key={idx}>
-	                            <td>{item.stockModel.name}</td>
-                              <td>
-                                {
-                                  item.color.isBasicColor ?
-                                  <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
-                                      <img className="img-circle" style={{height: 15, width: 15, backgroundColor: item.color.color}}/>
-                                      <p style={{paddingLeft: 5}}>{item.color.name}</p>
-                                  </div>
-                                  :
-                                  <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
-                                    <img className="img-circle" src={item.color.image && item.color.image.file ? item.color.image.file : ''} style={{height: 15, width: 15}}/>
-                                    <p style={{paddingLeft: 5}}>{item.color.name}</p>
-                                  </div>
-                                }
-                              </td>
-	                            <td>{item.quantity}</td>
-                              <td>
-                                {
-                                  item.stockModel.isPromotion ?
-                                  <div><span className="rate-cu">{accounting.formatNumber(item.stockModel.price)}đ</span>&nbsp;<span>{accounting.formatNumber(item.stockModel.price - item.stockModel.saleOff)}đ</span></div>
-                                  :
-                                  <span>{accounting.formatNumber(item.stockModel.price)}đ</span>
-                                }
-                              </td>
-	                          </tr>
-                        	))
+													__.map(getInVoice.invoiceDetails, (item, idx) => {
+	                           return (
+                               <tr key={idx}>
+                                <td>{item.stockModel.name}</td>
+                                 {
+                                   item.color && item.color._id ?
+                                   <td>
+                                     {
+                                       item.clolor && item.color.isBasicColor ?
+                                       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
+                                           <img className="img-circle" style={{height: 15, width: 15, backgroundColor: item.color.color}}/>
+                                           <p style={{paddingLeft: 5}}>{item.color.name}</p>
+                                       </div>
+                                       :
+                                       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
+                                         <img className="img-circle" src={item.color.image && item.color.image.file ? item.color.image.file : ''} style={{height: 15, width: 15}}/>
+                                         <p style={{paddingLeft: 5}}>{item.color.name}</p>
+                                       </div>
+                                     }
+                                   </td>
+                                   :
+                                   <td></td>
+                                 }
+                                <td>{item.quantity}</td>
+                                 <td>
+                                   {
+                                     item.stockModel.isPromotion ?
+                                     <div><span className="rate-cu">{accounting.formatNumber(item.stockModel.price)}đ</span>&nbsp;<span>{accounting.formatNumber(item.stockModel.price - item.stockModel.saleOff)}đ</span></div>
+                                     :
+                                     <span>{accounting.formatNumber(item.stockModel.price)}đ</span>
+                                   }
+                                 </td>
+                              </tr>
+                             )
+                        	})
 												}
                       </tbody>
                     </table>
