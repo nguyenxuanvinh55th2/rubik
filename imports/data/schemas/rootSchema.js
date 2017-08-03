@@ -143,6 +143,7 @@ const rootSchema = `
     type Query {
       categories: [Classify]
       colors: [Color]
+      customers: [Classify]
       stockModels(limit: Int): [StockModel]
       stockModelHome(limit: Int): [StockModel]
       stockModelById(_id: String!): StockModel

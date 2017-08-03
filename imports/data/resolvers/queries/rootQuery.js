@@ -24,6 +24,9 @@ const rootQuery = {
   categories: (_, {}) => {
     return Classifies.find({isCategory: true, active: true}).fetch();
   },
+  customers: (_, {}) => {
+    return Classifies.find({isCustomer: true, active: true}).fetch();
+  },
   colors: (_, {}) => {
     return Colors.find({isColor: true, active: true}).fetch();
   },

@@ -1,6 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router';
-import {PinTop} from '../../javascript/header.js'
+import {PinTop} from '../../javascript/header.js';
+import { Classifies } from '../../../collections/classifies';
 export default class Footer extends React.Component {
   constructor(props) {
     super(props);
@@ -52,7 +53,11 @@ export default class Footer extends React.Component {
                           this.props.addNotificationMute({fetchData: true, message: 'Sai định dạng mail', level: 'warning'});
                         }
                         else {
-                          this.props.addNotificationMute({fetchData: true, message: 'Cảm ơn bản đã ủng hộ shop, shop sẽ liên hệ lại với bạn, chào bạn.', level: 'success'});
+                          Classifies.insert({
+                            name: this.state.email,
+                            isCustomer: true, active: true
+                          });
+                          this.props.addNotificationMute({fetchData: true, message: 'Cảm ơn bản đã ủng hộ shop, shop sẽ liên hệ lại với bạn, chào bạn!', level: 'success'});
                         }
                       }
                       else {

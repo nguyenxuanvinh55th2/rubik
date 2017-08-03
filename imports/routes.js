@@ -30,7 +30,8 @@ import AllProduct from './containers/AllProduct.js';
 import InvoiceManagement from './components/invoiceManagement/InvoiveManagement.jsx';
 import User from './components/user/User.jsx';
 import SliderForm from './components/theme/SliderForm.jsx';
-import Colors from './components/category/Colors.jsx'
+import Colors from './components/category/Colors.jsx';
+import Customers from './components/category/Customers.jsx';
 function requireAuth(nextState, replace){
   if (!Meteor.userId()) {
     replace({
@@ -73,6 +74,7 @@ export const renderRoutes = () => (
         <Route path="/user" component={User}/>
         <Route path="/slider" component={SliderForm}/>
         <Route path="/colors" component={Colors}/>
+        <Route path="/customers" component={Customers}/>
       </Route>
       <Route path="*" component={Home} />
     </Route>

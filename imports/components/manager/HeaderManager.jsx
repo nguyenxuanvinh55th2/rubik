@@ -77,6 +77,7 @@ class HeaderManager extends React.Component {
                   <li><a onClick={() => browserHistory.push('/category')}>Chủng loại</a></li>
                   <li><a onClick={() => browserHistory.push('/stockModels')}>Kiểu hàng</a></li>
                   <li><a onClick={() => browserHistory.push('/colors')}>Màu sắc</a></li>
+                  <li><a onClick={() => browserHistory.push('/customers')}>Khách hàng</a></li>
                 </ul>
               </li>
               <li className="dropdown">
