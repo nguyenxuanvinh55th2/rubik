@@ -13,8 +13,6 @@ function sendMail_Notification(notification){
   }, (err) => {
       if (err) {
         console.log('err ', err);
-      } else {
-          console.log("message send mail");
       }
   });
   return;
@@ -48,10 +46,7 @@ const rootMutation = {
           throw error;
         }
         else {
-          console.log(info.data.isBasicColor, info.image);
           if(!info.data.isBasicColor && info.image){
-            console.log("image");
-
             let docData = [info.image];
             let imageData = {};
             __.forEach(docData, (content, key)=>{
@@ -67,7 +62,6 @@ const rootMutation = {
                     if (err) {
                       throw err;
                     } else {
-                      console.log("ss");
                       Colors.update({_id: result}, {$set: {image: fileRef._id}});
                     }
                 }, true);
@@ -286,7 +280,12 @@ const rootMutation = {
   orderDevoice: (_, {token, info}) => {
     info = JSON.parse(info);
     return Invoices.update({_id: token}, {$set: {
-      customer: info,
+      note: info.note,
+      customer:  {
+        email: info.email,
+        mobile: info.mobile,
+        address: info.address
+      },
       status: 1
     }}, (err) => {
       if(err) {
@@ -310,6 +309,7 @@ const rootMutation = {
                 '<tr><td>Tên khách hàng:</td><td style="font-weight: 600;">' + info.name + '</td><td>Địa chỉ mail</td><td style="font-weight: 600;">' + info.email + '</td></tr>' +
                 '<tr><td>Số điện thoại:</td><td style="font-weight: 600;">' + info.mobile + '</td><td>Địa chỉ:</td><td style="font-weight: 600;">' + info.address + '</td></tr>' +
                 '</table></br>';
+            content += '<div><h3>Ghi chú: ' + info.note + '</h3></div>';
             content += '<h2></h2><table style="width: 100%; border-collapse: collapse; border: 1px solid;"><tr>';
             content += '<th style="border: 1px solid;">Tên sản phẩm</th>';
             content += '<th style="border: 1px solid;">Màu sắc</th>';
@@ -321,9 +321,9 @@ const rootMutation = {
               total += stockModel.quantity * stockModel.amount;
               content += '<tr>';
               content += '<td style="border: 1px solid;">' + stockModel.stockModel.name + '</td>';
-              content += '<td style="border: 1px solid;">' + stockModel.color && stockModel.color._id && stockModel.color.name ? stockModel.color.name : ''  + '</td>';
+              content += '<td style="border: 1px solid;">' + `${stockModel.color && stockModel.color._id && stockModel.color.name ? stockModel.color.name : 'Chưa chọn màu'}`  + '</td>';
               content += '<td style="border: 1px solid;">' + stockModel.quantity + '</td>';
-              content += '<td style="border: 1px solid;">' + stockModel.amount + '</td>';
+              content += '<td style="border: 1px solid; text-align: right;">' + accounting.formatNumber(stockModel.amount) + '</td>';
               content += '</tr>';
             });
             content += '</table>';

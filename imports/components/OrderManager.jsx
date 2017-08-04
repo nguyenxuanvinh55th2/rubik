@@ -301,7 +301,25 @@ class OrderDevoice extends React.Component {
                         showText = "Hoàn thành";
                       return showText;
                     }
-                  }
+                  }, {
+                    headerName: "Ghi chú",
+                    field: "note",
+                    width: 320,
+                    cellStyle: function(params) {
+                      if (params.node.data.gridType == 'footer') {
+                        return {fontWeight: 'bold'};
+                      } else {
+                        return null;
+                      }
+                    },
+                    onCellClicked: (params) => {
+                      this.setState({invoice: params.data});
+                    },
+                    filterParams: {
+                      filterOptions: ['contains', 'notContains', 'startsWith', 'endsWith']
+                    },
+                    filter: 'text',
+                  },
               ];
               let weight = 0;
               if(this.state.invoice) {
@@ -449,6 +467,7 @@ const INVOICE_QUERY = gql `
 					total
 					createdAt
 					shipFee
+          note
           customer {
             name
             email

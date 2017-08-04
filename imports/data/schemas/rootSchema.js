@@ -78,6 +78,7 @@ const rootSchema = `
       createdAt: Float
       shipFee: Int
       invoiceDetails: [InvoiceDetail]
+      note: String
     }
     type InvoiceDetail {
       _id: String

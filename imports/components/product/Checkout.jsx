@@ -19,6 +19,7 @@ class Checkout extends React.Component {
 				name: '',
 				mobile: '',
 				address: '',
+        note: ''
 			},
 			emailError: null,
 			nameError: null,
@@ -32,7 +33,7 @@ class Checkout extends React.Component {
 		let token = localStorage.getItem('invoiceId') ? localStorage.getItem('invoiceId') : '';
 		let { info, emailError, nameError, mobileError, addressError } = this.state;
 		if(!emailError && !nameError && !mobileError && !addressError && !this.allowClick && info.email !== '' && info.mobile !== '' && info.name !== '' && info.address !== '') {
-			info = JSON.stringify(info);
+    	info = JSON.stringify(info);
 			this.props.orderDevoice(token, info).then(() => {
         this.props.addNotificationMute({fetchData: true, message: 'Đặt hàng thành công', level:'success'});
         browserHistory.push('/')
@@ -164,6 +165,21 @@ class Checkout extends React.Component {
                         </div>
                       </div>
                     </div>
+                    <div className="row">
+                      <div className="col-sm-3">
+                        <p>Ghi chú</p>
+                      </div>
+                      <div className="col-sm-9">
+												<div className="from-group">
+                          <input type="text" className="form-control" value={this.state.info.note} onChange={({target}) => {
+                            this.setState((prevState) => {
+                              prevState.info.note = target.value;
+                                return prevState;
+                            })
+                          }} />
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className="col-sm-6">
@@ -189,14 +205,14 @@ class Checkout extends React.Component {
                                    <td>
                                      {
                                        item.clolor && item.color.isBasicColor ?
-                                       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
-                                           <img className="img-circle" style={{height: 15, width: 15, backgroundColor: item.color.color}}/>
-                                           <p style={{paddingLeft: 5}}>{item.color.name}</p>
+                                       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', border: '1px solid black', borderRadius: 10, width: 30}} data-toggle="tooltip" title={item.color.name}>
+                                           <img className="img-circle" style={{height: 30, width: 30, backgroundColor: item.color.color}}/>
+                                           {/* <p style={{paddingLeft: 5}}>{item.color.name}</p> */}
                                        </div>
                                        :
-                                       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
-                                         <img className="img-circle" src={item.color.image && item.color.image.file ? item.color.image.file : ''} style={{height: 15, width: 15}}/>
-                                         <p style={{paddingLeft: 5}}>{item.color.name}</p>
+                                       <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', border: '1px solid black', borderRadius: 10, width: 30}} data-toggle="tooltip" title={item.color.name}>
+                                         <img className="img-circle" src={item.color.image && item.color.image.file ? item.color.image.file : ''} style={{height: 30, width: 30}}/>
+                                         {/* <p style={{paddingLeft: 5}}>{item.color.name}</p> */}
                                        </div>
                                      }
                                    </td>
@@ -232,7 +248,7 @@ class Checkout extends React.Component {
                 </div>
               </div>
               <p className="text-center">
-                <a className="btn-more btn-red" href="#" onClick={this.orderDevoice.bind(this)}>Xác nhận Thanh toán</a>
+                <a className="btn-more btn-red" onClick={this.orderDevoice.bind(this)}>Xác nhận Thanh toán</a>
               </p>
             </div>
           </div>

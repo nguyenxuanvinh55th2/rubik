@@ -73,14 +73,14 @@ class Cart extends React.Component {
                                 <h4 style={{display: 'flex', flexDirection: 'row',justifyContent: 'flex-start'}}>{'Màu: '}&nbsp;
                                   {
                                     item.color.isBasicColor ?
-                                    <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
-                                        <img className="img-circle" style={{height: 15, width: 15, backgroundColor: item.color.color}}/>
-                                        <p style={{paddingLeft: 5}}>{item.color.name}</p>
+                                    <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', border: '1px solid black', borderRadius: 10}} data-toggle="tooltip" title={item.color.name}>
+                                        <img className="img-circle" style={{height: 30, width: 30, backgroundColor: item.color.color}}/>
+                                        {/* <p style={{paddingLeft: 5}}>{item.color.name}</p> */}
                                     </div>
                                     :
-                                    <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
-                                      <img className="img-circle" src={item.color.image && item.color.image.file ? item.color.image.file : ''} style={{height: 15, width: 15}}/>
-                                      <p style={{paddingLeft: 5}}>{item.color.name}</p>
+                                    <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', border: '1px solid black', borderRadius: 10}} data-toggle="tooltip" title={item.color.name}>
+                                      <img className="img-circle" src={item.color.image && item.color.image.file ? item.color.image.file : ''} style={{height: 30, width: 30}}/>
+                                      {/* <p style={{paddingLeft: 5}}>{item.color.name}</p> */}
                                     </div>
                                   }
                                 </h4>
@@ -118,14 +118,14 @@ class Cart extends React.Component {
                               <td>
                                 {
                                   item.color.isBasicColor ?
-                                  <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
-                                      <img className="img-circle" style={{height: 15, width: 15, backgroundColor: item.color.color}}/>
-                                      <p style={{paddingLeft: 5}}>{item.color.name}</p>
+                                  <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', border: '1px solid black', borderRadius: 10, width: 30}} data-toggle="tooltip" title={item.color.name}>
+                                      <img className="img-circle" style={{height: 30, width: 30, backgroundColor: item.color.color}}/>
+                                      {/* <p style={{paddingLeft: 5}}>{item.color.name}</p> */}
                                   </div>
                                   :
-                                  <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
-                                    <img className="img-circle" src={item.color.image && item.color.image.file ? item.color.image.file : ''} style={{height: 15, width: 15}}/>
-                                    <p style={{paddingLeft: 5}}>{item.color.name}</p>
+                                  <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', border: '1px solid black', borderRadius: 10, width: 30}} data-toggle="tooltip" title={item.color.name}>
+                                    <img className="img-circle" src={item.color.image && item.color.image.file ? item.color.image.file : ''} style={{height: 30, width: 30}}/>
+                                    {/* <p style={{paddingLeft: 5}}>{item.color.name}</p> */}
                                   </div>
                                 }
                               </td>

@@ -314,14 +314,12 @@ class DetailProduct extends React.Component {
                                       }}>
                                         {
                                           color.isBasicColor ?
-                                          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
+                                          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}} data-toggle="tooltip" title={color.name}>
                                               <img className="img-circle" style={{height: 30, width: 30, backgroundColor: color.color}}/>
-                                              <p style={{paddingTop: 5, paddingLeft: 5}}>{color.name}</p>
                                           </div>
                                           :
-                                          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}}>
+                                          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', padding: 5}} data-toggle="tooltip" title={color.name}>
                                             <img className="img-circle" src={color.image && color.image.file ? color.image.file : ''} style={{height: 30, width: 30}}/>
-                                            <p style={{paddingTop: 5, paddingLeft: 5}}>{color.name}</p>
                                           </div>
                                         }
                                       </div>

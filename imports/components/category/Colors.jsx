@@ -44,11 +44,12 @@ class Colors extends React.Component {
   handleChange = (color) => {
     this.setState((prevState) => {
       prevState.color = color.hex;
-      prevState.displayColorPicker = false;
+      // prevState.displayColorPicker = false;
       return prevState;
     })
   }
   handleClick = () => {
+    console.log(this.state.displayColorPicker);
     this.setState({
       displayColorPicker: !this.state.displayColorPicker
     })
@@ -258,12 +259,12 @@ class Colors extends React.Component {
                         <div className="form-group">
                           <label className="control-label col-sm-3">Chọn màu<span></span></label>
                           <div className="col-sm-9">
-                            <div style={styles.swatch} onClick={this.handleClick}>
+                            <div style={styles.swatch} onClick={() => this.handleClick()}>
                               <div style={styles.color}></div>
                             </div>
                             {this.state.displayColorPicker
                               ? <div style={styles.popover}>
-                                  <div style={styles.cover} onClick={this.handleClose}/>
+                                  <div style={styles.cover} onClick={()  => this.setState({displayColorPicker: !this.state.displayColorPicker})}/>
                                   <SketchPicker color={this.state.color} onChange={this.handleChange}/>
                                 </div>
                               : null}
