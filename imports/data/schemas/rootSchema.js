@@ -103,9 +103,6 @@ const rootSchema = `
     type Slider {
       _id: String
       name: String
-      sliders: [DetailSlider]
-    }
-    type DetailSlider {
       image: File
       link: String
     }
@@ -154,7 +151,7 @@ const rootSchema = `
       posts(limit: Int): [Post]
       invoices: [Invoice]
       post(_id: String): Post
-      slider: Slider
+      sliders(query: String): [Slider]
       getAllPostByType(stockTypeId: String): [Post]
       getPostTypeLimit(stockTypeId: String, offset: Int, limit: Int): [Post]
       findProduct(query: String, offset: Int, limit: Int): [StockModel]
@@ -169,6 +166,7 @@ const rootSchema = `
       insertCategories(userId: String!, info: String!): String
       removeColor(userId: String!, _id: String!): String
       insertColor(userId: String!, info: String!): String
+      insertSlider(userId: String!, info: String!): String
       insertStockModel(userId: String!, info: String!): String
       insertFiles(userId: String, info: String): String
       insertInvoice(token: String!, info: String): String

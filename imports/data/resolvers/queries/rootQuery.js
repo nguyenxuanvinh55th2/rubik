@@ -87,8 +87,8 @@ const rootQuery = {
   post: (_, {_id}) => {
     return Posts.findOne({_id: _id})
   },
-  slider: () => {
-    return Sliders.findOne({_id: '0'})
+  sliders: (_, {query}) => {
+    return Sliders.find(JSON.parse(query)).fetch();
   },
   getAllPostByType: (_, {stockTypeId}) => {
     return Posts.find({"stockType._id": stockTypeId}).fetch();

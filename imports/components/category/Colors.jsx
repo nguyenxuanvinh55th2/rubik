@@ -49,7 +49,6 @@ class Colors extends React.Component {
     })
   }
   handleClick = () => {
-    console.log(this.state.displayColorPicker);
     this.setState({
       displayColorPicker: !this.state.displayColorPicker
     })

@@ -10,7 +10,7 @@ class Sliders extends React.Component {
   }
   render() {
     let defaultImage = '/imgs/event.jpg';
-    if(!this.props.data.slider){
+    if(!this.props.data.sliders){
         return(
           <div className="item-slider">
             <div className="loading">
@@ -42,40 +42,53 @@ class Sliders extends React.Component {
       };
       return (
         <div>
-          <Slider {...settings}>
-            {
-              __.map(this.props.data.slider.sliders,(slider,idx) =>{
-                return(
-                  <div key={idx} className="item-slider" style={{
-                    backgroundImage: `url(${slider.image && slider.image.file && slider.image._id ? slider.image.file : defaultImage})`
-                  }}></div>
-                )
-              })
-            }
-          </Slider>
+          {
+            this.props.data.sliders.length ?
+            <Slider {...settings}>
+              {
+                __.map(this.props.data.sliders,(slider,idx) =>{
+                  return(
+                    <div key={idx} className="item-slider" style={{
+                      backgroundImage: `url(${slider.image && slider.image.file && slider.image._id ? slider.image.file : defaultImage})`
+                    }}></div>
+                  )
+                })
+              }
+            </Slider>
+            :
+            <Slider {...settings}>
+              <div  className="item-slider" style={{
+                backgroundImage: `url(${defaultImage})`
+              }}></div>
+            </Slider>
+          }
         </div>
       );
     }
   }
 }
 const SLIDER = gql `
-    query slider{
-      slider {
+    query sliders($query: String){
+      sliders(query: $query) {
         _id
         name
-        sliders {
-          image {
-            _id
-            file
-            fileName
-            type
-          }
-          link
+        image {
+          _id
+          file
+          fileName
+          type
         }
+        link
       }
 }`
 
 export default compose(
   graphql(SLIDER, {
-    options: () => ({variables: {}, fetchPolicy: 'network-only'})
+    options: () => ({variables: {
+      query: JSON.stringify(
+        {
+          active: true, isSlider: true
+        }
+      )
+    }, fetchPolicy: 'network-only'})
   }))(Sliders);

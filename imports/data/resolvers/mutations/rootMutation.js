@@ -72,6 +72,46 @@ const rootMutation = {
     }
     return;
   },
+  insertSlider: (_,{ userId, info }) => {
+    let user = Meteor.users.findOne({_id: userId});
+    if(user) {
+      info = JSON.parse(info);
+      info.data.createdAt = moment().valueOf();
+      info.data.createdBy = {
+        _id: user._id,
+        username: user.username
+      }
+      return Sliders.insert(info.data,(error, result) => {
+        if(error){
+          throw error;
+        }
+        else {
+          if(!info.data.isBasicColor && info.image){
+            let docData = [info.image];
+            let imageData = {};
+            __.forEach(docData, (content, key)=>{
+                if(content.fileName){
+                    imageData[key] = content;
+                    imageData[key].file = content.file.replace(/^data:image\/(png|gif|jpeg);base64,/,'');
+                    content = '';
+                }
+            });
+            __.forEach(imageData, (img, key)=>{
+                buf = new Buffer(img.file, 'base64');
+                Files.write(buf, {fileName: img.fileName, type: img.type, userId: userId}, (err, fileRef)=>{
+                    if (err) {
+                      throw err;
+                    } else {
+                      Sliders.update({_id: result}, {$set: {image: fileRef._id}});
+                    }
+                }, true);
+            });
+          }
+        }
+      });
+    }
+    return;
+  },
   removeCategories: (_,{ userId, _id }) => {
     let user = Meteor.users.findOne({_id: userId});
     if(user) {

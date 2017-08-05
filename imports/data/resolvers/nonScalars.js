@@ -65,7 +65,7 @@ const NonScalars = {
       return {}
     }
   },
-  DetailSlider: {
+  Slider: {
     image: ({image}) => {
       if(image){
         let file = Files.findOne({_id: image});

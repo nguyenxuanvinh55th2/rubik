@@ -4,22 +4,144 @@ import { browserHistory } from 'react-router';
 import { graphql, compose } from 'react-apollo';
 import gql from 'graphql-tag';
 import __ from 'lodash';
+import Dialog from 'material-ui/Dialog';
 class SliderForm extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      height: window.innerHeight,
+      open: false,
+      link: '', image: {}
+    }
   }
-  render(){
-    if(!this.props.data.slider){
-      return(
-        <div className="item-slider">
-          <div className="loading">
-              <i className="fa fa-spinner fa-spin" style={{fontSize: 20}}></i>
+  handleAddImage(files){
+    let that = this;
+    if(files[0]){
+      let file = files[0];
+      if(file.size <= 1024*1000*2){
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function (e) {
+            if(e.target.result){
+              that.setState({image:{
+                file:e.target.result,
+                fileName: file.name,
+                type: file.type
+              }});
+            }
+        };
+        reader.onerror = function (error) {
+          console.log('Error: ', error);
+        };
+      }
+      else {
+        alert('File nhỏ hơn 2MB!');
+      }
+    }
+  }
+  handleSaveColor(){
+    if(this.state.image){
+      let info = {
+        data: {
+          link: this.state.link,
+          active: true,
+          isSlider: true
+        },
+        image: this.state.image
+      }
+      if(this.props.insertSlider){
+        this.props.insertSlider(Meteor.userId(), JSON.stringify(info)).then(({data}) => {
+          if(data){
+            this.props.addNotificationMute({fetchData: true, message: 'Thêm thành công', level: 'success'});
+            this.setState({open: false});
+            this.props.data.refetch();
+          }
+        })
+        .catch((error) => {
+          this.props.addNotificationMute({fetchData: true, message: 'Thêm thất bại', level: 'error'});
+          this.setState({open: false});
+          this.props.data.refetch();
+        })
+      }
+    }
+  }
+  renderDialog(){
+    return (
+      <Dialog modal={true} open={this.state.open} bodyStyle={{
+        padding: 0
+      }} contentStyle={{
+        width: 500, height: '90%'
+      }}>
+        <div className="modal-dialog" style={{
+          width: 'auto',
+          margin: 0
+        }}>
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">Tạo mới slider </h4>
+            </div>
+            <div className="modal-body" style={{height: window.innerHeight - 250 , overflowY: 'auto',  overflowX: 'hidden'}}>
+              <form className="form-horizontal">
+                <div className="form-group">
+                  <label className="control-label col-sm-3">Đường dẫn</label>
+                  <div className="col-sm-9">
+                    <div className="checkbox">
+                      <input type="text" className="form-control" value={this.state.link} onChange={({target}) => this.setState({link: target.value})}/>
+                   </div>
+                  </div>
+                </div>
+                <div>
+                  <div className="form-group">
+                    <label className="control-label col-sm-3">Chọn hình</label>
+                    <div className="col-sm-9">
+                      <input type="file" name="pic" accept="image/*" multiple={false} onChange={({target}) => this.handleAddImage(target.files)}/>
+                    </div>
+                  </div>
+                  {
+                    this.state.image && this.state.image.file &&
+                    <div className="form-group">
+                      <div className="col-sm-offset-3 col-sm-9">
+                        <img src={this.state.image.file} style={{height: 100, width: 100}}/>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </form>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-default" onClick={() => this.setState({open: false})}>Đóng</button>
+              <button type="button" className="btn btn-primary" disabled={!this.state.image.file} onClick={() => this.handleSaveColor()}>Lưu</button>
+            </div>
           </div>
         </div>
-      )
+      </Dialog>
+    )
+  }
+  render(){
+    if(!this.props.data.sliders){
+      if(this.props.data.loading){
+        return(
+          <div className="item-slider">
+            <div className="loading">
+                <i className="fa fa-spinner fa-spin" style={{fontSize: 20}}></i>
+            </div>
+          </div>
+        )
+      }
+      else {
+        return (
+          <div>
+            <button type="button" className="btn btn-primary" style={{marginTop: 10, marginRight: 10}} onClick={() => this.setState({open: true})}>
+              Thêm mới
+            </button>
+            {
+              this.renderDialog()
+            }
+          </div>
+        )
+      }
     }
     else {
-      console.log(this.props.data.slider);
       return(
         <div>
           <div style={{
@@ -38,28 +160,33 @@ class SliderForm extends React.Component {
                 <a onClick={() => browserHistory.push('/slider')}>Slider</a>
               </li>
             </ol>
+            <button type="button" className="btn btn-primary" style={{marginTop: 10, marginRight: 10}} onClick={() => this.setState({open: true})}>
+              Thêm mới
+            </button>
           </div>
           <table className="table table-striped">
             <thead>
               <tr>
-                <th></th>
-                <th></th>
+                <th style={{width: 30}}></th>
+                <th style={{width: 30}}></th>
                 <th>Hình ảnh</th>
                 <th>Đường dẫn</th>
               </tr>
             </thead>
             <tbody>
               {
-                __.map(this.props.data.slider.sliders, (slider, idx) => {
+                __.map(this.props.data.sliders, (slide, idx) => {
                   return (
                     <tr key={idx}>
-                      <td><button>Xóa</button></td>
-                      <td><button>Cập nhập</button></td>
                       <td>
-                        <img src={slider.image.file ? slider.image.file : '/imgs/logo.png'} style={{height: 60, width: 100}} />
+                        <button type="button" className="btn btn" style={{backgroundColor: 'white', boxShadow: 'none'}}>
+                        <span className="glyphicon glyphicon-remove" style={{color: 'red'}}></span>
+                      </button>
                       </td>
                       <td>
-                        <a href={slider.link}></a>
+                        <button type="button" className="btn btn" style={{backgroundColor: 'white', boxShadow: 'none'}}>
+                        <span className="glyphicon glyphicon-upload" style={{color: 'blue'}}></span>
+                      </button>
                       </td>
                     </tr>
                   )
@@ -67,25 +194,26 @@ class SliderForm extends React.Component {
               }
             </tbody>
           </table>
+          {
+            this.renderDialog()
+          }
         </div>
       )
     }
   }
 }
 const SLIDER = gql `
-    query slider{
-      slider {
+    query sliders($query: String){
+      sliders(query: $query) {
         _id
         name
-        sliders {
-          image {
-            _id
-            file
-            fileName
-            type
-          }
-          link
+        image {
+          _id
+          file
+          fileName
+          type
         }
+        link
       }
 }`
 
@@ -94,10 +222,19 @@ const UPDATE_SLIDER = gql `
     updateSlider(userId: $userId,_id:$_id,info:$info)
   }
 `;
-
+const INSERT_SLIDER = gql `
+    mutation insertSlider($userId: String!, $info: String!){
+        insertSlider(userId: $userId, info: $info)
+}`
 export default compose(
   graphql(SLIDER, {
-    options: () => ({variables: {}, fetchPolicy: 'network-only'})
+    options: () => ({variables: {
+      query: JSON.stringify(
+        {
+          active: true, isSlider: true
+        }
+      )
+    }, fetchPolicy: 'network-only'})
   }),
   graphql(UPDATE_SLIDER, {
     props: ({mutate}) => ({
@@ -110,4 +247,14 @@ export default compose(
       })
     })
   }),
+  graphql(INSERT_SLIDER, {
+    props: ({mutate}) => ({
+      insertSlider: (userId, info) => mutate({
+        variables: {
+          userId,
+          info
+        }
+      })
+    })
+  })
 )(SliderForm);
