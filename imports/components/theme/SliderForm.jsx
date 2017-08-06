@@ -164,36 +164,37 @@ class SliderForm extends React.Component {
               Thêm mới
             </button>
           </div>
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th style={{width: 30}}></th>
-                <th style={{width: 30}}></th>
-                <th>Hình ảnh</th>
-                <th>Đường dẫn</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
+          <div className="row">
+            {
                 __.map(this.props.data.sliders, (slide, idx) => {
                   return (
-                    <tr key={idx}>
-                      <td>
-                        <button type="button" className="btn btn" style={{backgroundColor: 'white', boxShadow: 'none'}}>
-                        <span className="glyphicon glyphicon-remove" style={{color: 'red'}}></span>
-                      </button>
-                      </td>
-                      <td>
-                        <button type="button" className="btn btn" style={{backgroundColor: 'white', boxShadow: 'none'}}>
-                        <span className="glyphicon glyphicon-upload" style={{color: 'blue'}}></span>
-                      </button>
-                      </td>
-                    </tr>
+                    <div key={idx} className="col-sm-3" style={{padding: 5}}>
+                      <div className="panel panel-default" style={{height: window.innerHeight - 170}}>
+                        <div className="panel-body">
+                          <img className="img-responsive" src={slide.image && slide.image.file ? slide.image.file : ''} style={{width: '100%', height: window.innerHeight - 270}}/>
+                          <p style={{textAlign: 'center'}}>{slide.link}</p>
+                          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <button type="button" className="btn btn-danger" onClick={() => {
+                              if(confirm("Xóa hình mẫu này!")){
+                                Sliders.remove(slide._id, (error) => {
+                                  if(error){
+                                    throw error;
+                                  }
+                                  else {
+                                    this.props.data.refetch();
+                                  }
+                                })
+                              }
+                            }}>Xóa</button>
+                            {/* <button type="button" className="btn btn-primary">Sửa</button> */}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   )
                 })
-              }
-            </tbody>
-          </table>
+            }
+          </div>
           {
             this.renderDialog()
           }
