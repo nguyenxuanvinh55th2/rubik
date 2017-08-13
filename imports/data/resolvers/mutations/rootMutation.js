@@ -187,7 +187,6 @@ const rootMutation = {
             if (err) {
               throw err;
             } else {
-              console.log(fileRef);
               return fileRef._id;
             }
         }, true);

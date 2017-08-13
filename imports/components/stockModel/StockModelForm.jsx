@@ -22,6 +22,7 @@ class StockModelForm extends React.Component {
       displayColorPicker: false,
       color: '#FF6900',
       openDialog: false,
+      disabledButton: false,
       data: {
         code: '',
         name: '',
@@ -68,7 +69,6 @@ class StockModelForm extends React.Component {
         }
       });
       stockModel.categories = categories;
-      console.log(stockModel.images);
       this.setState({data: stockModel});
     }
   }
@@ -104,11 +104,11 @@ class StockModelForm extends React.Component {
   handleSave(type) {
     let data = this.state.data;
     data.categories = __.map(data.categories, (category) => category.name);
-    data.averagePrice = parseInt(data.averagePrice);
-    data.price = parseInt(data.price);
-    data.weight = parseFloat(data.weight);
-    data.quantity = parseInt(data.quantity);
-    data.saleOff = parseInt(data.saleOff);
+    data.averagePrice = data.averagePrice ? parseInt(data.averagePrice) : 0;
+    data.price = data.price ? parseInt(data.price) : 0;
+    data.weight = data.weight ? parseFloat(data.weight) : 0;
+    data.quantity = data.quantity ? parseInt(data.quantity) : 0;
+    data.saleOff = data.saleOff ? parseInt(data.saleOff) : 0;
     let info = {
       data: data,
       images: this.state.data.images
@@ -131,6 +131,7 @@ class StockModelForm extends React.Component {
             this.props.addNotificationMute({fetchData: true, message: 'Thêm hàng mới thành công', level: 'success'});
             if (type) {
               this.setState({
+                disabledButton: false,
                 data: {
                   active: true,
                   code: '',
@@ -230,12 +231,12 @@ class StockModelForm extends React.Component {
               justifyContent: 'flex-end',
               marginTop: 5
             }}>
-              {!this.props.params._id && <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit || !data.code || !data.stockType._id || !data.price} onClick={() => this.handleSave(true)}>Lưu và khởi tạo</button>
-            }
-              <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit || !data.code || !data.stockType._id || !data.price} style={{
+              {!this.props.params._id && <button type="button" className="btn btn-primary" disabled={!data.name || !data.unit || !data.code || !data.stockType._id || !data.price} onClick={() => { this.setState({disabledButton: true}) ; this.handleSave(true)}}>Lưu và khởi tạo</button>
+}
+              <button type="button" id="btn-save" className="btn btn-primary" disabled={!data.name || !data.unit || !data.code || !data.stockType._id || !data.price || this.state.disabledButton} style={{
                 marginLeft: 10
               }} onClick={() => {
-                this.handleSave()
+                this.setState({disabledButton: true}) ; this.handleSave();
               }}>Lưu</button>
               <button type="button" className="btn btn-danger" style={{
                 margin: '0 10px'
@@ -378,52 +379,7 @@ class StockModelForm extends React.Component {
                   </div>
                   <div className="form-group">
                     <label>Chủng loại</label>
-                  < Creatable multi = {
-  true
-}
-value = {
-  data.categories
-}
-valueKey = "_id" labelKey = "name" placeholder = "Chọn chủng loại" options = {
-  this.props.data.categories
-}
-promptTextCreator = {
-  (label) => {
-    return (label : String)
-  }
-}
-onChange = {
-  (value) => {
-    this.setState((prevState) => {
-      if (this.state.isCreateNew) {
-        if (this.props.insertCategories) {
-          this.props.insertCategories(Meteor.userId(), JSON.stringify({
-            name: value[value.length - 1].name,
-            active: true,
-            isCategory: true
-          })).then(({data}) => {
-            this.props.data.refetch();
-            prevState.isCreateNew = false;
-            if (data.insertCategories) {
-              value[value.length - 1]._id = data.insertCategories;
-            }
-          }).catch((error) => {
-            console.log(error);
-          });
-        }
-      }
-      prevState.data.categories = value;
-      return prevState;
-    })
-  }
-}
-shouldKeyDownEventCreateNewOption = {
-  (event, label, value) => {
-    if (event.keyCode == 13) {
-      this.setState({isCreateNew: true})
-    }
-  }
-} />
+                    < Creatable multi={true} value={data.categories} valueKey="_id" labelKey="name" placeholder="Chọn chủng loại" options={this.props.data.categories} promptTextCreator= { (label) => { return (label : String) } } onChange= { (value) => { this.setState((prevState) => { if (this.state.isCreateNew) { if (this.props.insertCategories) { this.props.insertCategories(Meteor.userId(), JSON.stringify({ name: value[value.length - 1].name, active: true, isCategory: true })).then(({data}) => { this.props.data.refetch(); prevState.isCreateNew = false; if (data.insertCategories) { value[value.length - 1]._id = data.insertCategories; } }).catch((error) => { console.log(error); }); } } prevState.data.categories = value; return prevState; }) } } shouldKeyDownEventCreateNewOption= { (event, label, value) => { if (event.keyCode == 13) { this.setState({isCreateNew: true}) } } }/>
                   </div>
                   <div className="form-group">
                     <label>Giá nhập</label>
