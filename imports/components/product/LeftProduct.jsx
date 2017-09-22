@@ -9,7 +9,7 @@ class LeftProduct extends React.Component {
   }
   render() {
       return (
-        <div className="danhmuc-sp">
+        <div className="danhmuc-sp panel-body">
           <h3>DANH MỤC SẢN PHẨM</h3>
           {
             !this.props.data.stockTypes ?

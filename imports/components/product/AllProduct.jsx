@@ -92,7 +92,7 @@ export default class AllPoduct extends React.Component {
         <div className="content" id="news">
           <div className="main-content container">
             <div className="row">
-              <div className="sidebar col-md-3" style={{paddingRight: 50}}>
+              <div className="col-md-3 panel panel-default">
                 <LeftProduct {...this.props} />
               </div>
               <div className="contents col-md-9">

@@ -13,7 +13,6 @@ import SliderDetails from '../home/SliderDetail.jsx'
 import Header from '../main/Header.jsx'
 import Footer from '../main/Footer.jsx'
 import {slideChitiet} from '../../javascript/header.js'
-
 import Rating from "./Rating.jsx";
 
 class Comment extends React.Component {
@@ -232,8 +231,8 @@ class DetailProduct extends React.Component {
           <div className="product-detail">
             <div className="container">
               <div className="row">
-                <div className="col-sm-3">
-                  <div className="danhmuc-sp">
+                <div className="col-sm-3 panel panel-default">
+                  <div className="danhmuc-sp panel-body">
                     <h3>DANH MỤC SẢN PHẨM</h3>
                     {
                       __.map(stockTypes, (stockType, idx) => {
@@ -264,13 +263,16 @@ class DetailProduct extends React.Component {
                     <div className="col-sm-7">
                       <div className="slider-anh">
                         <div className="show-anh">
-                          {images.map((item, idx) => (
-                            <div key={idx} className={this.state.indexImage === idx
-                              ? "item" + idx + " item active"
-                              : "item" + idx + " item"}>
-                              <img src={item} alt=""/>
-                            </div>
-                          ))
+                          {images.map((item, idx) => {
+                            let conf = {"width":400,"scale":1.5,"img":item,"offset":{"vertical":0,"horizontal":10}}
+                            return (
+                              <div key={idx} className={this.state.indexImage === idx
+                                ? "item" + idx + " item active"
+                                : "item" + idx + " item"}>
+                                <img src={item} alt=""/>
+                              </div>
+                            )
+                          })
                         }
                         </div>
                         <div className="click-anh">
@@ -288,7 +290,7 @@ class DetailProduct extends React.Component {
                     <div className="col-sm-5">
                       <div className="thongtin-sp">
                         <h3>{stockModelById.name.toUpperCase()}</h3>
-                        <h4 className="ma">{'Mã: ' + stockModelById.code}</h4>
+                        {/* <h4 className="ma">{'Mã: ' + stockModelById.code}</h4> */}
                         {
                           stockModelById.isPromotion &&
                           <h4 className="gia">Giá trước kia:&nbsp;<span className="rate-cu">{ accounting.format(stockModelById.price) + 'đ'}</span></h4>

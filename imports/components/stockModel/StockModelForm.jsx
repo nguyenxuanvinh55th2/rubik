@@ -277,7 +277,7 @@ class StockModelForm extends React.Component {
                       });
                     }}/>
                   </div>
-                  <div className="form-group">
+                  {/* <div className="form-group">
                     <label>Cân nặng(gram)</label>
                     <input type="number" className="form-control" value={data.weight} onChange={({target}) => {
                       this.setState((prevState) => {
@@ -285,7 +285,7 @@ class StockModelForm extends React.Component {
                         return prevState;
                       });
                     }}/>
-                  </div>
+                  </div> */}
                   <div className="form-group">
                     <label>Màu sắc</label>
                     <Select multi={true} value={data.colors} valueKey="_id" labelKey="name" placeholder="Chọn màu sắc" options={this.props.data.colors} promptTextCreator={(label) => {
