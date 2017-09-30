@@ -95,6 +95,7 @@ class HeaderManager extends React.Component {
                 <ul className="dropdown-menu">
                   <li><a onClick={() => browserHistory.push('/editAbout')}>Chỉnh sửa trang giới thiệu</a></li>
                   <li><a onClick={() => browserHistory.push('/slider')}>Slider</a></li>
+                  {/* <li><a onClick={() => browserHistory.push('/managerImage')}>Quản lý hình ảnh</a></li> */}
                 </ul>
               </li>
               <li><a onClick={() => browserHistory.push('/user')}>Người dùng</a></li>

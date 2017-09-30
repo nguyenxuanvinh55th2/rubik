@@ -155,6 +155,13 @@ export default class AllPoduct extends React.Component {
                                     </div>
                                     : null
                                   }
+                                  {
+                                    value.quantity <= 0 ?
+                                      <div className="out-stock">
+                                        <p>Hết hàng</p>
+                                      </div>
+                                    : null
+                                  }
                                   <div className="link-detail">
                                     <Link to={`/chi-tiet-san-pham/${value._id}`} className="btn btn-cate">Xem chi tiết</Link>
                                   </div>

@@ -48,6 +48,16 @@
 				font-size: 15px;
 			}
 		}
+		.out-stock{
+			position: absolute;
+			top:10%;
+			left: 15%;
+			transform: translateX(-50%) translateY(-50%);
+			font-size: 15px;
+			color: white;
+			padding: 5px;
+			background-color: #2e318d;
+		}
 		&:hover{
 			cursor: pointer;
 			.hover-product{
@@ -76,7 +86,11 @@
 				opacity: 1;
 				z-index: 2;
 			}
-
+			.out-stock {
+				visibility: visible;
+				opacity: 1;
+				z-index: 2;
+			}
 		}
 	}
 }
