@@ -76,7 +76,7 @@ export const renderRoutes = () => (
         <Route path="/slider" component={SliderForm}/>
         <Route path="/colors" component={Colors}/>
         <Route path="/customers" component={Customers}/>
-        {/* <Route path="/managerImage" component={ManagerImage}/> */}
+        <Route path="/managerImage" component={ManagerImage}/>
       </Route>
       <Route path="*" component={Home} />
     </Route>

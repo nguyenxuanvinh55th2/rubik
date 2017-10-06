@@ -569,7 +569,60 @@ const rootMutation = {
     }
   },
   updateSlider: (_, {userId, _id, info}) => {
-
+    if(typeof info == 'string'){
+      info = JSON.parse(info);
+    }
+    let future = new Future();
+    let user = Meteor.users.findOne({_id: userId});
+    if (user){
+      let imagesExit = [], docData = [], imageData = {};
+      info.data.updatedAt = moment().valueOf();
+      info.data.updatedBy = {
+         _id: user._id,
+         username: user.username
+      };
+      if(info.image && info.image._id){
+        future.return(
+          Sliders.update({_id: _id}, {$set: info.data}, (err) => {
+            if(err){
+              throw err;
+            }
+          })
+        )
+      }
+      else {
+        future.return(
+          Sliders.update({_id: _id}, {$set: info.data}, (err) => {
+            if(err){
+              console.log(err);
+            }
+            else {
+              if(info.image && info.image.fileName){
+                docData = [info.image]
+                __.forEach(docData, (content, key)=>{
+                    if(content.fileName){
+                        imageData[key] = content;
+                        imageData[key].file = content.file.replace(/^data:image\/(png|gif|jpeg);base64,/,'');
+                        content = '';
+                    }
+                });
+                __.forEach(imageData, (img, key)=>{
+                    buf = new Buffer(img.file, 'base64');
+                    Files.write(buf, {fileName: img.fileName, userId: user._id, type: img.type}, (err, fileRef)=>{
+                        if (err) {
+                          throw err;
+                        } else {
+                          Sliders.update({ _id: _id },{$set: { image: fileRef._id }});
+                        }
+                    }, true);
+                });
+              }
+            }
+          })
+        )
+      }
+    }
+    return future.wait();
   }
 }
 export default rootMutation

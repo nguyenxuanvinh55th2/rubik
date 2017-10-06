@@ -105,6 +105,12 @@ const rootSchema = `
       name: String
       image: File
       link: String
+      type: SliderType
+    }
+    type SliderType {
+      _id: String
+      name: String
+      type: String
     }
     type Email {
       address: String

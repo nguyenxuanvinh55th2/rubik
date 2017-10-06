@@ -8,7 +8,7 @@ import SliderNew from './SliderNews.jsx'
 import Product from '../product/Product.jsx'
 import {Link} from 'react-router';
 import {showProduct, removeMenu } from '../../javascript/header.js'
-
+import FindingStock from './FindingStock.jsx';
 class Home extends React.Component {
   constructor(props) {
     super(props)
@@ -27,49 +27,7 @@ class Home extends React.Component {
         <Sliders/>/
         <div className="sec-cate">
           <div className="container">
-            <div className="row">
-              <div className="col-sm-4">
-                <div className="item bg" style={{
-                  backgroundImage: "url('/imgs/spinner.jpg')"
-                }}>
-                  <p>
-                    <Link to={'/san-pham/loai-hang/100'} className="btn btn-cate">Spinner</Link>
-                  </p>
-                </div>
-                <div className="item bg" style={{
-                  backgroundImage: "url('/imgs/rubik.jpg')"
-                }}>
-                  <p>
-                    <Link to={'/san-pham/loai-hang/99'} className="btn btn-cate">Rubik</Link>
-                  </p>
-                </div>
-              </div>
-              <div className="col-sm-4">
-                <div className="item-center bg" style={{
-                  backgroundImage: "url('/imgs/tutorial.jpg')"
-                }}>
-                  <p>
-                    <Link to={'/huong-dan-choi/2'} className="btn btn-cate">Hướng dẫn chơi</Link>
-                  </p>
-                </div>
-              </div>
-              <div className="col-sm-4">
-                <div className="item bg" style={{
-                  backgroundImage: "url('/imgs/spinner.jpg')"
-                }}>
-                  <p>
-                    <Link to={'/san-pham'} className="btn btn-cate">Sản phẩm mới</Link>
-                  </p>
-                </div>
-                <div className="item bg" style={{
-                  backgroundImage: "url('/imgs/rubik.jpg')"
-                }}>
-                  <p>
-                    <Link to={'/san-pham/loai-hang/101'} className="btn btn-cate">Phụ kiện</Link>
-                  </p>
-                </div>
-              </div>
-            </div>
+            <FindingStock {...this.props} />
           </div>
         </div>
         <div className="sec-product">
