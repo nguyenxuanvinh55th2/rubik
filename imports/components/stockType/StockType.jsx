@@ -63,24 +63,27 @@ export default class StockType extends React.Component {
       }
       else {
         let columnDefs= [
-          //  {
-          //      headerName: "", field:'delete', minWidth: 56, width: 56, cellClass: 'agaction', pinned: 'left', filter: '',
-          //        cellRendererFramework:DeleteAditorRender,
-          //       cellStyle: (params) => {
-          //           if (params.node.data.gridType == 'footer') {
-          //               return {display: 'none'};
-          //           }
-          //       },
-          //       onCellClicked: (params) => {
-          //         if(params.data && params.data._id){
-          //           this.props.removeStockType(Meteor.userId(), params.data._id).then(({data}) => {
-          //             if(data){
-          //               this.props.data.refetch();
-          //             }
-          //           })
-          //         }
-          //       }
-          //  },
+           {
+               headerName: "", field:'delete', minWidth: 56, width: 56, cellClass: 'agaction', pinned: 'left', filter: '',
+                 cellRendererFramework:DeleteAditorRender,
+                cellStyle: (params) => {
+                    if (params.node.data.gridType == 'footer') {
+                        return {display: 'none'};
+                    }
+                },
+                onCellClicked: (params) => {
+                  if(params.data && params.data._id){
+                    var deleteImage = confirm("Bạn có muốn?");
+                    if (deleteImage == true) {
+                      this.props.removeStockType(Meteor.userId(), params.data._id).then(({data}) => {
+                        if(data){
+                          this.props.data.refetch();
+                        }
+                      })
+                    }
+                  }
+                }
+           },
            {
                headerName: "Tên loại hàng", field: "name", width: 320, cellStyle: function(params) {
                        if (params.node.data.gridType == 'footer') {

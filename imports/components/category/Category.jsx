@@ -97,11 +97,14 @@ export default class Category extends React.Component {
             },
             onCellClicked: (params) => {
               if (params.data && params.data._id) {
-                this.props.removeCategories(Meteor.userId(), params.data._id).then(({data}) => {
-                  if (data) {
-                    this.props.data.refetch();
-                  }
-                })
+                var deleteImage = confirm("Bạn có muốn?");
+                if (deleteImage == true) {
+                  this.props.removeCategories(Meteor.userId(), params.data._id).then(({data}) => {
+                    if (data) {
+                      this.props.data.refetch();
+                    }
+                  })
+                }
               }
             }
           }, {
