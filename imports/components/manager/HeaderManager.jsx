@@ -99,6 +99,7 @@ class HeaderManager extends React.Component {
                 </ul>
               </li>
               <li><a onClick={() => browserHistory.push('/user')}>Người dùng</a></li>
+              <li><a onClick={() => browserHistory.push('/setting')}>Cài đặt</a></li>
             </ul>
           </div>
         </nav>

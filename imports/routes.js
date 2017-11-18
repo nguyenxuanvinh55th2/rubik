@@ -33,6 +33,7 @@ import SliderForm from './components/theme/SliderForm.jsx';
 import Colors from './components/category/Colors.jsx';
 import Customers from './components/category/Customers.jsx';
 import ManagerImage from './components/managerImage/ManagerImage.jsx';
+import Setting from './components/setting/Setting.jsx';
 function requireAuth(nextState, replace){
   if (!Meteor.userId()) {
     replace({
@@ -77,6 +78,7 @@ export const renderRoutes = () => (
         <Route path="/colors" component={Colors}/>
         <Route path="/customers" component={Customers}/>
         <Route path="/managerImage" component={ManagerImage}/>
+        <Route path="/setting" component={Setting}/>
       </Route>
       <Route path="*" component={Home} />
     </Route>
