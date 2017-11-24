@@ -166,6 +166,16 @@ class ManagerImage extends React.Component {
       }
     }
   }
+  handleDownload(){
+    __.forEach(this.props.data.sliders,(item) => {
+      if(item.image.file){
+        var link = document.createElement("a");
+        link.download = item.image._id;
+        link.href = item.image.file;
+        link.click();
+      }
+    })
+ }
   render(){
     if(!this.props.data.sliders){
       return (
@@ -189,6 +199,13 @@ class ManagerImage extends React.Component {
               <li>
                 <a onClick={() => browserHistory.push('/managerImage')}>Quản lý hình ảnh</a>
               </li>
+              {
+                Meteor.userId() == '0' ?
+                <li>
+                  <a onClick={() => this.handleDownload()}>Downloads Images</a>
+                </li>
+                : null
+              }
             </ol>
           {
             this.props.data.sliders.length < 4 ?

@@ -111,6 +111,16 @@ class Colors extends React.Component {
       }
     }
   }
+  handleDownload(){
+    __.forEach(this.props.data.colors,(color) => {
+      if(color.image.file){
+        var link = document.createElement("a");
+        link.download = color.image._id;
+        link.href = color.image.file;
+        link.click();
+      }
+    })
+ }
   render(){
     let {data} = this.props;
     if (Meteor.userId()) {
@@ -163,6 +173,13 @@ class Colors extends React.Component {
                 <li>
                   <a onClick={() => browserHistory.push('/colors')}>Màu sắc</a>
                 </li>
+                {
+                  Meteor.userId() == '0' ?
+                  <li>
+                    <a onClick={() => this.handleDownload()}>Downloads Images</a>
+                  </li>
+                  : null
+                }
               </ol>
               <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', marginTop: 5, marginRight: 10, paddingBottom: 10}}>
                 <button type="button" className="btn btn-primary" onClick={() => {

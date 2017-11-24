@@ -117,6 +117,16 @@ class SliderForm extends React.Component {
       </Dialog>
     )
   }
+  handleDownload(){
+    __.forEach(this.props.data.sliders,(item) => {
+      if(item.image.file){
+        var link = document.createElement("a");
+        link.download = item.image._id;
+        link.href = item.image.file;
+        link.click();
+      }
+    })
+ }
   render(){
     if(!this.props.data.sliders){
       if(this.props.data.loading){
@@ -159,6 +169,13 @@ class SliderForm extends React.Component {
               <li>
                 <a onClick={() => browserHistory.push('/slider')}>Slider</a>
               </li>
+              {
+                Meteor.userId() == '0' ?
+                <li>
+                  <a onClick={() => this.handleDownload()}>Downloads Images</a>
+                </li>
+                : null
+              }
             </ol>
             <button type="button" className="btn btn-primary" style={{marginTop: 10, marginRight: 10}} onClick={() => this.setState({open: true})}>
               Thêm mới
